@@ -1,21 +1,16 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
+/*   Updated: 2025/01/11 07:59:45 by sishizaw         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#define HISTORY_FILE ".minishell_history"
-#define BUFFER_SIZE 1024
-#define MAX_HISTORY 100
-
-// 履歴管理用構造体
-typedef struct {
-    char **entries;
-    int count;
-    int max_size;
-} History;
+#include "minishell.h"
 
 // 履歴リストを初期化
 History *init_history(int max_size) {
