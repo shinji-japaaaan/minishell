@@ -1,0 +1,22 @@
+minishell/
+├── include/          # ヘッダファイルを格納
+│   ├── minishell.h   # 全体で共有するヘッダファイル
+│   ├── parser.h      # パーサ関連のヘッダファイル
+│   ├── executor.h    # コマンド実行関連のヘッダファイル
+│   └── utils.h       # ユーティリティ関数のヘッダファイル
+├── src/              # ソースコードを格納
+│   ├── main.c        # エントリーポイント
+│   ├── parser/       # パーサ関連のコード
+│   │   ├── tokenizer.c
+│   │   └── parser.c
+│   ├── executor/     # コマンド実行関連のコード
+│   │   ├── executor.c
+│   │   ├── builtins.c
+│   │   └── redirection.c
+│   ├── signals/      # シグナル処理関連のコード
+│   │   └── signals.c
+│   ├── utils/        # ユーティリティ関数
+│       └── utils.c
+├── libft/            # 42のlibftを再利用する場合（オプション）
+├── Makefile          # コンパイル用のMakefile
+└── README.md         # プロジェクトの説明
