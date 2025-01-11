@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/11 11:01:33 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/11 11:07:19 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,34 @@
 #include <unistd.h>
 
 void change_directory(char *path) {
-    if (chdir(path) == -1) {
-        perror("cd failed");
-    } else {
-        char cwd[256];
-        if (getcwd(cwd, sizeof(cwd)) != NULL) {
-            printf("Current directory: %s\n", cwd);
+    if (strcmp(path, "~") == 0) {
+        // "~"が指定された場合はHOMEディレクトリに変更
+        char *home = getenv("HOME");
+        if (home != NULL) {
+            if (chdir(home) == -1) {
+                perror("cd failed");
+            } else {
+                char cwd[256];
+                if (getcwd(cwd, sizeof(cwd)) != NULL) {
+                    printf("Current directory: %s\n", cwd);
+                } else {
+                    perror("getcwd failed");
+                }
+            }
         } else {
-            perror("getcwd failed");
+            perror("HOME environment variable is not set");
+        }
+    } else {
+        // 他のディレクトリに移動
+        if (chdir(path) == -1) {
+            perror("cd failed");
+        } else {
+            char cwd[256];
+            if (getcwd(cwd, sizeof(cwd)) != NULL) {
+                printf("Current directory: %s\n", cwd);
+            } else {
+                perror("getcwd failed");
+            }
         }
     }
 }
@@ -52,5 +72,6 @@ int main() {
 
     return 0;
 }
+
 
 
