@@ -1,11 +1,13 @@
 minishell/
 ├── include/          # ヘッダファイルを格納
 │   ├── minishell.h   # 全体で共有するヘッダファイル
+│   ├── history.h     # 履歴管理関連のヘッダファイル
 │   ├── parser.h      # パーサ関連のヘッダファイル
 │   ├── executor.h    # コマンド実行関連のヘッダファイル
 │   └── utils.h       # ユーティリティ関数のヘッダファイル
 ├── src/              # ソースコードを格納
 │   ├── main.c        # エントリーポイント
+│   ├── main.c        # 履歴管理
 │   ├── parser/       # パーサ関連のコード
 │   │   ├── tokenizer.c
 │   │   └── parser.c
