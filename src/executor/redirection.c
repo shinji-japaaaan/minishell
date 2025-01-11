@@ -6,52 +6,50 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/12 07:07:28 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/12 07:15:38 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 
-// ファイルリダイレクトの処理関数
 void handle_redirect(int redirect_type, char *file) {
     int fd;
 
-    if (redirect_type == 1) { // '>' (出力リダイレクト)
+    if (redirect_type == 1) { // '>' の場合
         fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
         if (fd == -1) {
             perror("Error opening file for output");
             exit(EXIT_FAILURE);
         }
-        // 標準出力をリダイレクト
         if (dup2(fd, STDOUT_FILENO) == -1) {
             perror("Error redirecting output");
             close(fd);
             exit(EXIT_FAILURE);
         }
-        close(fd); // ファイルディスクリプタを閉じる
-    } else if (redirect_type == 2) { // '<' (入力リダイレクト)
-        fd = open(file, O_RDONLY);
+        close(fd);
+    } else if (redirect_type == 2) { // '<' の場合
+        fd = open(file, O_RDONLY); // 読み込み専用でファイルを開く
         if (fd == -1) {
             perror("Error opening file for input");
             exit(EXIT_FAILURE);
         }
-        // 標準入力をリダイレクト
         if (dup2(fd, STDIN_FILENO) == -1) {
             perror("Error redirecting input");
             close(fd);
             exit(EXIT_FAILURE);
         }
-        close(fd); // ファイルディスクリプタを閉じる
+        close(fd);
     }
 }
 
 int main() {
-    // テスト用ファイル
     char *output_file = "test_output.txt";
     char *input_file = "test_input.txt";
+    char buffer[128];
+    ssize_t bytes_read;
 
     // 標準出力を保存
     int stdout_backup = dup(STDOUT_FILENO);
@@ -60,10 +58,11 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    // **1. 出力リダイレクトテスト**
+    // 出力リダイレクトのテスト
     printf("Testing output redirection...\n");
     handle_redirect(1, output_file); // '>' のリダイレクト
     printf("This text should be written to %s\n", output_file);
+
     // 標準出力を元に戻す
     if (dup2(stdout_backup, STDOUT_FILENO) == -1) {
         perror("Error restoring STDOUT");
@@ -71,15 +70,18 @@ int main() {
     }
     close(stdout_backup);
 
-    // **2. 入力リダイレクトテスト**
+    // 入力リダイレクトのテスト
     printf("Testing input redirection...\n");
     handle_redirect(2, input_file); // '<' のリダイレクト
-    char buffer[128];
-    if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-        printf("Read from %s: %s", input_file, buffer);
-    } else {
-        perror("Error reading from input file");
-    }
 
-    return 0;
+    // read を使ってデータを読み込む
+    bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer) - 1);
+    if (bytes_read == -1) {
+        perror("Error reading from input file");
+        return EXIT_FAILURE;
+    }
+    buffer[bytes_read] = '\0'; // Null文字で終端
+    printf("Read from %s: %s", input_file, buffer);
+
+    return EXIT_SUCCESS;
 }
