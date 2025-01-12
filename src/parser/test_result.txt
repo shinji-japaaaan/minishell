@@ -1,0 +1,31 @@
+test1:   		adj dasfj adk | dasj jdasg|dasf   	 	 	
+adj
+dasfj
+adk
+|
+dasj
+jdasg
+|
+dasf
+test2: "dsfljfd | dfa"
+"dsfljfd | dfa"
+test3: dsf "abcd|"adfadsf   
+dsf
+"abcd|"adfadsf
+test4: cat input.txt>output.txt
+cat
+input.txt
+>
+output.txt
+test5: cat input.txt>>output.txt
+cat
+input.txt
+>>
+output.txt
+test6: input.txt < cat
+input.txt
+<
+cat
+test7: echo 'input.txt < cat'
+echo
+'input.txt < cat'
