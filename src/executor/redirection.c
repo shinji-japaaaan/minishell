@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/13 15:29:51 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:39:01 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,17 @@ int main() {
     printf("Testing input redirection...\n");
     handle_redirect(2, input_file); // '<' のリダイレクト
 
-    // read を使ってデータを読み込む
-    bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer) - 1);
-    if (bytes_read == -1) {
+    // ファイルをバッファサイズずつ繰り返し読み込む
+    printf("Reading from input file:\n");
+    while ((bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer) - 1)) > 0) {
+        buffer[bytes_read] = '\0'; // Null文字で終端
+        printf("%s", buffer);      // 標準出力に出力
+    }
+
+    if (bytes_read == -1) { // エラー処理
         perror("Error reading from input file");
         return EXIT_FAILURE;
     }
-    buffer[bytes_read] = '\0'; // Null文字で終端
-    printf("Read from %s: %s", input_file, buffer);
 
     // 標準入力を元に戻す
     if (dup2(stdin_backup, STDIN_FILENO) == -1) {
