@@ -6,12 +6,12 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/11 08:11:40 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/13 10:01:24 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "history.h"
+#include "../include/minishell.h"
+#include "../include/history.h"
 
 int main(void) {
     char *input;
@@ -38,10 +38,7 @@ int main(void) {
             for (int i = 0; i < history->count; i++) {
                 printf("%d: %s\n", i + 1, history->entries[i]);
             }
-        } else {
-            printf("You entered: %s\n", input);
         }
-
         free(input);
     }
 
