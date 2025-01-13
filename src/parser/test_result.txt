@@ -26,6 +26,14 @@ test6: input.txt < cat
 input.txt
 <
 cat
-test7: echo 'input.txt < cat'
+test7: echo 'input.txt < cat   '   
 echo
-'input.txt < cat'
+'input.txt < cat   '
+
+test for expansion
+===================================
+test8: echo $USER "$USER" '$USER'
+echo
+user42
+"user42"
+'$USER'

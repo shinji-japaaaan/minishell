@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 12:35:19 by karai             #+#    #+#             */
-/*   Updated: 2025/01/12 17:05:22 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/13 10:59:32 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,18 @@ int	main(void)
 	head = parser(str6);
 	linked_list_print(head);
 
-	char *str7 = "echo 'input.txt < cat'";
+	char *str7 = "echo 'input.txt < cat   '   ";
 	printf("test%d: %s\n", idx++, str7);
 	head = parser(str7);
 	linked_list_print(head);
 
+	printf("\ntest for expansion\n");
+	printf("===================================\n");
 
+	char *str8 = "echo $USER \"$USER\" '$USER'";
+	printf("test%d: %s\n", idx++, str8);
+	head = parser(str8);
+	linked_list_print(head);
 	// head = linked_list_init(head);
 	// linked_list_append(head, "aaaa");
 	// linked_list_append(head, "bbbb");

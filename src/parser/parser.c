@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/01/12 17:08:57 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/13 10:53:32 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,6 @@ t_linked_list	*parser(char *input)
 		linked_list_append(head, str_temp);
 		input += len;
 	}
+	linked_list_expansion(head);
 	return (head);
 }
