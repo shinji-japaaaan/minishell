@@ -6,16 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:33:42 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/11 10:38:16 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:18:30 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <stdlib.h>
-#include <string.h>
+#include "../../include/minishell.h"
 
 void execute_command(char *input) {
     pid_t pid;

@@ -6,14 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/13 12:26:48 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:17:41 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "../../include/minishell.h"
 
 // 環境変数をコピーする関数
 char **copy_environment(char **envp) {
