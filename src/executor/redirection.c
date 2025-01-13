@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/13 14:18:37 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:29:51 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,13 @@ int main() {
     }
     close(stdout_backup);
 
+    // 標準入力を保存
+    int stdin_backup = dup(STDIN_FILENO);
+    if (stdin_backup == -1) {
+        perror("Error saving STDIN");
+        return EXIT_FAILURE;
+    }
+
     // 入力リダイレクトのテスト
     printf("Testing input redirection...\n");
     handle_redirect(2, input_file); // '<' のリダイレクト
@@ -79,6 +86,13 @@ int main() {
     }
     buffer[bytes_read] = '\0'; // Null文字で終端
     printf("Read from %s: %s", input_file, buffer);
+
+    // 標準入力を元に戻す
+    if (dup2(stdin_backup, STDIN_FILENO) == -1) {
+        perror("Error restoring STDIN");
+        return EXIT_FAILURE;
+    }
+    close(stdin_backup);
 
     return EXIT_SUCCESS;
 }
