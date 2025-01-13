@@ -6,12 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:12:05 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/11 08:17:08 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/13 10:23:47 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "history.h"
-#include "minishell.h"
+#include "../include/minishell.h"
 
 // 履歴リストを初期化
 History *init_history(int max_size) {

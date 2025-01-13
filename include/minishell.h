@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:00:06 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/11 08:18:22 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:18:09 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "history.h"  // history.h をインクルード
-
-#define HISTORY_FILE ".minishell_history"
-#define BUFFER_SIZE 1024
-#define MAX_HISTORY 100
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #endif /* MINISHELL_H */
 

@@ -6,16 +6,16 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:10:32 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/11 08:18:39 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/13 10:23:23 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HISTORY_H
 #define HISTORY_H
 
-#include "minishell.h"  // minishell.h をインクルードして、共通の定義を再利用
-
+// 履歴関連の定数定義
 #define HISTORY_FILE ".minishell_history"
+#define BUFFER_SIZE 1024
 #define MAX_HISTORY 100
 
 // 履歴管理用構造体
@@ -33,4 +33,5 @@ void load_history_from_file(const char *filename, History *history);
 void free_history(History *history);
 
 #endif /* HISTORY_H */
+
 
