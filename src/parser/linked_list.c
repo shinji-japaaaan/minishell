@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:20:24 by karai             #+#    #+#             */
-/*   Updated: 2025/01/12 16:40:03 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/13 10:52:34 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,24 @@ void	linked_list_append(t_linked_list *list_head, char *str)
 
 void	linked_list_print(t_linked_list *list_head)
 {
-	t_linked_list *ptr_temp;
+	t_linked_list	*ptr_temp;
 
 	ptr_temp = list_head->next;
 	while (ptr_temp)
 	{
 		printf("%s\n", ptr_temp->content);
+		ptr_temp = ptr_temp->next;
+	}
+}
+
+void	linked_list_expansion(t_linked_list *list_head)
+{
+	t_linked_list *ptr_temp;
+
+	ptr_temp = list_head->next;
+	while(ptr_temp)
+	{
+		ptr_temp->content = expansion(ptr_temp->content);
 		ptr_temp = ptr_temp->next;
 	}
 }

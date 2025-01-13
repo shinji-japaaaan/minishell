@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/01/12 12:45:00 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/13 10:50:57 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,13 @@ char			*strdup_len(char *str, size_t n);
 char			*delete_blank_start_end(char *input);
 size_t			split_len(char *input);
 t_linked_list	*parser(char *input);
+
+//expansion.c
+bool	is_name_character(char c);
+char	*get_env_str(char *str, size_t *len);
+void	ft_strcpy(char *dst, char *src);
+char	*replace_to_env_val(char *str, char *env_str);
+char	*expansion(char *str);
+
 
 #endif
