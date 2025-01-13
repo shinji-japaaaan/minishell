@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/13 11:53:13 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/13 12:26:48 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,13 @@ void free_environment(char **env) {
 }
 
 void change_directory(char *path) {
+    if (!path || strcmp(path, "~") == 0) {
+        path = getenv("HOME");
+        if (!path) {
+            write(STDERR_FILENO, "cd failed: HOME not set\n", 24);
+            return;
+        }
+    }
     if (chdir(path) == -1) {
         perror("cd failed");
     }
@@ -139,7 +146,11 @@ int main(int argc, char **argv, char **envp) {
         fgets(input, 256, stdin);
         input[strcspn(input, "\n")] = '\0'; // 改行を除去
 
-        if (strncmp(input, "cd ", 3) == 0) {
+        if (strcmp(input, "cd") == 0) {
+            // 引数がない場合はホームディレクトリに移動
+            change_directory(NULL);
+        } else if (strncmp(input, "cd ", 3) == 0) {
+            // 引数がある場合は指定されたパスに移動
             change_directory(input + 3);
         } else if (strcmp(input, "exit") == 0) {
             exit_shell(environment);
