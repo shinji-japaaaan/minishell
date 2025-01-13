@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:20:24 by karai             #+#    #+#             */
-/*   Updated: 2025/01/13 10:52:34 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/13 21:25:28 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_linked_list	*linked_list_init(t_linked_list *new_node)
 	new_node = (t_linked_list *)malloc(sizeof(t_linked_list));
 	new_node->content = NULL;
 	new_node->next = NULL;
-	new_node->type = 0;
+	new_node->token_type = TYPE_DEFAULT;
 	return (new_node);
 }
 
@@ -44,6 +44,19 @@ void	linked_list_append(t_linked_list *list_head, char *str)
 	}
 }
 
+void	linked_list_expansion(t_linked_list *list_head)
+{
+	t_linked_list	*ptr_temp;
+
+	ptr_temp = list_head->next;
+	while (ptr_temp)
+	{
+		ptr_temp->content = expansion(ptr_temp->content);
+		ptr_temp = ptr_temp->next;
+	}
+}
+
+// for test
 void	linked_list_print(t_linked_list *list_head)
 {
 	t_linked_list	*ptr_temp;
@@ -56,14 +69,16 @@ void	linked_list_print(t_linked_list *list_head)
 	}
 }
 
-void	linked_list_expansion(t_linked_list *list_head)
+// for test
+void	linked_list_print_with_token(t_linked_list *list_head)
 {
 	t_linked_list *ptr_temp;
 
 	ptr_temp = list_head->next;
-	while(ptr_temp)
+	while (ptr_temp)
 	{
-		ptr_temp->content = expansion(ptr_temp->content);
+		printf("token type: %d\n", ptr_temp->token_type);
+		printf("%s\n", ptr_temp->content);
 		ptr_temp = ptr_temp->next;
 	}
 }
