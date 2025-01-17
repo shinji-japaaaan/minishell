@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/01/13 10:53:41 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/17 22:13:52 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "parser.h"
 
 bool	is_name_character(char c)
@@ -46,18 +45,6 @@ char	*get_env_str(char *str, size_t *len)
 	}
 	env_str[i] = '\0';
 	return (env_str);
-}
-
-void	ft_strcpy(char *dst, char *src)
-{
-	if (dst == NULL || src == NULL)
-		return ;
-	while (*src)
-	{
-		*dst = *src;
-		dst += 1;
-		src += 1;
-	}
 }
 
 char	*replace_to_env_val(char *str, char *env_str)
@@ -106,7 +93,7 @@ char	*expansion(char *str)
 	char	*env_str;
 	size_t	len;
 	size_t	i;
-	char	*str_temp;
+	// char	*str_temp;
 
 	i = 0;
 	if (str == NULL)
@@ -128,6 +115,8 @@ char	*expansion(char *str)
 	}
 	return (str);
 }
+
+
 
 // int	main(void)
 // {

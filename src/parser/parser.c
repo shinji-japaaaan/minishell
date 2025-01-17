@@ -3,84 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/01/13 21:20:35 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/17 22:25:29 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "linked_list.h"
 #include "parser.h"
 
-// char	*delete_blank_start_end(char *input)
-// {
-// 	size_t	len;
-
-// 	while (is_blank(*input))
-// 	{
-// 		input += 1;
-// 	}
-// 	len = strlen(input);
-// 	while (len >= 0 && is_blank(input[len]))
-// 	{
-// 		input[len] = '\0';
-// 		len -= 1;
-// 	}
-// 	return (input);
-// }
-
-size_t	split_len(char *input)
+t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
 {
-	bool	inside_single_quote;
-	bool	inside_double_quote;
-	size_t	len;
+	t_linked_list	*ptr_temp;
 
-	inside_single_quote = false;
-	inside_double_quote = false;
-	len = 0;
-	// while (*input != '\0' && is_blank(*input))
-	// 	input += 1;
-	if (is_delimeter(input) != 0)
-		return (is_delimeter(input));
-	while (input[len])
+	ptr_temp = list_head->next;
+	while (ptr_temp)
 	{
-		if (input[len] == '\'')
-			inside_single_quote = !inside_single_quote;
-		if (input[len] == '\"')
-			inside_double_quote = !inside_double_quote;
-		if (inside_double_quote == false && inside_single_quote == false)
+		if (ptr_temp->token_type == TYPE_COMMAND)
 		{
-			if (is_delimeter(&(input[len])) != 0)
-				return (len);
-			if (is_blank(input[len]))
-				return (len);
+			ptr_temp->content = remove_quote(ptr_temp->content);
 		}
-		len += 1;
+		ptr_temp = ptr_temp->next;
 	}
-	return (len);
+	return *list_head;  // list_headの値を返す
 }
 
-t_linked_list	*parser(char *input)
+void	expand_env_variables_in_list(t_linked_list *list_head)
 {
-	t_linked_list	*head;
-	char			*str_temp;
-	size_t			len;
+	t_linked_list	*ptr_temp;
 
-	head = linked_list_init(head);
-	while (*input != '\0')
+	ptr_temp = list_head->next;
+	while (ptr_temp)
 	{
-		while (*input != '\0' && is_blank(*input))
-			input += 1;
-		if (*input == '\0')
-		 	break ;
-		len = split_len(input);
-		str_temp = strdup_len(input, len);
-		linked_list_append(head, str_temp);
-		input += len;
+		ptr_temp->content = expansion(ptr_temp->content);
+		ptr_temp = ptr_temp->next;
 	}
-	linked_list_tokenize(head);
-	linked_list_expansion(head);
-	linked_list_remove_quote(head);
-	return (head);
+}
+
+t_linked_list *parser(char *input)
+{
+    t_linked_list *head;
+
+	head = NULL;
+    head = linked_list_init(head);
+    tokenize_input(head, input); // トークン化処理を呼び出し
+    assign_token_types(head);
+    expand_env_variables_in_list(head);
+    remove_quotes_from_tokens(head);
+    return (head);
 }

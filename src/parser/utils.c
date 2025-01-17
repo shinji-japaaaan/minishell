@@ -1,39 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/12 11:00:42 by karai             #+#    #+#             */
-/*   Updated: 2025/01/12 15:58:16 by karai            ###   ########.fr       */
+/*   Created: 2025/01/12 09:20:24 by karai             #+#    #+#             */
+/*   Updated: 2025/01/17 22:14:38 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "linked_list.h"
 #include "parser.h"
-
-bool	is_blank(char c)
-{
-	if (c == ' ' || c == '\t' || c == '\n')
-		return (true);
-	else
-		return (false);
-}
-
-// not implementing here doc for now
-int	is_delimeter(char *str)
-{
-	if (str[0] == '\0')
-		return (0);
-	if (str[0] == '>' && str[1] == '>')
-		return (2);
-	if (str[0] == '<' && str[1] == '<')
-		return (2);
-	if (*str == '|' || *str == '<' || *str == '>')
-		return (1);
-	return (0);
-}
 
 char	*strdup_len(char *str, size_t n)
 {
@@ -50,3 +27,25 @@ char	*strdup_len(char *str, size_t n)
 	ret_str[i] = '\0';
 	return (ret_str);
 }
+
+bool	is_blank(char c)
+{
+	if (c == ' ' || c == '\t' || c == '\n')
+		return (true);
+	else
+		return (false);
+}
+
+void	ft_strcpy(char *dst, char *src)
+{
+	if (dst == NULL || src == NULL)
+		return ;
+	while (*src)
+	{
+		*dst = *src;
+		dst += 1;
+		src += 1;
+	}
+}
+
+
