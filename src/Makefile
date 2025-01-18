@@ -3,7 +3,7 @@ NAME = minishell
 
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -Iinclude -I./libft
+CFLAGS = -Wall -Wextra -Werror -Iinclude -I./libft -g
 
 # Source files
 SRCS = main.c \
@@ -13,7 +13,8 @@ SRCS = main.c \
        parser/linked_list.c \
        parser/remove_quote.c \
        parser/utils.c \
-	   ../bonus/history.c
+	   ../bonus/history.c \
+	   executor/builtins.c \
 
 # Object files (SRCSから.oファイルを生成)
 OBJS = $(SRCS:.c=.o)

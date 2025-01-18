@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 22:10:28 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/18 07:18:50 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:11:53 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,12 @@ void	linked_list_append(t_linked_list *list_head, char *str)
 	t_linked_list *new_node = NULL;
     new_node = linked_list_init(new_node);
 	new_node->content = strdup(str);
-	if (list_head->next == NULL)
+	//list_head->contentがNULLの場合、最初のノードにデータを格納
+    if (list_head->content == NULL)
+    {
+        list_head->content = new_node->content;
+    }
+    else if (list_head->next == NULL) // 次のノードが無ければ、リストの末尾に追加
 	{
 		list_head->next = new_node;
 	}

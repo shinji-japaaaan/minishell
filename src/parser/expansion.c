@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/01/18 09:53:44 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 13:22:24 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ char	*get_env_str(char *str, size_t *len)
 		i += 1;
 	}
 	env_str[i] = '\0';
+	printf("Extracted environment variable name: %s, Length: %zu\n", env_str, *len);
 	return (env_str);
 }
 
@@ -71,6 +72,8 @@ char	*replace_to_env_val(char *str, char *env_str)
 	{
 		if (*str == '$' && strncmp(str + 1, env_str, env_str_len) == 0)
 		{
+			// デバッグ情報を追加
+            printf("Replacing $%s with %s\n", env_str, env_val ? env_val : "(NULL)");
 			ft_strcpy(&new_str[i], env_val);
 			i += env_val_len;
 			str += (env_str_len + 1);
@@ -104,6 +107,8 @@ char	*expansion(char *str)
 	{
 		if (str[i] == '$')
 		{
+			// デバッグ情報を追加
+            printf("Found $ at position %zu\n", i);
 			if (!(str[i + 1] == '\0' || is_blank(str[i + 1])))
 			{
 				env_str = get_env_str(&str[i + 1], &len);

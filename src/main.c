@@ -6,15 +6,35 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/18 07:42:47 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 13:52:37 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include "../include/parser.h"
 
-// シェルの処理全体を管理する関数
-void process_shell(void) {
+void handle_internal_commands(char *command, char *args, char **env) {
+    if (strcmp(command, "cd") == 0) {
+        change_directory(args);
+    } else if (strcmp(command, "exit") == 0) {
+        exit_shell(env);
+    } else if (strcmp(command, "echo") == 0) {
+        echo_command(args);
+    } else if (strcmp(command, "pwd") == 0) {
+        print_working_directory();
+    } else if (strcmp(command, "env") == 0) {
+        print_environment(env);
+    } else if (strncmp(command, "export", 7) == 0) {
+        export_variable(&env, args);
+    } else if (strncmp(command, "unset", 5) == 0) {
+        unset_variable(&env, args);
+    } else {
+        // 外部コマンドに対する処理（必要に応じて）
+        printf("Unsupported command: %s\n", command);
+    }
+}
+
+void process_shell(char **env) {
     char *input;
     t_linked_list *parsed_list;
 
@@ -31,19 +51,9 @@ void process_shell(void) {
             printf("exit\n");
             break;
         }
-
         if (*input) { // 入力が空でない場合
             add_history(input);           // readline用の履歴に追加
             add_to_history(history, input); // 自前の履歴にも追加
-        }
-
-        // 内部コマンド "history" の処理
-        if (strcmp(input, "history") == 0) {
-            for (int i = 0; i < history->count; i++) {
-                printf("%d: %s\n", i + 1, history->entries[i]);
-            }
-            free(input);
-            continue; // 次の入力を待つ
         }
 
         // パーサーの実行
@@ -54,11 +64,12 @@ void process_shell(void) {
             continue; // 次の入力を待つ
         }
 
-        // リンクリストの内容とトークンタイプを表示
-        linked_list_print_with_token(parsed_list);
+        // リストからコマンドと引数を取得
+        char *command = parsed_list->content; // コマンド部分
+        char *args = parsed_list->next ? parsed_list->next->content : NULL; // 引数部分
 
-        // パース後の処理をここに追加
-        // 例えば、コマンド実行部分を呼び出すなど
+        // 内部コマンドの処理を外だし関数で呼び出す
+        handle_internal_commands(command, args, env);
 
         // メモリ解放
         linked_list_free(parsed_list);
@@ -73,8 +84,10 @@ void process_shell(void) {
     rl_clear_history();
 }
 
-int main(void) {
-    process_shell(); // 入力受付関数を呼び出し
+int main(int argc, char **argv, char **envp) {
+    (void)argc; // argc を無視
+    (void)argv; // argv を無視
+    process_shell(envp); // 入力受付関数を呼び出し
     return 0;
 }
 

@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/13 14:17:41 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 11:44:10 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,41 +134,41 @@ void unset_variable(char ***env, char *arg) {
     (*env)[j] = NULL;
 }
 
-int main(int argc, char **argv, char **envp) {
-    char **environment = copy_environment(envp);
-    char input[256];
+// int main(int argc, char **argv, char **envp) {
+//     char **environment = copy_environment(envp);
+//     char input[256];
 
-    while (1) {
-        printf("minishell> ");
-        fgets(input, 256, stdin);
-        input[strcspn(input, "\n")] = '\0'; // 改行を除去
+//     while (1) {
+//         printf("minishell> ");
+//         fgets(input, 256, stdin);
+//         input[strcspn(input, "\n")] = '\0'; // 改行を除去
 
-        if (strcmp(input, "cd") == 0) {
-            // 引数がない場合はホームディレクトリに移動
-            change_directory(NULL);
-        } else if (strncmp(input, "cd ", 3) == 0) {
-            // 引数がある場合は指定されたパスに移動
-            change_directory(input + 3);
-        } else if (strcmp(input, "exit") == 0) {
-            exit_shell(environment);
-        } else if (strncmp(input, "echo ", 5) == 0) {
-            echo_command(input + 5);
-        } else if (strcmp(input, "pwd") == 0) {
-            print_working_directory();
-        } else if (strcmp(input, "env") == 0) {
-            print_environment(environment);
-        } else if (strncmp(input, "export ", 7) == 0) {
-            export_variable(&environment, input + 7);
-        } else if (strncmp(input, "unset ", 6) == 0) {
-            unset_variable(&environment, input + 6);
-        } else {
-            printf("Unsupported command: %s\n", input);
-        }
-    }
+//         if (strcmp(input, "cd") == 0) {
+//             // 引数がない場合はホームディレクトリに移動
+//             change_directory(NULL);
+//         } else if (strncmp(input, "cd ", 3) == 0) {
+//             // 引数がある場合は指定されたパスに移動
+//             change_directory(input + 3);
+//         } else if (strcmp(input, "exit") == 0) {
+//             exit_shell(environment);
+//         } else if (strncmp(input, "echo ", 5) == 0) {
+//             echo_command(input + 5);
+//         } else if (strcmp(input, "pwd") == 0) {
+//             print_working_directory();
+//         } else if (strcmp(input, "env") == 0) {
+//             print_environment(environment);
+//         } else if (strncmp(input, "export ", 7) == 0) {
+//             export_variable(&environment, input + 7);
+//         } else if (strncmp(input, "unset ", 6) == 0) {
+//             unset_variable(&environment, input + 6);
+//         } else {
+//             printf("Unsupported command: %s\n", input);
+//         }
+//     }
 
-    free_environment(environment);
-    return 0;
-}
+//     free_environment(environment);
+//     return 0;
+// }
 
 
 
