@@ -6,11 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:45:13 by karai             #+#    #+#             */
-/*   Updated: 2025/01/17 22:14:29 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 07:18:43 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../../include/parser.h"
 
 size_t	remove_quote_get_newlen(char *str)
 {

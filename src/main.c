@@ -6,15 +6,17 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/18 06:55:07 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 07:42:47 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include "../include/parser.h"
 
 // シェルの処理全体を管理する関数
 void process_shell(void) {
     char *input;
+    t_linked_list *parsed_list;
 
     // 履歴リストの初期化
     History *history = init_history(MAX_HISTORY);
@@ -40,8 +42,26 @@ void process_shell(void) {
             for (int i = 0; i < history->count; i++) {
                 printf("%d: %s\n", i + 1, history->entries[i]);
             }
+            free(input);
+            continue; // 次の入力を待つ
         }
 
+        // パーサーの実行
+        parsed_list = parser(input);
+        if (!parsed_list) {
+            fprintf(stderr, "Error: Failed to parse input.\n");
+            free(input);
+            continue; // 次の入力を待つ
+        }
+
+        // リンクリストの内容とトークンタイプを表示
+        linked_list_print_with_token(parsed_list);
+
+        // パース後の処理をここに追加
+        // 例えば、コマンド実行部分を呼び出すなど
+
+        // メモリ解放
+        linked_list_free(parsed_list);
         free(input); // 動的メモリの解放
     }
 

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   linked_list_utils.c                                :+:      :+:    :+:   */
+/*   linked_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 22:10:28 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/17 22:13:54 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 07:18:50 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../../include/parser.h"
 
 // for test
 void	linked_list_print(t_linked_list *list_head)

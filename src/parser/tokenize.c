@@ -6,11 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:18:22 by karai             #+#    #+#             */
-/*   Updated: 2025/01/17 22:14:31 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 07:18:14 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../../include/parser.h"
 
 TokenType	get_token_type(char *str)
 {

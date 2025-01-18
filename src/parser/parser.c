@@ -6,11 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/01/17 22:25:29 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 07:18:45 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../../include/parser.h"
 
 t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
 {

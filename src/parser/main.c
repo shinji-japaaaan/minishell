@@ -1,7 +1,7 @@
 // File: main.c
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../../include/parser.h"
 
 void run_test(const char *test_name, char *input)
 {

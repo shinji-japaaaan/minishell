@@ -6,11 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:20:24 by karai             #+#    #+#             */
-/*   Updated: 2025/01/17 22:14:38 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 07:18:19 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../../include/parser.h"
 
 char	*strdup_len(char *str, size_t n)
 {

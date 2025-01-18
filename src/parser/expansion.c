@@ -6,11 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/01/17 22:13:52 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/18 09:53:44 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../../include/parser.h"
 
 bool	is_name_character(char c)
 {
@@ -116,14 +116,3 @@ char	*expansion(char *str)
 	return (str);
 }
 
-
-
-// int	main(void)
-// {
-// 	char	*converted_str;
-// 	char	*str;
-
-// 	str = strdup("dsfjd  $oo  $USER# adfa $USER $AAA");
-// 	converted_str = expansion(str);
-// 	printf("%s\n", converted_str);
-// }
