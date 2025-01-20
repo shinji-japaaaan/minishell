@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/20 20:30:20 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/20 21:32:53 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void process_shell(char **env) {
         }
         // パーサーの実行
         parsed_list = parser(input);
-        print_cmd(parsed_list);
         if (!parsed_list) {
             fprintf(stderr, "Error: Failed to parse input.\n");
             free(input);
@@ -110,7 +109,7 @@ void process_shell(char **env) {
         }
 
         // メモリ解放
-        linked_list_free(parsed_list);
+        // linked_list_free(parsed_list);
         free(input); // 動的メモリの解放
     }
 

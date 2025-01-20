@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/01/19 07:45:46 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:54:23 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ t_redirect	*redirect_init(t_redirect *new_node)
 t_cmd_invoke	*cmd_invoke_init(t_cmd_invoke *new_node)
 {
 	new_node = (t_cmd_invoke *)malloc(sizeof(t_cmd_invoke));
-	new_node->cmd = NULL;
 	new_node->cmd_list = NULL;
 	new_node->redirect_in_head = redirect_init(NULL);
 	new_node->redirect_out_head = redirect_init(NULL);
@@ -82,6 +81,7 @@ t_redirect	*redirect_append(t_redirect *redirect_head, char *content)
 	ptr_temp->next = new_node;
 	return (redirect_head);
 }
+
 t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head)
 {
 	t_linked_list	*list_ptr_temp;

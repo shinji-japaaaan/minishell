@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 22:10:28 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/20 20:40:40 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/20 21:29:43 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	linked_list_append(t_linked_list *list_head, char *str)
 	new_node = NULL;
     new_node = linked_list_init(new_node);
 	new_node->content = strdup(str);
-	printf("%s", new_node->content);
+	free(str);
 	if (list_head->next == NULL)
 	{
 		list_head->next = new_node;
@@ -77,7 +77,6 @@ void	linked_list_append(t_linked_list *list_head, char *str)
 		}
 		ptr_temp->next = new_node;
 	}
-	printf("%s", ptr_temp->next->content);
 }
 
 t_linked_list	*linked_list_init(t_linked_list *new_node)
