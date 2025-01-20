@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/19 07:27:37 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/20 22:20:52 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int	cmd_execute_main(t_cmd_invoke *head)
 		temp_ptr->pid = fork();
 		if (temp_ptr->pid == 0)
 		{
+			open_redirect(temp_ptr);
 			if (is_first && temp_ptr->next == NULL)
 			{
 				cmd_execute_first_last(temp_ptr);
@@ -121,6 +122,7 @@ int	cmd_execute_main(t_cmd_invoke *head)
 				close(temp_ptr->bef_pipefd[0]);
 				close(temp_ptr->bef_pipefd[1]);
 			}
+			reset_redirect(temp_ptr);
 		}
 		is_first = false;
 		temp_ptr = temp_ptr->next;

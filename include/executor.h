@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_pipileine.h                                :+:      :+:    :+:   */
+/*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/01/19 05:56:23 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/20 21:58:37 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,11 @@ char	*get_path_main(t_cmd_invoke *node);
 // get_path_utils.c
 int		is_access(char *full_path);
 bool	is_full_relative_path(char *str);
+
+//redirection.c
+void	open_redirect(t_cmd_invoke *node);
+void	handle_redirect_all(t_redirect *head);
+void	handle_redirect(TokenType token_type, t_redirect *node);
+void	reset_redirect(t_cmd_invoke *node);
 
 #endif

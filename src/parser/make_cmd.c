@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/01/20 20:54:23 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/20 22:28:04 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_redirect	*redirect_init(t_redirect *new_node)
 {
 	new_node = (t_redirect *)malloc(sizeof(t_redirect));
 	new_node->filename = NULL;
-	new_node->redirect_type = TYPE_DEFAULT;
+	new_node->token_type = TYPE_DEFAULT;
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -40,8 +40,10 @@ t_cmd_invoke	*cmd_invoke_init(t_cmd_invoke *new_node)
 {
 	new_node = (t_cmd_invoke *)malloc(sizeof(t_cmd_invoke));
 	new_node->cmd_list = NULL;
-	new_node->redirect_in_head = redirect_init(NULL);
-	new_node->redirect_out_head = redirect_init(NULL);
+	new_node->redirect_in_head = NULL;
+	new_node->redirect_out_head = NULL;
+	new_node->redirect_in_head = redirect_init(new_node->redirect_in_head);
+	new_node->redirect_out_head = redirect_init(new_node->redirect_out_head);
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -66,13 +68,16 @@ size_t	ft_cmd_len(t_linked_list *node)
 	return (cmd_len);
 }
 
-t_redirect	*redirect_append(t_redirect *redirect_head, char *content)
+t_redirect	*redirect_append(t_redirect *redirect_head, char *content,
+		TokenType token_type)
 {
 	t_redirect	*new_node;
 	t_redirect	*ptr_temp;
 
-	new_node = redirect_init(NULL);
+	new_node = NULL;
+	new_node = redirect_init(new_node);
 	new_node->filename = content;
+	new_node->token_type = token_type;
 	ptr_temp = redirect_head;
 	while (ptr_temp->next != NULL)
 	{
@@ -129,13 +134,13 @@ t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head)
 			{
 				// to redirect_in
 				redirect_append(cmd_ptr_temp->redirect_in_head,
-					list_ptr_temp->content);
+					list_ptr_temp->content, bef_token_type);
 			}
 			else
 			{
 				// to redirect_out
 				redirect_append(cmd_ptr_temp->redirect_out_head,
-					list_ptr_temp->content);
+					list_ptr_temp->content, bef_token_type);
 			}
 			is_filename = false;
 			bef_token_type = TYPE_COMMAND;

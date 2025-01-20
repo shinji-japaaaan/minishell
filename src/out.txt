@@ -1,0 +1,13 @@
+total 124
+drwxrwxr-x 2 user42 user42  4096  1月 20 22:28 executor
+drwxrwxr-x 2 user42 user42  4096  1月 20 22:28 libft
+-rw-rw-r-- 1 user42 user42  4234  1月 20 22:28 main.c
+-rw-rw-r-- 1 user42 user42 14760  1月 20 22:28 main.o
+-rw-rw-r-- 1 user42 user42  1090  1月 20 22:00 Makefile
+-rwxrwxr-x 1 user42 user42 67736  1月 20 22:28 minishell
+-rw-rw-r-- 1 user42 user42     0  1月 20 22:28 out.txt
+drwxrwxr-x 2 user42 user42  4096  1月 20 22:28 parser
+-rw-rw-r-- 1 user42 user42  1363  1月 20 20:44 test.c
+-rw-rw-r-- 1 user42 user42  2907  1月 20 20:44 test_make_cmd.c
+-rw-rw-r-- 1 user42 user42  3504  1月 20 20:44 test.o
+-rw-rw-r-- 1 user42 user42  2264  1月 20 20:44 test_parser.c

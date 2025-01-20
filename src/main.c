@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/20 21:32:53 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/20 22:28:10 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void process_shell(char **env) {
         char *command = parsed_list->next->cmd_list[0]; // コマンド部分
         char *args = parsed_list->next ? parsed_list->next->cmd_list[1] : NULL; // 引数部分
 
+        // print_cmd(parsed_list);
         // 内部コマンドの処理を外だし関数で呼び出す
         if (!handle_internal_commands(command, args, env))
         {
@@ -109,7 +110,7 @@ void process_shell(char **env) {
         }
 
         // メモリ解放
-        // linked_list_free(parsed_list);
+        linked_list_free(parsed_list);
         free(input); // 動的メモリの解放
     }
 
