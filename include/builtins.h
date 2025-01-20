@@ -9,5 +9,6 @@ void print_working_directory(void);
 void print_environment(char **env);
 void export_variable(char ***env, char *args);
 void unset_variable(char ***env, char *args);
+void execute_command(t_linked_list *parsed_list);
 
-#endif // INTERNAL_COMMANDS_H
+#endif

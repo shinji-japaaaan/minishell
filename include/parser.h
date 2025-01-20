@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/01/17 22:29:46 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:16:31 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,7 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-# include <stdlib.h>
-# include <string.h>
-# include <stdio.h>
-# include <stdbool.h>
-# include "../libft/libft.h"
+#include <stdbool.h>
 
 // TokenTypeの定義（必要な場合）
 typedef enum e_token_type
@@ -41,6 +37,26 @@ typedef struct s_linked_list
     struct s_linked_list *next;
 }   t_linked_list;
 
+typedef struct s_redirect
+{
+	char				*filename;
+	TokenType			redirect_type;
+	struct s_redirect	*next;
+}						t_redirect;
+
+typedef struct s_cmd_invoke
+{
+	char				**cmd_list;
+	t_redirect			*redirect_in_head;
+	t_redirect			*redirect_out_head;
+	struct s_cmd_invoke	*next;
+	pid_t				pid;
+	int					*bef_pipefd;
+	int					nxt_pipefd[2];
+	int					in_fd;
+	int					out_fd;
+}						t_cmd_invoke;
+
 // 関数プロトタイプ
 
 // expansion.c
@@ -52,14 +68,14 @@ char    *expansion(char *str);
 // linked_list.c
 void    linked_list_print(t_linked_list *list_head);
 void    linked_list_print_with_token(t_linked_list *list_head);
-void    linked_list_free(t_linked_list *list_head);
-void    linked_list_append(t_linked_list *list_head, char *str);
-t_linked_list    *linked_list_init(t_linked_list *new_node);
+void    linked_list_free(t_cmd_invoke *list_head);
+void	linked_list_append(t_linked_list *list_head, char *str);
+t_linked_list    *linked_list_init(t_linked_list *head);
 
 // parser.c
 t_linked_list    remove_quotes_from_tokens(t_linked_list *list_head);
 void    expand_env_variables_in_list(t_linked_list *list_head);
-t_linked_list    *parser(char *input);
+t_cmd_invoke    *parser(char *input);
 
 // remove_quote.c
 size_t  remove_quote_get_newlen(char *str);
@@ -76,6 +92,15 @@ void        tokenize_input(t_linked_list *head, char *input);
 char    *strdup_len(char *str, size_t n);
 bool    is_blank(char c);
 void    ft_strcpy(char *dst, char *src);
+
+// make_cmd.c
+size_t	ft_cmd_len_list(t_cmd_invoke *head);
+t_redirect		*redirect_init(t_redirect *new_node);
+t_cmd_invoke	*cmd_invoke_init(t_cmd_invoke *new_node);
+size_t			ft_cmd_len(t_linked_list *node);
+t_redirect		*redirect_append(t_redirect *redirect_head, char *content);
+t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head);
+
 
 #endif
 /* ************************************************************************** */

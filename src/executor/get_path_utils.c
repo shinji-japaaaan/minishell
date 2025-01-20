@@ -1,51 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   get_path_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/12 09:20:24 by karai             #+#    #+#             */
-/*   Updated: 2025/01/19 05:27:13 by sishizaw         ###   ########.fr       */
+/*   Created: 2024/12/24 02:47:23 by karai             #+#    #+#             */
+/*   Updated: 2025/01/19 05:50:53 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*strdup_len(char *str, size_t n)
+int	is_access(char *full_path)
 {
-	char	*ret_str;
-	size_t	i;
-
-	ret_str = (char *)malloc(sizeof(char) * (n + 1));
-	i = 0;
-	while (i < n)
+	if (access(full_path, F_OK) == 0)
 	{
-		ret_str[i] = str[i];
-		i += 1;
+		if (access(full_path, X_OK) == 0)
+			return (2);
+		else
+			return (1);
 	}
-	ret_str[i] = '\0';
-	return (ret_str);
+	return (0);
 }
 
-bool	is_blank(char c)
+bool	is_full_relative_path(char *str)
 {
-	if (c == ' ' || c == '\t' || c == '\n')
-		return (true);
-	else
+	if (str == NULL)
 		return (false);
+	if (str[0] == '.' || str[0] == '/')
+		return (true);
+	return (false);
 }
-
-void	ft_strcpy(char *dst, char *src)
-{
-	if (dst == NULL || src == NULL)
-		return ;
-	while (*src)
-	{
-		*dst = *src;
-		dst += 1;
-		src += 1;
-	}
-}
-
-

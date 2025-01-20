@@ -6,11 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/01/18 13:54:03 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:33:20 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/parser.h"
+#include "../../include/minishell.h"
 
 t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
 {
@@ -40,14 +40,22 @@ void	expand_env_variables_in_list(t_linked_list *list_head)
 	}
 }
 
-t_linked_list *parser(char *input)
+t_cmd_invoke *parser(char *input)
 {
     t_linked_list *head;
+	t_cmd_invoke	*cmd_head;
 
-	head = linked_list_init(NULL);
+	head = NULL;
+	head = linked_list_init(head);
+	if (head == NULL) {
+    fprintf(stderr, "Failed to initialize linked list.\n");
+    return (NULL); // 適切なエラーハンドリング
+	}
     tokenize_input(head, input); // トークン化処理を呼び出し
     assign_token_types(head);
     expand_env_variables_in_list(head);
     remove_quotes_from_tokens(head);
-    return (head);
+	cmd_head = cmd_invoke_init(NULL);
+	cmd_head = make_cmd(head, cmd_head);
+    return (cmd_head);
 }
