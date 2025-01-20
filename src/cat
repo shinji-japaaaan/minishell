@@ -1,0 +1,14 @@
+cat
+executor
+libft
+main.c
+main.o
+Makefile
+minishell
+out1.txt
+out.txt
+parser
+test.c
+test_make_cmd.c
+test.o
+test_parser.c

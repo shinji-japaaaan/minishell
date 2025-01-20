@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/01/20 22:16:24 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/21 08:15:17 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ typedef struct s_linked_list
 
 typedef struct s_redirect
 {
-	char				*filename;
-	TokenType			token_type;
-	int					fd;
-	int					stdio_backup;
-	struct s_redirect	*next;
-}						t_redirect;
+	char					*filename;
+	TokenType				token_type;
+	int						fd;
+	int						stdio_backup;
+	struct s_redirect		*next;
+}							t_redirect;
 
 typedef struct s_cmd_invoke
 {
@@ -80,7 +80,7 @@ t_linked_list				remove_quotes_from_tokens(t_linked_list *list_head);
 void						expand_env_variables_in_list(t_linked_list *list_head);
 t_cmd_invoke				*parser(char *input);
 
-// remove_quote.c
+// remove_quote.cS
 size_t						remove_quote_get_newlen(char *str);
 char						*remove_quote(char *str);
 
