@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/01/20 21:30:24 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/21 21:08:41 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
 		}
 		ptr_temp = ptr_temp->next;
 	}
-	return *list_head;  // list_headの値を返す
+	return (*list_head); // list_headの値を返す
 }
 
 void	expand_env_variables_in_list(t_linked_list *list_head)
@@ -40,22 +40,29 @@ void	expand_env_variables_in_list(t_linked_list *list_head)
 	}
 }
 
-t_cmd_invoke *parser(char *input)
+t_cmd_invoke	*parser(char *input)
 {
-    t_linked_list *head;
+	t_linked_list	*head;
 	t_cmd_invoke	*cmd_head;
 
 	head = NULL;
 	head = linked_list_init(head);
-	if (head == NULL) {
-    fprintf(stderr, "Failed to initialize linked list.\n");
-    return (NULL); // 適切なエラーハンドリング
+	if (head == NULL)
+	{
+		fprintf(stderr, "Failed to initialize linked list.\n");
+		return (NULL); // 適切なエラーハンドリング
 	}
-    tokenize_input(head, input); // トークン化処理を呼び出し
-    assign_token_types(head);
-    expand_env_variables_in_list(head);
-    remove_quotes_from_tokens(head);
+	tokenize_input(head, input); // トークン化処理を呼び出し
+	assign_token_types(head);
+	expand_env_variables_in_list(head);
+	remove_quotes_from_tokens(head);
+	if (parse_error_last_token(head) || parse_error_consecutive_pipe(head)
+		|| parse_error_consecutive_redirect(head))
+	{
+		ft_putendl_fd("syntax error", 2);
+		return (NULL); // should be freed before return
+	}
 	cmd_head = cmd_invoke_init(NULL);
 	cmd_head = make_cmd(head, cmd_head);
-    return (cmd_head);
+	return (cmd_head);
 }

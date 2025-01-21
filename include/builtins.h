@@ -1,6 +1,8 @@
 #ifndef INTERNAL_COMMANDS_H
 # define INTERNAL_COMMANDS_H
 
+#include "parser.h"
+
 // 内部コマンドで使用する関数群の宣言
 void	change_directory(char *path);
 void	exit_shell(char **env);

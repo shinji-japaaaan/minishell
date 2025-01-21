@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/01/21 08:15:17 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/21 20:53:57 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,14 @@ t_redirect					*redirect_append(t_redirect *redirect_head,
 								char *content, TokenType token_type);
 t_cmd_invoke				*make_cmd(t_linked_list *list_head,
 								t_cmd_invoke *cmd_head);
+
+// parse_error.c
+bool	parse_error_quote(char *input);
+bool	parse_error_unexpected_str_judge(char *str);
+bool	parse_error_unexpected_str(char *input);
+bool	parse_error_last_token(t_linked_list *head);
+bool	parse_error_consecutive_redirect(t_linked_list *head);
+bool	parse_error_consecutive_pipe(t_linked_list *head);
 
 #endif
 

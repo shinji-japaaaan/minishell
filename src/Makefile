@@ -14,6 +14,7 @@ SRCS = main.c \
        parser/remove_quote.c \
        parser/utils.c \
 	   parser/make_cmd.c \
+	   parser/parse_error.c\
 	   ../bonus/history.c \
 	   executor/builtins.c \
 	   executor/executor.c \
