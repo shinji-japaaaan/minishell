@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/20 22:28:10 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/21 20:29:39 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void process_shell(char **env) {
         // プロンプト表示と入力受付
         input = readline("minishell> ");
         if (!input) { // EOFやエラー時の終了処理
+            printf("this is input\n%s", input);
             printf("exit\n");
             break;
         }

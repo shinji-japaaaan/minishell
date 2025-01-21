@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/21 08:44:06 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/21 20:29:29 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,6 @@ int	parent_process_wait(t_cmd_invoke *head)
 		return (WIFSIGNALED(status));
 	return (WEXITSTATUS(status));
 }
-
-// void	cmd_execute_first_last(t_cmd_invoke *node)
-// {
-// 	char		*path;
-
-// 	path = get_path_main(node);
-// }
 
 void	cmd_execute_first(t_cmd_invoke *node)
 {
@@ -66,6 +59,7 @@ int	cmd_execute_main(t_cmd_invoke *head)
 	bool			is_first;
 	char			*path;
 	extern char		**environ;
+	int				status_handle_internal_command;
 
 	is_first = true;
 	temp_ptr = head->next;
@@ -89,19 +83,26 @@ int	cmd_execute_main(t_cmd_invoke *head)
 			else if (temp_ptr->next == NULL)
 				cmd_execute_last(temp_ptr); //  pipe connect
 			else
-				cmd_execute_middle(temp_ptr);          //  pipe connect
-			open_redirect(temp_ptr);                   // processing redirect
-			path = get_path_main(temp_ptr);            //  get command path
-			execve(path, temp_ptr->cmd_list, environ); // execute command
+				cmd_execute_middle(temp_ptr); //  pipe connect
+			open_redirect(temp_ptr);          // processing redirect
+			status_handle_internal_command = handle_internal_commands(temp_ptr->cmd_list[0],
+					temp_ptr->cmd_list[1], environ);
+			if (!status_handle_internal_command)
+			{
+				path = get_path_main(temp_ptr);            //  get command path
+				execve(path, temp_ptr->cmd_list, environ); // execute command
+			}
+			else
+				exit (status_handle_internal_command);
 		}
 		else // start parent process
 		{
 			if (is_first == false)
 			{
 				close(temp_ptr->bef_pipefd[0]);
-					// close not using pipe connection
+				// close not using pipe connection
 				close(temp_ptr->bef_pipefd[1]);
-					// close not using pipe connection
+				// close not using pipe connection
 			}
 		}
 		is_first = false;
@@ -109,6 +110,6 @@ int	cmd_execute_main(t_cmd_invoke *head)
 		temp_ptr = temp_ptr->next; // move to next command
 	}
 	status = parent_process_wait(head);
-		// wait for finishing child process in parent process
+	// wait for finishing child process in parent process
 	return (status);
 }
