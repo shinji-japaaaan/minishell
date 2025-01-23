@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/21 21:13:11 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/23 21:36:55 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,11 @@ void	process_shell(char **env)
 	char			*input;
 	t_cmd_invoke	*parsed_list;
 	History			*history;
+	int				last_status;
+	char			*command;
+	char			*args;
 
+	last_status = 0;
 	// 履歴リストの初期化
 	history = init_history(MAX_HISTORY);
 	// 履歴ファイルの読み込み
@@ -117,7 +121,7 @@ void	process_shell(char **env)
 			continue ;
 		}
 		// パーサーの実行
-		parsed_list = parser(input);
+		parsed_list = parser(input, last_status);
 		if (!parsed_list)
 		{
 			fprintf(stderr, "Error: Failed to parse input.\n");
@@ -125,16 +129,16 @@ void	process_shell(char **env)
 			continue ; // 次の入力を待つ
 		}
 		// リストからコマンドと引数を取得
-		char *command = parsed_list->next->cmd_list[0];
-			// コマンド部分
-		char *args = parsed_list->next ? parsed_list->next->cmd_list[1] : NULL;
-			// 引数部分
+		command = parsed_list->next->cmd_list[0];
+		// コマンド部分
+		args = parsed_list->next ? parsed_list->next->cmd_list[1] : NULL;
+		// 引数部分
 		// print_cmd(parsed_list);
 		// 内部コマンドの処理を外だし関数で呼び出す
 		if (!handle_internal_commands(command, args, env))
 		{
 			// 外部コマンドの処理
-			cmd_execute_main(parsed_list);
+			last_status = cmd_execute_main(parsed_list);
 		}
 		// メモリ解放
 		linked_list_free(parsed_list);

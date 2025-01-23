@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/01/21 21:08:41 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/23 21:37:51 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@ t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
 	return (*list_head); // list_headの値を返す
 }
 
-void	expand_env_variables_in_list(t_linked_list *list_head)
+void	expand_env_variables_in_list(t_linked_list *list_head, int last_status)
 {
 	t_linked_list	*ptr_temp;
 
 	ptr_temp = list_head->next;
 	while (ptr_temp)
 	{
-		ptr_temp->content = expansion(ptr_temp->content);
+		ptr_temp->content = expansion(ptr_temp->content, last_status);
 		ptr_temp = ptr_temp->next;
 	}
 }
 
-t_cmd_invoke	*parser(char *input)
+t_cmd_invoke	*parser(char *input, int last_status)
 {
 	t_linked_list	*head;
 	t_cmd_invoke	*cmd_head;
@@ -54,7 +54,7 @@ t_cmd_invoke	*parser(char *input)
 	}
 	tokenize_input(head, input); // トークン化処理を呼び出し
 	assign_token_types(head);
-	expand_env_variables_in_list(head);
+	expand_env_variables_in_list(head, last_status);
 	remove_quotes_from_tokens(head);
 	if (parse_error_last_token(head) || parse_error_consecutive_pipe(head)
 		|| parse_error_consecutive_redirect(head))

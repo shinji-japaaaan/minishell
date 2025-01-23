@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/01/21 20:53:57 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/23 21:37:16 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,10 @@ typedef struct s_cmd_invoke
 
 // expansion.c
 bool						is_name_character(char c);
-char						*get_env_str(char *str, size_t *len);
-char						*replace_to_env_val(char *str, char *env_str);
-char						*expansion(char *str);
+char						*get_env_str(char *str, size_t *strdup_len);
+char						*replace_to_env_val(char *str, char *env_str,
+								int last_status);
+char						*expansion(char *str, int last_status);
 
 // linked_list.c
 void						linked_list_print(t_linked_list *list_head);
@@ -77,8 +78,9 @@ t_linked_list				*linked_list_init(t_linked_list *head);
 
 // parser.c
 t_linked_list				remove_quotes_from_tokens(t_linked_list *list_head);
-void						expand_env_variables_in_list(t_linked_list *list_head);
-t_cmd_invoke				*parser(char *input);
+void						expand_env_variables_in_list(t_linked_list *list_head,
+								int last_status);
+t_cmd_invoke				*parser(char *input, int last_status);
 
 // remove_quote.cS
 size_t						remove_quote_get_newlen(char *str);
@@ -107,12 +109,12 @@ t_cmd_invoke				*make_cmd(t_linked_list *list_head,
 								t_cmd_invoke *cmd_head);
 
 // parse_error.c
-bool	parse_error_quote(char *input);
-bool	parse_error_unexpected_str_judge(char *str);
-bool	parse_error_unexpected_str(char *input);
-bool	parse_error_last_token(t_linked_list *head);
-bool	parse_error_consecutive_redirect(t_linked_list *head);
-bool	parse_error_consecutive_pipe(t_linked_list *head);
+bool						parse_error_quote(char *input);
+bool						parse_error_unexpected_str_judge(char *str);
+bool						parse_error_unexpected_str(char *input);
+bool						parse_error_last_token(t_linked_list *head);
+bool						parse_error_consecutive_redirect(t_linked_list *head);
+bool						parse_error_consecutive_pipe(t_linked_list *head);
 
 #endif
 
