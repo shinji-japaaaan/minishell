@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/01/23 21:37:16 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/24 19:44:33 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,11 @@ bool						parse_error_unexpected_str(char *input);
 bool						parse_error_last_token(t_linked_list *head);
 bool						parse_error_consecutive_redirect(t_linked_list *head);
 bool						parse_error_consecutive_pipe(t_linked_list *head);
+
+// heredoc.c
+void						heredoc_read(t_redirect *node, char *str_eof);
+void						heredoc_redirect_list(t_redirect *head_redirect_in);
+void						heredoc_main(t_cmd_invoke *head_cmd);
 
 #endif
 

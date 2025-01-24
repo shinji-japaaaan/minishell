@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/21 20:29:29 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/24 21:16:55 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,11 @@ int	cmd_execute_main(t_cmd_invoke *head)
 		temp_ptr->pid = fork();
 		if (temp_ptr->pid == 0) // start child process
 		{
-			if (is_first && temp_ptr->next == NULL) //  pipe connect
-			{
-				// noting to do
-			}
-			else if (is_first)
+			if (is_first)
 				cmd_execute_first(temp_ptr); //  pipe connect
 			else if (temp_ptr->next == NULL)
 				cmd_execute_last(temp_ptr); //  pipe connect
-			else
+			else if (!is_first && temp_ptr->next != NULL)
 				cmd_execute_middle(temp_ptr); //  pipe connect
 			open_redirect(temp_ptr);          // processing redirect
 			status_handle_internal_command = handle_internal_commands(temp_ptr->cmd_list[0],

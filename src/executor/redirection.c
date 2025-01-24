@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/21 06:29:58 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/24 20:05:20 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,10 @@ void	handle_redirect(TokenType token_type, t_redirect *node)
 			exit(EXIT_FAILURE);
 		}
 		close(fd);
+	}
+	else if (token_type == TYPE_HEREDOC)
+	{
+		// write to do
 	}
 }
 

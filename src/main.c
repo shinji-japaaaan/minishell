@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/23 21:36:55 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/24 21:04:44 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,26 @@ int	handle_internal_commands(char *command, char *args, char **env)
 	}
 }
 
+bool	is_internal_commands(char *command)
+{
+	if (strcmp(command, "cd") == 0)
+		return (true);
+	else if (strcmp(command, "exit") == 0)
+		return (true);
+	else if (strcmp(command, "echo") == 0)
+		return (true);
+	else if (strcmp(command, "pwd") == 0)
+		return (true);
+	else if (strcmp(command, "env") == 0)
+		return (true);
+	else if (strncmp(command, "export", 7) == 0)
+		return (true);
+	else if (strncmp(command, "unset", 5) == 0)
+		return (true);
+	else
+		return (false);
+}
+
 void	process_shell(char **env)
 {
 	char			*input;
@@ -128,6 +148,7 @@ void	process_shell(char **env)
 			free(input);
 			continue ; // 次の入力を待つ
 		}
+		heredoc_main(parsed_list);
 		// リストからコマンドと引数を取得
 		command = parsed_list->next->cmd_list[0];
 		// コマンド部分
@@ -135,11 +156,15 @@ void	process_shell(char **env)
 		// 引数部分
 		// print_cmd(parsed_list);
 		// 内部コマンドの処理を外だし関数で呼び出す
-		if (!handle_internal_commands(command, args, env))
+		if (is_internal_commands(command) && parsed_list->next->next == NULL)
 		{
+			open_redirect(parsed_list->next);
+			last_status = handle_internal_commands(command, args, env);
+			reset_redirect(parsed_list->next);
+		}
+		else
 			// 外部コマンドの処理
 			last_status = cmd_execute_main(parsed_list);
-		}
 		// メモリ解放
 		linked_list_free(parsed_list);
 		free(input); // 動的メモリの解放

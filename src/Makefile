@@ -15,6 +15,7 @@ SRCS = main.c \
        parser/utils.c \
 	   parser/make_cmd.c \
 	   parser/parse_error.c\
+	   parser/heredoc.c\
 	   ../bonus/history.c \
 	   executor/builtins.c \
 	   executor/executor.c \
