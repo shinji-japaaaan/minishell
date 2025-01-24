@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/24 20:05:20 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/25 07:16:39 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	handle_redirect(TokenType token_type, t_redirect *node)
 		}
 		close(fd);
 	}
-    else if (token_type == TYPE_REDIRECT_APPEND)
+	else if (token_type == TYPE_REDIRECT_APPEND)
 	{ // '>' の場合
 		node->stdio_backup = dup(STDOUT_FILENO);
 		if (node->stdio_backup == -1)
@@ -103,7 +103,19 @@ void	handle_redirect(TokenType token_type, t_redirect *node)
 	}
 	else if (token_type == TYPE_HEREDOC)
 	{
-		// write to do
+		node->stdio_backup = dup(STDIN_FILENO);
+		if (node->stdio_backup == -1)
+		{
+			perror("aa Error saving STDIN");
+			exit(EXIT_FAILURE);
+		}
+		if (dup2(node->fd, STDIN_FILENO) == -1)
+		{
+			perror("Error heredoc input");
+			close(node->fd);
+			exit(EXIT_FAILURE);
+		}
+		close(node->fd);
 	}
 }
 
@@ -123,6 +135,10 @@ void	reset_redirect(t_cmd_invoke *node)
 		{
 			perror("Error restoring STDIN");
 			exit(EXIT_FAILURE);
+		}
+		if (temp_ptr->token_type == TYPE_HEREDOC)
+		{
+			close(temp_ptr->fd);
 		}
 		temp_ptr = temp_ptr->next;
 	}
