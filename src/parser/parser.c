@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/01/23 21:37:51 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/25 23:04:15 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,11 @@ t_cmd_invoke	*parser(char *input, int last_status)
 		|| parse_error_consecutive_redirect(head))
 	{
 		ft_putendl_fd("syntax error", 2);
-		return (NULL); // should be freed before return
+		free_linked_list_only_node(&head);
+		return (NULL);
 	}
 	cmd_head = cmd_invoke_init(NULL);
 	cmd_head = make_cmd(head, cmd_head);
+	free_linked_list_only_node(&head);
 	return (cmd_head);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/25 21:07:48 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/25 23:12:16 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ void process_shell(char **env)
             // 外部コマンドの処理
             last_status = cmd_execute_main(parsed_list);
         // メモリ解放
-        linked_list_free(parsed_list);
+        free_all(&parsed_list);
         free(input); // 動的メモリの解放
     }
     // 履歴を保存

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/25 16:58:59 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/26 00:08:26 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,17 @@ void	handle_redirect_all(t_redirect *head)
 
 void	handle_redirect(TokenType token_type, t_redirect *node)
 {
-	int	fd;
+	int		fd;
+	char	buffer[1000];
 
 	// printf("redirect type %d\n", token_type);
 	if (token_type == TYPE_REDIRECT_OUT)
 	{ // '>' の場合
 		node->stdio_backup = dup(STDOUT_FILENO);
+		sprintf(buffer, "out fd in child %d\n", STDOUT_FILENO);
+		ft_putendl_fd(buffer, 2);
+		sprintf(buffer, "out fd in child %d\n", node->stdio_backup);
+		ft_putendl_fd(buffer, 2);
 		if (node->stdio_backup == -1)
 		{
 			perror("Error saving STDOUT");
@@ -140,6 +145,7 @@ void	reset_redirect(t_cmd_invoke *node)
 	t_redirect	*redirect_in_head;
 	t_redirect	*redirect_out_head;
 	t_redirect	*temp_ptr;
+	char		buffer[1000];
 
 	redirect_in_head = node->redirect_in_head;
 	redirect_out_head = node->redirect_out_head;
@@ -147,6 +153,8 @@ void	reset_redirect(t_cmd_invoke *node)
 	temp_ptr = redirect_in_head->next;
 	while (temp_ptr)
 	{
+		sprintf(buffer, "in fd %d\n", temp_ptr->stdio_backup);
+		ft_putendl_fd(buffer, 2);
 		if (dup2(temp_ptr->stdio_backup, STDIN_FILENO) == -1)
 		{
 			perror("Error restoring STDIN");
@@ -162,6 +170,8 @@ void	reset_redirect(t_cmd_invoke *node)
 	temp_ptr = redirect_out_head->next;
 	while (temp_ptr)
 	{
+		sprintf(buffer, "out fd in parent %d\n", temp_ptr->stdio_backup);
+		ft_putendl_fd(buffer, 2);
 		if (dup2(temp_ptr->stdio_backup, STDOUT_FILENO) == -1)
 		{
 			perror("Error restoring STDOUT");

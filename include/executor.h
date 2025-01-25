@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/01/20 21:58:37 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/25 23:08:37 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ void	perror_exit(char *str, char **str_array1, char **str_array2,
 
 // free.c
 void	free2dim(char **str_array);
+void	free_redirect(t_redirect **redirect_head);
+void	free_cmd_node(t_cmd_invoke *node);
+void	free_all(t_cmd_invoke **cmd_head);
+void	free_linked_list_only_node(t_linked_list **head_list);
+void	free_linked_list_all(t_linked_list **head_list);
 
 // get_path.c
 char	*get_path_cmd(char *path_env, char **cmd);
@@ -41,7 +46,7 @@ char	*get_path_main(t_cmd_invoke *node);
 int		is_access(char *full_path);
 bool	is_full_relative_path(char *str);
 
-//redirection.c
+// redirection.c
 void	open_redirect(t_cmd_invoke *node);
 void	handle_redirect_all(t_redirect *head);
 void	handle_redirect(TokenType token_type, t_redirect *node);

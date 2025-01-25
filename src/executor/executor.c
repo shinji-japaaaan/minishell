@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/25 17:17:18 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/25 23:53:37 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	parent_process_wait(t_cmd_invoke *head)
 	while (temp_ptr)
 	{
 		waitpid(temp_ptr->pid, &status, 0);
+		reset_redirect(temp_ptr);  // redirect shall be reset for next command.
 		temp_ptr = temp_ptr->next;
 	}
 	if (WIFSIGNALED(status))
@@ -109,7 +110,6 @@ int	cmd_execute_main(t_cmd_invoke *head)
 		}
 		// ft_putendl_fd("3\n", 2);
 		is_first = false;
-		reset_redirect(temp_ptr);  // redirect shall be reset for next command.
 		temp_ptr = temp_ptr->next; // move to next command
 	}
 	status = parent_process_wait(head);
