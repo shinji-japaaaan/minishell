@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/25 10:34:41 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/25 17:17:18 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	cmd_execute_main(t_cmd_invoke *head)
 		temp_ptr->pid = fork();
 		if (temp_ptr->pid == 0) // start child process
 		{
+			// ft_putendl_fd("1\n", 2);
 			if (is_first && temp_ptr->next != NULL)
 				cmd_execute_first(temp_ptr); //  pipe connect
 			else if (!is_first && temp_ptr->next == NULL)
@@ -81,7 +82,8 @@ int	cmd_execute_main(t_cmd_invoke *head)
 			else if (!is_first && temp_ptr->next != NULL)
 				cmd_execute_middle(temp_ptr); //  pipe connect
 			open_redirect(temp_ptr);          // processing redirect
-			status_handle_internal_command = handle_internal_commands(head, environ);
+			status_handle_internal_command = handle_internal_commands(temp_ptr,
+					environ);
 			if (!status_handle_internal_command)
 			{
 				path = get_path_main(temp_ptr);            //  get command path
@@ -90,16 +92,22 @@ int	cmd_execute_main(t_cmd_invoke *head)
 			else
 				exit(status_handle_internal_command);
 		}
-		else // start parent process
+		// else // start parent process
+		// {
+		// 	ft_putendl_fd("2\n",2);
+		// 	if (is_first == false)
+		// 	{
+		// 		close(temp_ptr->bef_pipefd[0]);
+		// 		close(temp_ptr->bef_pipefd[1]);
+		// 	}
+		// }
+		// ft_putendl_fd("2\n", 2);
+		if (is_first == false)
 		{
-			if (is_first == false)
-			{
-				close(temp_ptr->bef_pipefd[0]);
-				// close not using pipe connection
-				close(temp_ptr->bef_pipefd[1]);
-				// close not using pipe connection
-			}
+			close(temp_ptr->bef_pipefd[0]);
+			close(temp_ptr->bef_pipefd[1]);
 		}
+		// ft_putendl_fd("3\n", 2);
 		is_first = false;
 		reset_redirect(temp_ptr);  // redirect shall be reset for next command.
 		temp_ptr = temp_ptr->next; // move to next command

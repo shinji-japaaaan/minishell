@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/25 07:16:39 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/25 16:58:59 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,14 @@ void	handle_redirect(TokenType token_type, t_redirect *node)
 			close(fd);
 			exit(EXIT_FAILURE);
 		}
-		close(fd);
+		if (close(fd) == -1)
+		{
+			perror("Error close");
+			exit(EXIT_FAILURE);
+		}
 	}
 	else if (token_type == TYPE_REDIRECT_APPEND)
-	{ // '>' の場合
+	{ // '>>' の場合
 		node->stdio_backup = dup(STDOUT_FILENO);
 		if (node->stdio_backup == -1)
 		{
@@ -77,7 +81,11 @@ void	handle_redirect(TokenType token_type, t_redirect *node)
 			close(fd);
 			exit(EXIT_FAILURE);
 		}
-		close(fd);
+		if (close(fd) == -1)
+		{
+			perror("Error close");
+			exit(EXIT_FAILURE);
+		}
 	}
 	else if (token_type == TYPE_REDIRECT_IN)
 	{ // '<' の場合
@@ -99,14 +107,18 @@ void	handle_redirect(TokenType token_type, t_redirect *node)
 			close(fd);
 			exit(EXIT_FAILURE);
 		}
-		close(fd);
+		if (close(fd) == -1)
+		{
+			perror("Error close");
+			exit(EXIT_FAILURE);
+		}
 	}
 	else if (token_type == TYPE_HEREDOC)
 	{
 		node->stdio_backup = dup(STDIN_FILENO);
 		if (node->stdio_backup == -1)
 		{
-			perror("aa Error saving STDIN");
+			perror("Error saving STDIN");
 			exit(EXIT_FAILURE);
 		}
 		if (dup2(node->fd, STDIN_FILENO) == -1)
@@ -115,7 +127,11 @@ void	handle_redirect(TokenType token_type, t_redirect *node)
 			close(node->fd);
 			exit(EXIT_FAILURE);
 		}
-		close(node->fd);
+		if (close(node->fd) == -1)
+		{
+			perror("Error close");
+			exit(EXIT_FAILURE);
+		}
 	}
 }
 
