@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/25 09:30:26 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/25 10:34:41 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ int	cmd_execute_main(t_cmd_invoke *head)
 		temp_ptr->pid = fork();
 		if (temp_ptr->pid == 0) // start child process
 		{
-			if (is_first)
+			if (is_first && temp_ptr->next != NULL)
 				cmd_execute_first(temp_ptr); //  pipe connect
-			else if (temp_ptr->next == NULL)
+			else if (!is_first && temp_ptr->next == NULL)
 				cmd_execute_last(temp_ptr); //  pipe connect
 			else if (!is_first && temp_ptr->next != NULL)
 				cmd_execute_middle(temp_ptr); //  pipe connect
@@ -88,7 +88,7 @@ int	cmd_execute_main(t_cmd_invoke *head)
 				execve(path, temp_ptr->cmd_list, environ); // execute command
 			}
 			else
-				exit (status_handle_internal_command);
+				exit(status_handle_internal_command);
 		}
 		else // start parent process
 		{
