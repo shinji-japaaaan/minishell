@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/26 00:26:57 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/26 00:37:03 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	open_redirect(t_cmd_invoke *node)
 {
-	handle_redirect_all(node->redirect_in_head);
 	handle_redirect_all(node->redirect_out_head);
+	handle_redirect_all(node->redirect_in_head);
 }
 
 void	handle_redirect_all(t_redirect *head)
