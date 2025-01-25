@@ -86,21 +86,25 @@ for testfile in ${test_lists[*]}; do
 			printf ❌
 		fi
 		printf "$GREY $teste \n$END"
+		if [ "$OUTFILES_DIFF" ]; then
 			echo "$OUTFILES_DIFF"
 			echo mini outfiles:
 			cat ./mini_outfiles/*
 			echo bash outfiles:
 			cat ./bash_outfiles/*
-
+		fi
+		if [ "$MINI_OUTPUT" != "$BASH_OUTPUT" ]; then
 			echo mini output = \($MINI_OUTPUT\)
 			echo bash output = \($BASH_OUTPUT\)
-
+		fi
+		if [ "$MINI_EXIT_CODE" != "$BASH_EXIT_CODE" ]; then
 			echo mini exit code = $MINI_EXIT_CODE
 			echo bash exit code = $BASH_EXIT_CODE
-
+		fi
+		if [ "$MINI_ERROR_MSG" != "$BASH_ERROR_MSG" ]; then
 			echo mini error = \($MINI_ERROR_MSG\)
 			echo bash error = \($BASH_ERROR_MSG\)
-
+		fi
 	done < $testfile
 done
 
