@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/24 21:16:55 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/25 09:30:26 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,7 @@ int	cmd_execute_main(t_cmd_invoke *head)
 			else if (!is_first && temp_ptr->next != NULL)
 				cmd_execute_middle(temp_ptr); //  pipe connect
 			open_redirect(temp_ptr);          // processing redirect
-			status_handle_internal_command = handle_internal_commands(temp_ptr->cmd_list[0],
-					temp_ptr->cmd_list[1], environ);
+			status_handle_internal_command = handle_internal_commands(head, environ);
 			if (!status_handle_internal_command)
 			{
 				path = get_path_main(temp_ptr);            //  get command path

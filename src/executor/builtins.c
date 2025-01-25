@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/18 11:44:10 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/25 10:05:08 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,28 @@ void exit_shell(char **env) {
     exit(0);
 }
 
-void echo_command(char *args) {
-    if (args) {
-        printf("%s\n", args);
-    } else {
+void echo_command(char **args)
+{
+    int no_newline = 0;
+    int i = 1; // 最初の引数はコマンド名なのでスキップ
+
+    // '-n' オプションの処理
+    if (args[i] && strcmp(args[i], "-n") == 0) {
+        no_newline = 1;
+        i++; // 次の引数に進む
+    }
+
+    // 引数をスペースで区切って出力
+    while (args[i]) {
+        printf("%s", args[i]);
+        if (args[i + 1]) {
+            printf(" "); // 次の引数があればスペースを追加
+        }
+        i++;
+    }
+
+    // 改行の処理
+    if (!no_newline) {
         printf("\n");
     }
 }
