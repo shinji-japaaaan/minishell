@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/01/24 19:48:52 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/25 08:36:22 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,6 @@ char	*replace_to_env_val(char *str, char *env_str, int last_status)
 	{
 		if (*str == '$' && strncmp(str + 1, env_str, env_str_len) == 0)
 		{
-			// デバッグ情報を追加
-			// printf("Replacing $%s with %s\n", env_str,
-			// 	env_val ? env_val : "(NULL)");
 			ft_strcpy(&new_str[i], env_val);
 			i += env_val_len;
 			str += (env_str_len + 1);
@@ -105,6 +102,7 @@ char	*expansion(char *str, int last_status)
 
 	i = 0;
 	state = 0;
+	env_str = NULL;
 	if (str == NULL)
 		return (NULL);
 	while (str[i])
@@ -127,8 +125,11 @@ char	*expansion(char *str, int last_status)
 				{
 					env_str = get_env_str(&str[i + 1], &len);
 				}
-				str = replace_to_env_val(str, env_str, last_status);
-				i = -1;
+				if (env_str != NULL)
+				{
+					str = replace_to_env_val(str, env_str, last_status);
+					i = -1;
+				}
 			}
 		}
 		else if (state == 1)
@@ -140,7 +141,7 @@ char	*expansion(char *str, int last_status)
 		{
 			if (str[i] == '\"')
 				state = 0;
-			if (str[i] == '$')
+			else if (str[i] == '$')
 			{
 				if (str[i + 1] == '?')
 				{
@@ -152,8 +153,11 @@ char	*expansion(char *str, int last_status)
 				{
 					env_str = get_env_str(&str[i + 1], &len);
 				}
-				str = replace_to_env_val(str, env_str, last_status);
-				i = -1;
+				if (env_str != NULL)
+				{
+					str = replace_to_env_val(str, env_str, last_status);
+					i = -1;
+				}
 			}
 		}
 		i += 1;
