@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/25 16:34:05 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/25 19:33:30 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,12 +126,14 @@ void	process_shell(char **env)
 	{
 		// プロンプト表示と入力受付
 		input = readline("minishell> ");
-		if (*input == '\0')
-			continue ;
 		if (!input)
 		{ // EOFやエラー時の終了処理
-			printf("exit\n");
 			break ;
+		}
+		if (*input == '\0')
+		{
+			free(input); // 空入力時もメモリ解放
+			continue ;
 		}
 		if (*input)
 		{                                   // 入力が空でない場合
