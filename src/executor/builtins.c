@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/25 10:05:08 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/25 18:41:46 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,15 @@ void exit_shell(char **env) {
 
 void echo_command(char **args)
 {
+    if (!args || !args[0]) {
+        return; // argsがNULLの場合は何もしない
+    }
+
     int no_newline = 0;
     int i = 1; // 最初の引数はコマンド名なのでスキップ
 
-    // '-n' オプションの処理
-    if (args[i] && strcmp(args[i], "-n") == 0) {
+    // '-n' オプションの判定（複数の '-n' を許可）
+    while (args[i] && strncmp(args[i], "-n", 2) == 0 && strlen(args[i]) == 2) {
         no_newline = 1;
         i++; // 次の引数に進む
     }
@@ -88,6 +92,7 @@ void echo_command(char **args)
         printf("\n");
     }
 }
+
 
 void print_working_directory() {
     char cwd[1024];
