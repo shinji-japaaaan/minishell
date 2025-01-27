@@ -1,1 +1,0 @@
-This text should be written to test_output.txt

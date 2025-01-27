@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/01/25 23:08:37 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/26 17:03:20 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int		is_access(char *full_path);
 bool	is_full_relative_path(char *str);
 
 // redirection.c
-void	open_redirect(t_cmd_invoke *node);
-void	handle_redirect_all(t_redirect *head);
-void	handle_redirect(TokenType token_type, t_redirect *node);
-void	reset_redirect(t_cmd_invoke *node);
+int		open_redirect(t_cmd_invoke *node);
+int		handle_redirect_all(t_redirect *head);
+int		handle_redirect(TokenType token_type, t_redirect *node);
+void	reset_redirect(t_cmd_invoke *node, bool is_parent);
 
 #endif

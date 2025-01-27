@@ -6,64 +6,56 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/26 00:37:03 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/27 20:59:37 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	open_redirect(t_cmd_invoke *node)
+int	open_redirect(t_cmd_invoke *node)
 {
-	handle_redirect_all(node->redirect_out_head);
-	handle_redirect_all(node->redirect_in_head);
-}
-
-void	handle_redirect_all(t_redirect *head)
-{
+	int			status;
 	t_redirect	*temp_ptr;
 
-	temp_ptr = head->next;
+	temp_ptr = node->redirect_head->next;
 	while (temp_ptr)
 	{
-		handle_redirect(temp_ptr->token_type, temp_ptr);
+		status = handle_redirect(temp_ptr->token_type, temp_ptr);
+		if (status != 0)
+			return (status);
 		temp_ptr = temp_ptr->next;
 	}
+	return (0);
 }
 
-void	handle_redirect(TokenType token_type, t_redirect *node)
+int	handle_redirect(TokenType token_type, t_redirect *node)
 {
-	int		fd;
-	// char	buffer[1000];
+	int	fd;
 
-	// printf("redirect type %d\n", token_type);
 	if (token_type == TYPE_REDIRECT_OUT)
 	{ // '>' の場合
 		node->stdio_backup = dup(STDOUT_FILENO);
-		// sprintf(buffer, "out fd in child %d\n", STDOUT_FILENO);
-		// ft_putendl_fd(buffer, 2);
-		// sprintf(buffer, "out fd in child %d\n", node->stdio_backup);
-		// ft_putendl_fd(buffer, 2);
 		if (node->stdio_backup == -1)
 		{
 			perror("Error saving STDOUT");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		fd = open(node->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd == -1)
 		{
 			perror("Error opening file for output");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		if (dup2(fd, STDOUT_FILENO) == -1)
 		{
 			perror("Error redirecting output");
 			close(fd);
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		if (close(fd) == -1)
 		{
 			perror("Error close");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 	}
 	else if (token_type == TYPE_REDIRECT_APPEND)
@@ -72,24 +64,24 @@ void	handle_redirect(TokenType token_type, t_redirect *node)
 		if (node->stdio_backup == -1)
 		{
 			perror("Error saving STDOUT");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		fd = open(node->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (fd == -1)
 		{
 			perror("Error opening file for output");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		if (dup2(fd, STDOUT_FILENO) == -1)
 		{
 			perror("Error redirecting output");
 			close(fd);
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		if (close(fd) == -1)
 		{
 			perror("Error close");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 	}
 	else if (token_type == TYPE_REDIRECT_IN)
@@ -98,24 +90,24 @@ void	handle_redirect(TokenType token_type, t_redirect *node)
 		if (node->stdio_backup == -1)
 		{
 			perror("Error saving STDIN");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		fd = open(node->filename, O_RDONLY); // 読み込み専用でファイルを開く
 		if (fd == -1)
 		{
 			perror("Error opening file for input");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		if (dup2(fd, STDIN_FILENO) == -1)
 		{
 			perror("Error redirecting input");
 			close(fd);
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		if (close(fd) == -1)
 		{
 			perror("Error close");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 	}
 	else if (token_type == TYPE_HEREDOC)
@@ -124,64 +116,146 @@ void	handle_redirect(TokenType token_type, t_redirect *node)
 		if (node->stdio_backup == -1)
 		{
 			perror("Error saving STDIN");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		if (dup2(node->fd, STDIN_FILENO) == -1)
 		{
 			perror("Error heredoc input");
 			close(node->fd);
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		if (close(node->fd) == -1)
 		{
 			perror("Error close");
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 	}
+	return (0);
 }
 
-void	reset_redirect(t_cmd_invoke *node)
+void	reset_redirect_recursive(t_redirect *node, bool is_parent)
 {
-	t_redirect	*redirect_in_head;
-	t_redirect	*redirect_out_head;
-	t_redirect	*temp_ptr;
-	// char		buffer[1000];
-
-	redirect_in_head = node->redirect_in_head;
-	redirect_out_head = node->redirect_out_head;
-	// 標準入力を元に戻す
-	temp_ptr = redirect_in_head->next;
-	while (temp_ptr)
+	if (node->token_type == TYPE_REDIRECT_OUT
+		|| node->token_type == TYPE_REDIRECT_APPEND)
 	{
-		// sprintf(buffer, "in fd %d\n", temp_ptr->stdio_backup);
-		// ft_putendl_fd(buffer, 2);
-		if (dup2(temp_ptr->stdio_backup, STDIN_FILENO) == -1)
+		if (node->next == NULL)
 		{
-			perror("Error restoring STDIN");
-			exit(EXIT_FAILURE);
+			if (is_parent == false)
+				node->stdio_backup = dup(STDOUT_FILENO);
+			if (dup2(node->stdio_backup, STDOUT_FILENO) == -1)
+			{
+				perror("Error restoring STDOUT");
+				exit(EXIT_FAILURE);
+			}
+			close(node->stdio_backup);
+			return ;
 		}
-		if (temp_ptr->token_type == TYPE_HEREDOC)
+		else
 		{
-			close(temp_ptr->fd);
+			reset_redirect_recursive(node->next, is_parent);
+			if (is_parent == false)
+				node->stdio_backup = dup(STDOUT_FILENO);
+			if (dup2(node->stdio_backup, STDOUT_FILENO) == -1)
+			{
+				perror("Error restoring STDOUT");
+				exit(EXIT_FAILURE);
+			}
+			close(node->stdio_backup);
+			return ;
 		}
-		temp_ptr = temp_ptr->next;
 	}
-	// 標準出力を元に戻す
-	temp_ptr = redirect_out_head->next;
-	while (temp_ptr)
+	else
 	{
-		temp_ptr->stdio_backup = dup(STDOUT_FILENO);
-		// sprintf(buffer, "out fd in parent %d\n", temp_ptr->stdio_backup);
-		// ft_putendl_fd(buffer, 2);
-		if (dup2(temp_ptr->stdio_backup, STDOUT_FILENO) == -1)
+		if (node->next == NULL)
 		{
-			perror("Error restoring STDOUT");
-			exit(EXIT_FAILURE);
+			if (is_parent == false)
+				node->stdio_backup = dup(STDIN_FILENO);
+			if (dup2(node->stdio_backup, STDIN_FILENO) == -1)
+			{
+				perror("Error restoring STDIN");
+				exit(EXIT_FAILURE);
+			}
+			if (node->token_type == TYPE_HEREDOC)
+			{
+				close(node->fd);
+			}
+			close(node->stdio_backup);
+			return ;
 		}
-		close(temp_ptr->stdio_backup);
-		temp_ptr = temp_ptr->next;
+		else
+		{
+			reset_redirect_recursive(node->next, is_parent);
+			if (is_parent == false)
+				node->stdio_backup = dup(STDIN_FILENO);
+			if (dup2(node->stdio_backup, STDIN_FILENO) == -1)
+			{
+				perror("Error restoring STDIN");
+				exit(EXIT_FAILURE);
+			}
+			if (node->token_type == TYPE_HEREDOC)
+			{
+				close(node->fd);
+			}
+			close(node->stdio_backup);
+			return ;
+		}
 	}
 }
+
+void	reset_redirect(t_cmd_invoke *node, bool is_parent)
+{
+	t_redirect	*redirect_head;
+
+	// char		buffer[1000];
+	redirect_head = node->redirect_head;
+	// 標準出力を元に戻す
+	if (redirect_head->next != NULL)
+	{
+		reset_redirect_recursive(redirect_head->next, is_parent);
+	}
+}
+
+// void	reset_redirect(t_cmd_invoke *node, bool is_parent)
+// {
+// 	t_redirect	*redirect_in_head;
+// 	t_redirect	*redirect_out_head;
+// 	t_redirect	*temp_ptr;
+
+// 	// char		buffer[1000];
+// 	redirect_in_head = node->redirect_in_head;
+// 	redirect_out_head = node->redirect_out_head;
+// 	// 標準出力を元に戻す
+// 	temp_ptr = redirect_out_head->next;
+// 	while (temp_ptr)
+// 	{
+// 		if (is_parent == false)
+// 			temp_ptr->stdio_backup = dup(STDOUT_FILENO);
+// 		if (dup2(temp_ptr->stdio_backup, STDOUT_FILENO) == -1)
+// 		{
+// 			perror("Error restoring STDOUT");
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		close(temp_ptr->stdio_backup);
+// 		temp_ptr = temp_ptr->next;
+// 	}
+// 	temp_ptr = redirect_in_head->next;
+// 	while (temp_ptr)
+// 	{
+// 		if (is_parent == false)
+// 			temp_ptr->stdio_backup = dup(STDIN_FILENO);
+// 		if (dup2(temp_ptr->stdio_backup, STDIN_FILENO) == -1)
+// 		{
+// 			perror("Error restoring STDIN");
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		if (temp_ptr->token_type == TYPE_HEREDOC)
+// 		{
+// 			close(temp_ptr->fd);
+// 		}
+// 		close(temp_ptr->stdio_backup);
+// 		temp_ptr = temp_ptr->next;
+// 	}
+// }
 
 // int	main(void)
 // {

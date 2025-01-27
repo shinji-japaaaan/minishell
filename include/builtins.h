@@ -13,5 +13,6 @@ void	export_variable(char ***env, char *args);
 void	unset_variable(char ***env, char *args);
 void	execute_command(t_linked_list *parsed_list);
 int		handle_internal_commands(t_cmd_invoke *parsed_list, char **env);
+bool	is_internal_commands(char *command);
 
 #endif

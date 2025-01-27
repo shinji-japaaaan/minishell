@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/01/24 19:44:33 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/27 20:29:29 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ typedef struct s_redirect
 typedef struct s_cmd_invoke
 {
 	char					**cmd_list;
-	t_redirect				*redirect_in_head;
-	t_redirect				*redirect_out_head;
+	// t_redirect				*redirect_in_head;
+	// t_redirect				*redirect_out_head;
+	t_redirect				*redirect_head;
 	struct s_cmd_invoke		*next;
 	pid_t					pid;
 	int						*bef_pipefd;

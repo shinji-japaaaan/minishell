@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:22:29 by karai             #+#    #+#             */
-/*   Updated: 2025/01/25 23:22:11 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/27 20:33:00 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ void free_redirect(t_redirect **redirect_head)
 
 void free_cmd_node(t_cmd_invoke *node)
 {
-	free_redirect(&(node->redirect_in_head));
-	free_redirect(&(node->redirect_out_head));
+	free_redirect(&(node->redirect_head));
 	free2dim(node->cmd_list);
 	free(node);
 }

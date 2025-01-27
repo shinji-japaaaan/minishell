@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:25:28 by karai             #+#    #+#             */
-/*   Updated: 2025/01/25 07:17:36 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/27 20:32:41 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	heredoc_main(t_cmd_invoke *head_cmd)
 	temp_ptr = head_cmd->next;
 	while (temp_ptr)
 	{
-		heredoc_redirect_list(temp_ptr->redirect_in_head);
+		heredoc_redirect_list(temp_ptr->redirect_head);
 		temp_ptr = temp_ptr->next;
 	}
 }

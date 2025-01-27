@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/26 00:21:08 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/26 17:02:58 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	parent_process_wait(t_cmd_invoke *head)
 	while (temp_ptr)
 	{
 		waitpid(temp_ptr->pid, &status, 0);
-		reset_redirect(temp_ptr);  // redirect shall be reset for next command.
+		reset_redirect(temp_ptr, false); // redirect shall be reset for next command.
 		temp_ptr = temp_ptr->next;
 	}
 	if (WIFSIGNALED(status))
@@ -60,7 +60,6 @@ int	cmd_execute_main(t_cmd_invoke *head)
 	bool			is_first;
 	char			*path;
 	extern char		**environ;
-	int				status_handle_internal_command;
 
 	is_first = true;
 	temp_ptr = head->next;
@@ -82,16 +81,16 @@ int	cmd_execute_main(t_cmd_invoke *head)
 				cmd_execute_last(temp_ptr); //  pipe connect
 			else if (!is_first && temp_ptr->next != NULL)
 				cmd_execute_middle(temp_ptr); //  pipe connect
-			open_redirect(temp_ptr);          // processing redirect
-			status_handle_internal_command = handle_internal_commands(temp_ptr,
-					environ);
-			if (!status_handle_internal_command)
+			status = open_redirect(temp_ptr);          // processing redirect
+			if (status != 0)
+				exit (status);
+			if (!is_internal_commands(temp_ptr->cmd_list[0]))
 			{
 				path = get_path_main(temp_ptr);            //  get command path
 				execve(path, temp_ptr->cmd_list, environ); // execute command
 			}
 			else
-				exit(status_handle_internal_command);
+				exit(handle_internal_commands(temp_ptr, environ));
 		}
 		// else // start parent process
 		// {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/01/25 07:11:09 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/27 20:32:13 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ t_cmd_invoke	*cmd_invoke_init(t_cmd_invoke *new_node)
 {
 	new_node = (t_cmd_invoke *)malloc(sizeof(t_cmd_invoke));
 	new_node->cmd_list = NULL;
-	new_node->redirect_in_head = NULL;
-	new_node->redirect_out_head = NULL;
-	new_node->redirect_in_head = redirect_init(new_node->redirect_in_head);
-	new_node->redirect_out_head = redirect_init(new_node->redirect_out_head);
+	new_node->redirect_head = NULL;
+	new_node->redirect_head = redirect_init(new_node->redirect_head);
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -129,19 +127,8 @@ t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head)
 		else if (list_ptr_temp->token_type == TYPE_COMMAND
 			&& is_filename == true)
 		{
-			if (bef_token_type == TYPE_REDIRECT_IN
-				|| bef_token_type == TYPE_HEREDOC)
-			{
-				// to redirect_in
-				redirect_append(cmd_ptr_temp->redirect_in_head,
+				redirect_append(cmd_ptr_temp->redirect_head,
 					list_ptr_temp->content, bef_token_type);
-			}
-			else
-			{
-				// to redirect_out
-				redirect_append(cmd_ptr_temp->redirect_out_head,
-					list_ptr_temp->content, bef_token_type);
-			}
 			is_filename = false;
 			bef_token_type = TYPE_COMMAND;
 		}
