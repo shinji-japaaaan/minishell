@@ -6,25 +6,34 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:22:29 by karai             #+#    #+#             */
-/*   Updated: 2025/01/27 20:33:00 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/28 21:11:39 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	free2dim(char **str_array)
+void	free1dim(char **str)
+{
+	if (*str == NULL)
+		return ;
+	free(*str);
+	*str = NULL;
+}
+
+void	free2dim(char ***str_array)
 {
 	size_t	i;
 
-	if (str_array == NULL)
+	if (*str_array == NULL)
 		return ;
 	i = 0;
-	while (str_array[i])
+	while ((*str_array)[i])
 	{
-		free(str_array[i]);
+		free((*str_array)[i]);
 		i += 1;
 	}
-	free(str_array);
+	free(*str_array);
+	*str_array = NULL;
 }
 
 void free_redirect(t_redirect **redirect_head)
@@ -46,7 +55,7 @@ void free_redirect(t_redirect **redirect_head)
 void free_cmd_node(t_cmd_invoke *node)
 {
 	free_redirect(&(node->redirect_head));
-	free2dim(node->cmd_list);
+	free2dim(&(node->cmd_list));
 	free(node);
 }
 
@@ -95,3 +104,4 @@ void free_linked_list_all(t_linked_list **head_list)
 	}
 	*head_list = NULL;
 }
+

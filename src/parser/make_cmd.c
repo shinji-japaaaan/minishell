@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/01/27 20:32:13 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/28 21:16:30 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head)
 		else if (list_ptr_temp->token_type == TYPE_COMMAND
 			&& is_filename == true)
 		{
-				redirect_append(cmd_ptr_temp->redirect_head,
-					list_ptr_temp->content, bef_token_type);
+			redirect_append(cmd_ptr_temp->redirect_head, list_ptr_temp->content,
+				bef_token_type);
 			is_filename = false;
 			bef_token_type = TYPE_COMMAND;
 		}
@@ -144,6 +144,7 @@ t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head)
 		{
 			bef_token_type = list_ptr_temp->token_type;
 			is_filename = true;
+			free1dim(&(list_ptr_temp->content));
 		}
 		list_ptr_temp = list_ptr_temp->next;
 	}

@@ -24,6 +24,7 @@ SRCS = main.c \
 	   executor/get_path_utils.c \
 	   executor/free.c \
 	   executor/redirection.c\
+	   executor/handle_redirect.c\
 
 
 # Object files (SRCSから.oファイルを生成)

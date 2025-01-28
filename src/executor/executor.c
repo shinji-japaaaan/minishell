@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/26 17:02:58 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/28 22:15:18 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,26 @@ int	parent_process_wait(t_cmd_invoke *head)
 	while (temp_ptr)
 	{
 		waitpid(temp_ptr->pid, &status, 0);
-		reset_redirect(temp_ptr, false); // redirect shall be reset for next command.
+		reset_redirect(temp_ptr, false);
 		temp_ptr = temp_ptr->next;
 	}
 	if (WIFSIGNALED(status))
 		return (WIFSIGNALED(status));
 	return (WEXITSTATUS(status));
+}
+
+void	close_fd_in_child(t_cmd_invoke *node)
+{
+	t_redirect	*redirect_head;
+	t_redirect	*temp_ptr;
+
+	redirect_head = node->redirect_head;
+	temp_ptr = redirect_head->next;
+	while (temp_ptr)
+	{
+		close(temp_ptr->stdio_backup);
+		temp_ptr = temp_ptr->next;
+	}
 }
 
 void	cmd_execute_first(t_cmd_invoke *node)
@@ -81,9 +95,14 @@ int	cmd_execute_main(t_cmd_invoke *head)
 				cmd_execute_last(temp_ptr); //  pipe connect
 			else if (!is_first && temp_ptr->next != NULL)
 				cmd_execute_middle(temp_ptr); //  pipe connect
-			status = open_redirect(temp_ptr);          // processing redirect
+			status = open_redirect(temp_ptr); // processing redirect
 			if (status != 0)
-				exit (status);
+			{
+				close_fd_in_child(temp_ptr);
+				// free_cmd_node(temp_ptr);
+				free_all(&head);
+				exit(status);
+			}
 			if (!is_internal_commands(temp_ptr->cmd_list[0]))
 			{
 				path = get_path_main(temp_ptr);            //  get command path
@@ -92,16 +111,6 @@ int	cmd_execute_main(t_cmd_invoke *head)
 			else
 				exit(handle_internal_commands(temp_ptr, environ));
 		}
-		// else // start parent process
-		// {
-		// 	ft_putendl_fd("2\n",2);
-		// 	if (is_first == false)
-		// 	{
-		// 		close(temp_ptr->bef_pipefd[0]);
-		// 		close(temp_ptr->bef_pipefd[1]);
-		// 	}
-		// }
-		// ft_putendl_fd("2\n", 2);
 		if (is_first == false)
 		{
 			close(temp_ptr->bef_pipefd[0]);

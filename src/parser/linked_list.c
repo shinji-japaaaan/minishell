@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 22:10:28 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/20 21:36:07 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/28 20:48:39 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	linked_list_append(t_linked_list *list_head, char *str)
 
 	new_node = NULL;
     new_node = linked_list_init(new_node);
-	new_node->content = strdup(str);
+	new_node->content = ft_strdup(str);
 	free(str);
 	if (list_head->next == NULL)
 	{

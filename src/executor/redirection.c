@@ -6,11 +6,13 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/27 20:59:37 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/28 22:13:02 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+char	buffer[1000];
 
 int	open_redirect(t_cmd_invoke *node)
 {
@@ -28,109 +30,36 @@ int	open_redirect(t_cmd_invoke *node)
 	return (0);
 }
 
-int	handle_redirect(TokenType token_type, t_redirect *node)
+void	reset_redirect_out(t_redirect *node, bool is_parent)
 {
-	int	fd;
+	// sprintf(buffer, "stdio back up %d", node->stdio_backup);
+	// ft_putendl_fd(buffer, 2);
+	if (is_parent == false)
+		node->stdio_backup = dup(STDOUT_FILENO);
+	if (dup2(node->stdio_backup, STDOUT_FILENO) == -1)
+	{
+		perror("Error restoring STDOUT");
+		exit(EXIT_FAILURE);
+	}
+	close(node->stdio_backup);
+}
 
-	if (token_type == TYPE_REDIRECT_OUT)
-	{ // '>' の場合
-		node->stdio_backup = dup(STDOUT_FILENO);
-		if (node->stdio_backup == -1)
-		{
-			perror("Error saving STDOUT");
-			return (EXIT_FAILURE);
-		}
-		fd = open(node->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			perror("Error opening file for output");
-			return (EXIT_FAILURE);
-		}
-		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			perror("Error redirecting output");
-			close(fd);
-			return (EXIT_FAILURE);
-		}
-		if (close(fd) == -1)
-		{
-			perror("Error close");
-			return (EXIT_FAILURE);
-		}
-	}
-	else if (token_type == TYPE_REDIRECT_APPEND)
-	{ // '>>' の場合
-		node->stdio_backup = dup(STDOUT_FILENO);
-		if (node->stdio_backup == -1)
-		{
-			perror("Error saving STDOUT");
-			return (EXIT_FAILURE);
-		}
-		fd = open(node->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
-		if (fd == -1)
-		{
-			perror("Error opening file for output");
-			return (EXIT_FAILURE);
-		}
-		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			perror("Error redirecting output");
-			close(fd);
-			return (EXIT_FAILURE);
-		}
-		if (close(fd) == -1)
-		{
-			perror("Error close");
-			return (EXIT_FAILURE);
-		}
-	}
-	else if (token_type == TYPE_REDIRECT_IN)
-	{ // '<' の場合
-		node->stdio_backup = dup(STDIN_FILENO);
-		if (node->stdio_backup == -1)
-		{
-			perror("Error saving STDIN");
-			return (EXIT_FAILURE);
-		}
-		fd = open(node->filename, O_RDONLY); // 読み込み専用でファイルを開く
-		if (fd == -1)
-		{
-			perror("Error opening file for input");
-			return (EXIT_FAILURE);
-		}
-		if (dup2(fd, STDIN_FILENO) == -1)
-		{
-			perror("Error redirecting input");
-			close(fd);
-			return (EXIT_FAILURE);
-		}
-		if (close(fd) == -1)
-		{
-			perror("Error close");
-			return (EXIT_FAILURE);
-		}
-	}
-	else if (token_type == TYPE_HEREDOC)
+void	reset_redirect_in(t_redirect *node, bool is_parent)
+{
+	if (is_parent == false)
 	{
 		node->stdio_backup = dup(STDIN_FILENO);
-		if (node->stdio_backup == -1)
-		{
-			perror("Error saving STDIN");
-			return (EXIT_FAILURE);
-		}
-		if (dup2(node->fd, STDIN_FILENO) == -1)
-		{
-			perror("Error heredoc input");
-			close(node->fd);
-			return (EXIT_FAILURE);
-		}
-		if (close(node->fd) == -1)
-		{
-			perror("Error close");
-			return (EXIT_FAILURE);
-		}
 	}
-	return (0);
+	if (dup2(node->stdio_backup, STDIN_FILENO) == -1)
+	{
+		perror("Error restoring STDIN");
+		exit(EXIT_FAILURE);
+	}
+	if (node->token_type == TYPE_HEREDOC)
+	{
+		close(node->fd);
+	}
+	close(node->stdio_backup);
 }
 
 void	reset_redirect_recursive(t_redirect *node, bool is_parent)
@@ -139,64 +68,22 @@ void	reset_redirect_recursive(t_redirect *node, bool is_parent)
 		|| node->token_type == TYPE_REDIRECT_APPEND)
 	{
 		if (node->next == NULL)
-		{
-			if (is_parent == false)
-				node->stdio_backup = dup(STDOUT_FILENO);
-			if (dup2(node->stdio_backup, STDOUT_FILENO) == -1)
-			{
-				perror("Error restoring STDOUT");
-				exit(EXIT_FAILURE);
-			}
-			close(node->stdio_backup);
-			return ;
-		}
+			return (reset_redirect_out(node, is_parent));
 		else
 		{
 			reset_redirect_recursive(node->next, is_parent);
-			if (is_parent == false)
-				node->stdio_backup = dup(STDOUT_FILENO);
-			if (dup2(node->stdio_backup, STDOUT_FILENO) == -1)
-			{
-				perror("Error restoring STDOUT");
-				exit(EXIT_FAILURE);
-			}
-			close(node->stdio_backup);
+			reset_redirect_out(node, is_parent);
 			return ;
 		}
 	}
 	else
 	{
 		if (node->next == NULL)
-		{
-			if (is_parent == false)
-				node->stdio_backup = dup(STDIN_FILENO);
-			if (dup2(node->stdio_backup, STDIN_FILENO) == -1)
-			{
-				perror("Error restoring STDIN");
-				exit(EXIT_FAILURE);
-			}
-			if (node->token_type == TYPE_HEREDOC)
-			{
-				close(node->fd);
-			}
-			close(node->stdio_backup);
-			return ;
-		}
+			return (reset_redirect_in(node, is_parent));
 		else
 		{
 			reset_redirect_recursive(node->next, is_parent);
-			if (is_parent == false)
-				node->stdio_backup = dup(STDIN_FILENO);
-			if (dup2(node->stdio_backup, STDIN_FILENO) == -1)
-			{
-				perror("Error restoring STDIN");
-				exit(EXIT_FAILURE);
-			}
-			if (node->token_type == TYPE_HEREDOC)
-			{
-				close(node->fd);
-			}
-			close(node->stdio_backup);
+			reset_redirect_in(node, is_parent);
 			return ;
 		}
 	}
@@ -206,14 +93,117 @@ void	reset_redirect(t_cmd_invoke *node, bool is_parent)
 {
 	t_redirect	*redirect_head;
 
-	// char		buffer[1000];
 	redirect_head = node->redirect_head;
-	// 標準出力を元に戻す
 	if (redirect_head->next != NULL)
 	{
 		reset_redirect_recursive(redirect_head->next, is_parent);
 	}
 }
+
+// int	handle_redirect(TokenType token_type, t_redirect *node)
+// {
+// 	int	fd;
+
+// 	if (token_type == TYPE_REDIRECT_OUT)
+// 	{ // '>' の場合
+// 		node->stdio_backup = dup(STDOUT_FILENO);
+// 		if (node->stdio_backup == -1)
+// 		{
+// 			perror("Error saving STDOUT");
+// 			return (EXIT_FAILURE);
+// 		}
+// 		fd = open(node->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+// 		if (fd == -1)
+// 		{
+// 			perror("Error opening file for output");
+// 			return (EXIT_FAILURE);
+// 		}
+// 		if (dup2(fd, STDOUT_FILENO) == -1)
+// 		{
+// 			perror("Error redirecting output");
+// 			close(fd);
+// 			return (EXIT_FAILURE);
+// 		}
+// 		if (close(fd) == -1)
+// 		{
+// 			perror("Error close");
+// 			return (EXIT_FAILURE);
+// 		}
+// 	}
+// 	else if (token_type == TYPE_REDIRECT_APPEND)
+// 	{ // '>>' の場合
+// 		node->stdio_backup = dup(STDOUT_FILENO);
+// 		if (node->stdio_backup == -1)
+// 		{
+// 			perror("Error saving STDOUT");
+// 			return (EXIT_FAILURE);
+// 		}
+// 		fd = open(node->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
+// 		if (fd == -1)
+// 		{
+// 			perror("Error opening file for output");
+// 			return (EXIT_FAILURE);
+// 		}
+// 		if (dup2(fd, STDOUT_FILENO) == -1)
+// 		{
+// 			perror("Error redirecting output");
+// 			close(fd);
+// 			return (EXIT_FAILURE);
+// 		}
+// 		if (close(fd) == -1)
+// 		{
+// 			perror("Error close");
+// 			return (EXIT_FAILURE);
+// 		}
+// 	}
+// 	else if (token_type == TYPE_REDIRECT_IN)
+// 	{ // '<' の場合
+// 		node->stdio_backup = dup(STDIN_FILENO);
+// 		if (node->stdio_backup == -1)
+// 		{
+// 			perror("Error saving STDIN");
+// 			return (EXIT_FAILURE);
+// 		}
+// 		fd = open(node->filename, O_RDONLY); // 読み込み専用でファイルを開く
+// 		if (fd == -1)
+// 		{
+// 			perror("Error opening file for input");
+// 			return (EXIT_FAILURE);
+// 		}
+// 		if (dup2(fd, STDIN_FILENO) == -1)
+// 		{
+// 			perror("Error redirecting input");
+// 			close(fd);
+// 			return (EXIT_FAILURE);
+// 		}
+// 		if (close(fd) == -1)
+// 		{
+// 			perror("Error close");
+// 			return (EXIT_FAILURE);
+// 		}
+// 	}
+// 	else if (token_type == TYPE_HEREDOC)
+// 	{
+// 		node->stdio_backup = dup(STDIN_FILENO);
+// 		if (node->stdio_backup == -1)
+// 		{
+// 			perror("Error saving STDIN");
+// 			return (EXIT_FAILURE);
+// 		}
+// 		if (dup2(node->fd, STDIN_FILENO) == -1)
+// 		{
+// 			perror("Error heredoc input");
+// 			close(node->fd);
+// 			return (EXIT_FAILURE);
+// 		}
+// 		if (close(node->fd) == -1)
+// 		{
+// 			perror("Error close");
+// 			return (EXIT_FAILURE);
+// 		}
+// 	}
+// 	return (0);
+// }
 
 // void	reset_redirect(t_cmd_invoke *node, bool is_parent)
 // {

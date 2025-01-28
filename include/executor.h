@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/01/26 17:03:20 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/28 21:09:19 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	perror_exit(char *str, char **str_array1, char **str_array2,
 			int exit_status);
 
 // free.c
-void	free2dim(char **str_array);
+void	free1dim(char **str);
+void	free2dim(char ***str_array);
 void	free_redirect(t_redirect **redirect_head);
 void	free_cmd_node(t_cmd_invoke *node);
 void	free_all(t_cmd_invoke **cmd_head);
@@ -48,8 +49,16 @@ bool	is_full_relative_path(char *str);
 
 // redirection.c
 int		open_redirect(t_cmd_invoke *node);
-int		handle_redirect_all(t_redirect *head);
-int		handle_redirect(TokenType token_type, t_redirect *node);
+void	reset_redirect_out(t_redirect *node, bool is_parent);
+void	reset_redirect_in(t_redirect *node, bool is_parent);
+void	reset_redirect_recursive(t_redirect *node, bool is_parent);
 void	reset_redirect(t_cmd_invoke *node, bool is_parent);
+
+// handle_redirect.c
+int		handle_redirect_out(t_redirect *node);
+int		handle_redirect_append(t_redirect *node);
+int		handle_redirect_in(t_redirect *node);
+int		handle_redirect_heredoc(t_redirect *node);
+int		handle_redirect(TokenType token_type, t_redirect *node);
 
 #endif
