@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/27 20:56:28 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/29 21:08:50 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,10 +151,11 @@ void	process_shell(char **env)
 		// 内部コマンドの処理を外だし関数で呼び出す
 		if (is_internal_commands(command) && parsed_list->next->next == NULL)
 		{
-			last_status = open_redirect(parsed_list->next);
+			last_status = open_redirect(parsed_list->next, true);
+			// sleep(1);
 			if (last_status == 0)
 				last_status = handle_internal_commands(parsed_list->next, env);
-			reset_redirect(parsed_list->next, true);
+			reset_redirect(parsed_list->next);
 		}
 		else
 			// 外部コマンドの処理

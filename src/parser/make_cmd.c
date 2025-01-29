@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/01/28 21:16:30 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/29 22:08:26 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head)
 			cmd_ptr_temp->next = cmd_invoke_init(cmd_ptr_temp->next);
 			cmd_ptr_temp = cmd_ptr_temp->next;
 			is_pipe = false;
+			is_filename = false;
 			cmd_len = ft_cmd_len(list_ptr_temp);
 			cmd_ptr_temp->cmd_list = (char **)malloc(sizeof(char *) * (cmd_len
 						+ 1));
@@ -116,6 +117,7 @@ t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head)
 		if (list_ptr_temp->token_type == TYPE_PIPE)
 		{
 			is_pipe = true;
+			free1dim(&(list_ptr_temp->content));
 		}
 		else if (list_ptr_temp->token_type == TYPE_COMMAND
 			&& is_filename == false)
@@ -131,11 +133,6 @@ t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head)
 				bef_token_type);
 			is_filename = false;
 			bef_token_type = TYPE_COMMAND;
-		}
-		else if (list_ptr_temp->token_type == TYPE_PIPE)
-		{
-			bef_token_type = TYPE_PIPE;
-			is_pipe = true;
 		}
 		else if (list_ptr_temp->token_type == TYPE_REDIRECT_IN
 			|| list_ptr_temp->token_type == TYPE_HEREDOC

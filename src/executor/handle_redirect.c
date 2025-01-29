@@ -6,21 +6,24 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:11:51 by karai             #+#    #+#             */
-/*   Updated: 2025/01/28 20:22:56 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/29 23:29:40 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	handle_redirect_out(t_redirect *node)
+int	handle_redirect_out(t_redirect *node, bool is_parent)
 {
 	int	fd;
 
-	node->stdio_backup = dup(STDOUT_FILENO);
-	if (node->stdio_backup == -1)
+	if (is_parent)
 	{
-		perror("Error saving STDOUT");
-		return (EXIT_FAILURE);
+		node->stdio_backup = dup(STDOUT_FILENO);
+		if (node->stdio_backup == -1)
+		{
+			perror("Error saving STDOUT");
+			return (EXIT_FAILURE);
+		}
 	}
 	fd = open(node->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
@@ -42,15 +45,18 @@ int	handle_redirect_out(t_redirect *node)
 	return (0);
 }
 
-int	handle_redirect_append(t_redirect *node)
+int	handle_redirect_append(t_redirect *node, bool is_parent)
 {
 	int	fd;
 
-	node->stdio_backup = dup(STDOUT_FILENO);
-	if (node->stdio_backup == -1)
+	if (is_parent)
 	{
-		perror("Error saving STDOUT");
-		return (EXIT_FAILURE);
+		node->stdio_backup = dup(STDOUT_FILENO);
+		if (node->stdio_backup == -1)
+		{
+			perror("Error saving STDOUT");
+			return (EXIT_FAILURE);
+		}
 	}
 	fd = open(node->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	if (fd == -1)
@@ -65,22 +71,22 @@ int	handle_redirect_append(t_redirect *node)
 		return (EXIT_FAILURE);
 	}
 	if (close(fd) == -1)
-	{
-		perror("Error close");
-		return (EXIT_FAILURE);
-	}
+		return (perror("Error close"), EXIT_FAILURE);
 	return (0);
 }
 
-int	handle_redirect_in(t_redirect *node)
+int	handle_redirect_in(t_redirect *node, bool is_parent)
 {
 	int	fd;
 
-	node->stdio_backup = dup(STDIN_FILENO);
-	if (node->stdio_backup == -1)
+	if (is_parent)
 	{
-		perror("Error saving STDIN");
-		return (EXIT_FAILURE);
+		node->stdio_backup = dup(STDIN_FILENO);
+		if (node->stdio_backup == -1)
+		{
+			perror("Error saving STDIN");
+			return (EXIT_FAILURE);
+		}
 	}
 	fd = open(node->filename, O_RDONLY);
 	if (fd == -1)
@@ -99,16 +105,19 @@ int	handle_redirect_in(t_redirect *node)
 		perror("Error close");
 		return (EXIT_FAILURE);
 	}
-	return(0);
+	return (0);
 }
 
-int	handle_redirect_heredoc(t_redirect *node)
+int	handle_redirect_heredoc(t_redirect *node, bool is_parent)
 {
-	node->stdio_backup = dup(STDIN_FILENO);
-	if (node->stdio_backup == -1)
+	if (is_parent)
 	{
-		perror("Error saving STDIN");
-		return (EXIT_FAILURE);
+		node->stdio_backup = dup(STDIN_FILENO);
+		if (node->stdio_backup == -1)
+		{
+			perror("Error saving STDIN");
+			return (EXIT_FAILURE);
+		}
 	}
 	if (dup2(node->fd, STDIN_FILENO) == -1)
 	{
@@ -124,17 +133,17 @@ int	handle_redirect_heredoc(t_redirect *node)
 	return (0);
 }
 
-int	handle_redirect(TokenType token_type, t_redirect *node)
+int	handle_redirect(TokenType token_type, t_redirect *node, bool is_parent)
 {
 	int	status;
 
 	if (token_type == TYPE_REDIRECT_OUT)
-		status = handle_redirect_out(node);
+		status = handle_redirect_out(node, is_parent);
 	else if (token_type == TYPE_REDIRECT_APPEND)
-		status = handle_redirect_append(node);
+		status = handle_redirect_append(node, is_parent);
 	else if (token_type == TYPE_REDIRECT_IN)
-		status = handle_redirect_in(node);
+		status = handle_redirect_in(node, is_parent);
 	else if (token_type == TYPE_HEREDOC)
-		status = handle_redirect_heredoc(node);
+		status = handle_redirect_heredoc(node, is_parent);
 	return (status);
 }

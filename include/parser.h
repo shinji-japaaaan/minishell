@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/01/28 21:04:29 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/29 22:11:04 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_redirect
 {
 	char					*filename;
 	TokenType				token_type;
+	int						pipefd[2];
 	int						fd;
 	int						stdio_backup;
 	struct s_redirect		*next;
@@ -119,6 +120,7 @@ bool						parse_error_consecutive_pipe(t_linked_list *head);
 void						heredoc_read(t_redirect *node, char *str_eof);
 void						heredoc_redirect_list(t_redirect *head_redirect_in);
 void						heredoc_main(t_cmd_invoke *head_cmd);
+void						heredoc_close(t_cmd_invoke *node);
 
 #endif
 

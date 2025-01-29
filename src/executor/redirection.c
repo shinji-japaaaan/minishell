@@ -6,15 +6,15 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/28 22:13:02 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/29 21:30:09 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	buffer[1000];
+// char	buffer[1000];
 
-int	open_redirect(t_cmd_invoke *node)
+int	open_redirect(t_cmd_invoke *node, bool is_parent)
 {
 	int			status;
 	t_redirect	*temp_ptr;
@@ -22,7 +22,7 @@ int	open_redirect(t_cmd_invoke *node)
 	temp_ptr = node->redirect_head->next;
 	while (temp_ptr)
 	{
-		status = handle_redirect(temp_ptr->token_type, temp_ptr);
+		status = handle_redirect(temp_ptr->token_type, temp_ptr, is_parent);
 		if (status != 0)
 			return (status);
 		temp_ptr = temp_ptr->next;
@@ -30,12 +30,8 @@ int	open_redirect(t_cmd_invoke *node)
 	return (0);
 }
 
-void	reset_redirect_out(t_redirect *node, bool is_parent)
+void	reset_redirect_out(t_redirect *node)
 {
-	// sprintf(buffer, "stdio back up %d", node->stdio_backup);
-	// ft_putendl_fd(buffer, 2);
-	if (is_parent == false)
-		node->stdio_backup = dup(STDOUT_FILENO);
 	if (dup2(node->stdio_backup, STDOUT_FILENO) == -1)
 	{
 		perror("Error restoring STDOUT");
@@ -44,12 +40,8 @@ void	reset_redirect_out(t_redirect *node, bool is_parent)
 	close(node->stdio_backup);
 }
 
-void	reset_redirect_in(t_redirect *node, bool is_parent)
+void	reset_redirect_in(t_redirect *node)
 {
-	if (is_parent == false)
-	{
-		node->stdio_backup = dup(STDIN_FILENO);
-	}
 	if (dup2(node->stdio_backup, STDIN_FILENO) == -1)
 	{
 		perror("Error restoring STDIN");
@@ -62,41 +54,41 @@ void	reset_redirect_in(t_redirect *node, bool is_parent)
 	close(node->stdio_backup);
 }
 
-void	reset_redirect_recursive(t_redirect *node, bool is_parent)
+void	reset_redirect_recursive(t_redirect *node)
 {
 	if (node->token_type == TYPE_REDIRECT_OUT
 		|| node->token_type == TYPE_REDIRECT_APPEND)
 	{
 		if (node->next == NULL)
-			return (reset_redirect_out(node, is_parent));
+			return (reset_redirect_out(node));
 		else
 		{
-			reset_redirect_recursive(node->next, is_parent);
-			reset_redirect_out(node, is_parent);
+			reset_redirect_recursive(node->next);
+			reset_redirect_out(node);
 			return ;
 		}
 	}
 	else
 	{
 		if (node->next == NULL)
-			return (reset_redirect_in(node, is_parent));
+			return (reset_redirect_in(node));
 		else
 		{
-			reset_redirect_recursive(node->next, is_parent);
-			reset_redirect_in(node, is_parent);
+			reset_redirect_recursive(node->next);
+			reset_redirect_in(node);
 			return ;
 		}
 	}
 }
 
-void	reset_redirect(t_cmd_invoke *node, bool is_parent)
+void	reset_redirect(t_cmd_invoke *node)
 {
 	t_redirect	*redirect_head;
 
 	redirect_head = node->redirect_head;
 	if (redirect_head->next != NULL)
 	{
-		reset_redirect_recursive(redirect_head->next, is_parent);
+		reset_redirect_recursive(redirect_head->next);
 	}
 }
 

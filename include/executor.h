@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/01/28 21:09:19 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/29 21:10:13 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,21 @@ int		is_access(char *full_path);
 bool	is_full_relative_path(char *str);
 
 // redirection.c
-int		open_redirect(t_cmd_invoke *node);
-void	reset_redirect_out(t_redirect *node, bool is_parent);
-void	reset_redirect_in(t_redirect *node, bool is_parent);
-void	reset_redirect_recursive(t_redirect *node, bool is_parent);
-void	reset_redirect(t_cmd_invoke *node, bool is_parent);
+int		open_redirect(t_cmd_invoke *node, bool is_parent);
+void	reset_redirect_out(t_redirect *node);
+void	reset_redirect_in(t_redirect *node);
+void	reset_redirect_recursive(t_redirect *node);
+void	reset_redirect(t_cmd_invoke *node);
 
 // handle_redirect.c
-int		handle_redirect_out(t_redirect *node);
-int		handle_redirect_append(t_redirect *node);
-int		handle_redirect_in(t_redirect *node);
-int		handle_redirect_heredoc(t_redirect *node);
-int		handle_redirect(TokenType token_type, t_redirect *node);
+int		handle_redirect_out(t_redirect *node, bool is_parent);
+int		handle_redirect_append(t_redirect *node, bool is_parent);
+int		handle_redirect_in(t_redirect *node, bool is_parent);
+int		handle_redirect_heredoc(t_redirect *node, bool is_parent);
+int		handle_redirect(TokenType token_type, t_redirect *node, bool is_parent);
+
+// hande}_redirect_parent.c
+int		handle_redirect_parent(TokenType token_type, t_redirect *node);
+int		open_redirect_parent(t_cmd_invoke *node);
 
 #endif
