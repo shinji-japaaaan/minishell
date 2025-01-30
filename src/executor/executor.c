@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/29 23:29:57 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/30 21:44:14 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	parent_process_wait(t_cmd_invoke *head)
 		temp_ptr = temp_ptr->next;
 	}
 	if (WIFSIGNALED(status))
-		return (WIFSIGNALED(status));
+		return (status + 128);
 	return (WEXITSTATUS(status));
 }
 
@@ -86,6 +86,7 @@ int	cmd_execute_main(t_cmd_invoke *head)
 			// pipe connect to next command
 		}
 		temp_ptr->pid = fork();
+		global_pid = temp_ptr->pid;
 		if (temp_ptr->pid == 0) // start child process
 		{
 			if (is_first && temp_ptr->next != NULL)

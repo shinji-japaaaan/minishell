@@ -6,11 +6,13 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/29 21:08:50 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/30 21:43:49 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+pid_t	global_pid = 0;
 
 int	handle_internal_commands(t_cmd_invoke *parsed_list, char **env)
 {
@@ -74,11 +76,18 @@ bool	is_internal_commands(char *command)
 
 void	handle_sigint(int signum)
 {
-	(void)signum;                  // 未使用変数を無視
-	write(STDOUT_FILENO, "\n", 1); // 改行のみ表示
-	rl_replace_line("", 0);        // 入力行をクリア
-	rl_on_new_line();              // 新しい行に移動
-	rl_redisplay();                // プロンプトを再表示
+	(void)signum; // 未使用変数を無視
+	if (global_pid != 0)
+	{
+		kill(global_pid, SIGINT);
+	}
+	else
+	{
+		write(STDOUT_FILENO, "\n", 1); // 改行のみ表示
+		rl_replace_line("", 0);        // 入力行をクリア
+		rl_on_new_line();              // 新しい行に移動
+		rl_redisplay();                // プロンプトを再表示
+	}
 }
 
 void	setup_signal_handler(void)
@@ -114,6 +123,7 @@ void	process_shell(char **env)
 	load_history_from_file(HISTORY_FILE, history);
 	while (1)
 	{
+		global_pid = 0;
 		// プロンプト表示と入力受付
 		input = readline("minishell> ");
 		if (!input)
