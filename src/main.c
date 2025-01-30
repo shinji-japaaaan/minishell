@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/30 21:43:49 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/31 05:19:06 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	handle_sigint(int signum)
 	if (global_pid != 0)
 	{
 		kill(global_pid, SIGINT);
+		write(STDOUT_FILENO, "\n", 1); // 改行のみ表示
 	}
 	else
 	{
