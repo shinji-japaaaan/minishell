@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/30 21:43:49 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/31 21:43:12 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,12 +155,12 @@ void	process_shell(char **env)
 			free(input);
 			continue ; // 次の入力を待つ
 		}
-		heredoc_main(parsed_list);
 		// コマンド部分
 		command = parsed_list->next->cmd_list[0];
 		// 内部コマンドの処理を外だし関数で呼び出す
 		if (is_internal_commands(command) && parsed_list->next->next == NULL)
 		{
+			heredoc_main(parsed_list);
 			last_status = open_redirect(parsed_list->next, true);
 			// sleep(1);
 			if (last_status == 0)

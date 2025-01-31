@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:09:45 by karai             #+#    #+#             */
-/*   Updated: 2025/01/28 21:11:23 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/31 23:19:45 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ char	*get_path_cmd(char *path_env, char **cmd)
 	ft_putendl_fd(" command not found", 2);
 	free2dim(&dir_array);
 	exit(NON_COMMAND);
-	// free_exit(dir_array, cmd, NON_COMMAND);
 	return (NULL);
 }
 
@@ -61,7 +60,6 @@ char	*get_path_cmd_part(char **dir_array, char **cmd, char *tmp_str)
 		ft_putendl_fd(" Permission denied", 2);
 		free2dim(&dir_array);
 		exit(NO_PERMISSION);
-		// free_exit(dir_array, cmd, NO_PERMISSION);
 	}
 	return (NULL);
 }
@@ -81,11 +79,11 @@ char	*get_path_cmd_not_find_path(char **cmd)
 	{
 		ft_putstr_fd(cmd[0], 2);
 		ft_putendl_fd(" Permission denied", 2);
-		// free2dim(cmd);
+		free2dim(&cmd);
 		exit(NO_PERMISSION);
 	}
 	perror(cmd[0]);
-	// free2dim(cmd);
+	free2dim(&cmd);
 	exit(NON_COMMAND);
 	return (NULL);
 }

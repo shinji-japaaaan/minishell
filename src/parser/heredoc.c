@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:25:28 by karai             #+#    #+#             */
-/*   Updated: 2025/01/29 23:28:40 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/31 22:57:36 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,3 +77,56 @@ void	heredoc_close(t_cmd_invoke *node)
 		temp_ptr = temp_ptr->next;
 	}
 }
+
+// void	heredoc_read_main(t_redirect *head_redirect)
+// {
+// 	t_cmd_invoke	*temp_ptr;
+
+// 	temp_ptr = head_redirect->next;
+// 	while (temp_ptr)
+// 	{
+// 		heredoc_read_rev(temp_ptr, temp_ptr->filename);
+// 		temp_ptr = temp_ptr->next;
+// 	}
+// }
+
+// void	heredoc_read_rev(t_redirect *node, char *str_eof)
+// {
+// 	char	*line;
+
+// 	setup_signal_handler();
+// 	while (1)
+// 	{
+// 		// setup_signal_handler();
+// 		line = readline("> ");
+// 		if (line == NULL)
+// 			break ;
+// 		if (strcmp(line, str_eof) == 0)
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		ft_putendl_fd(line, node->fd1);
+// 		free(line);
+// 	}
+// 	close(pipefd[1]);
+// }
+
+// void	heredoc_pipe_open(t_redirect *head_redirect)
+// {
+// 	t_redirect	*temp_ptr;
+// 	int			pipefd[2];
+
+// 	head_redirect->next;
+// 	while (temp_ptr)
+// 	{
+// 		if (temp_ptr->token_type == TYPE_HEREDOC)
+// 		{
+// 			if (pipe(pipefd) < 0)
+// 				perror("heredoc pipe failed");
+// 			temp_ptr->fd = pipefd[0];
+// 			temp_ptr->fd1 = pipefd[1];
+// 		}
+// 		temp_ptr = temp_ptr->next;
+// 	}
+// }

@@ -19,10 +19,12 @@ SRCS = main.c \
 	   ../bonus/history.c \
 	   executor/builtins.c \
 	   executor/executor.c \
+	   executor/cmd_execute.c \
 	   executor/executor_utils.c \
 	   executor/get_path.c \
 	   executor/get_path_utils.c \
-	   executor/free.c \
+	   executor/free1.c \
+	   executor/free2.c \
 	   executor/redirection.c\
 	   executor/handle_redirect.c\
 

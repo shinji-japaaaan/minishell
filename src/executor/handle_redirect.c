@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:11:51 by karai             #+#    #+#             */
-/*   Updated: 2025/01/29 23:29:40 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/31 23:26:27 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ int	handle_redirect_out(t_redirect *node, bool is_parent)
 	{
 		node->stdio_backup = dup(STDOUT_FILENO);
 		if (node->stdio_backup == -1)
-		{
-			perror("Error saving STDOUT");
-			return (EXIT_FAILURE);
-		}
+			return (perror("Error saving STDOUT"), EXIT_FAILURE);
 	}
 	fd = open(node->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
@@ -38,10 +35,7 @@ int	handle_redirect_out(t_redirect *node, bool is_parent)
 		return (EXIT_FAILURE);
 	}
 	if (close(fd) == -1)
-	{
-		perror("Error close");
-		return (EXIT_FAILURE);
-	}
+		return (perror("Error close"), EXIT_FAILURE);
 	return (0);
 }
 
@@ -60,10 +54,7 @@ int	handle_redirect_append(t_redirect *node, bool is_parent)
 	}
 	fd = open(node->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	if (fd == -1)
-	{
-		perror("Error opening file for output");
-		return (EXIT_FAILURE);
-	}
+		return (perror("Error opening file for output"), EXIT_FAILURE);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("Error redirecting output");
@@ -83,10 +74,7 @@ int	handle_redirect_in(t_redirect *node, bool is_parent)
 	{
 		node->stdio_backup = dup(STDIN_FILENO);
 		if (node->stdio_backup == -1)
-		{
-			perror("Error saving STDIN");
-			return (EXIT_FAILURE);
-		}
+			return (perror("Error saving STDIN"), EXIT_FAILURE);
 	}
 	fd = open(node->filename, O_RDONLY);
 	if (fd == -1)
@@ -101,10 +89,7 @@ int	handle_redirect_in(t_redirect *node, bool is_parent)
 		return (EXIT_FAILURE);
 	}
 	if (close(fd) == -1)
-	{
-		perror("Error close");
-		return (EXIT_FAILURE);
-	}
+		return (perror("Error close"), EXIT_FAILURE);
 	return (0);
 }
 

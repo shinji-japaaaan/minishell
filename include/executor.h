@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/01/29 21:10:13 by karai            ###   ########.fr       */
+/*   Updated: 2025/01/31 23:19:05 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,18 @@
 # define NON_COMMAND 127
 # define NO_PERMISSION 126
 
-// cmd_execute_main.c
+// executor.c
 int		parent_process_wait(t_cmd_invoke *head);
-void	cmd_execute_first_last(t_cmd_invoke *node);
+void	close_fd_in_child(t_cmd_invoke *node);
+void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
+			bool is_first);
+void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first);
+int		cmd_execute_main(t_cmd_invoke *head);
+
+// cmd_execute.c
 void	cmd_execute_first(t_cmd_invoke *node);
 void	cmd_execute_last(t_cmd_invoke *node);
 void	cmd_execute_middle(t_cmd_invoke *node);
-int		cmd_execute_main(t_cmd_invoke *head);
 
 // cmd_execute_utils.c
 void	perror_exit(char *str, char **str_array1, char **str_array2,
