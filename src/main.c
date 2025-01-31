@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/31 05:19:06 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:20:19 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,24 @@ void	handle_sigint(int signum)
 	}
 }
 
+// 端末のエコー制御（ECHOCTL を無効化して `^\` を表示しないようにする）
+void	disable_echoctl(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+	{
+		perror("tcgetattr");
+		exit(EXIT_FAILURE);
+	}
+	term.c_lflag &= ~ECHOCTL; // ECHOCTL を無効化 (`^\` を表示しない)
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+	{
+		perror("tcsetattr");
+		exit(EXIT_FAILURE);
+	}
+}
+
 void	setup_signal_handler(void)
 {
 	struct sigaction	sa;
@@ -104,6 +122,15 @@ void	setup_signal_handler(void)
 		perror("sigaction");
 		exit(EXIT_FAILURE);
 	}
+	// SIGQUIT (ctrl-\) を無視する設定
+	sa.sa_handler = SIG_IGN;
+	if (sigaction(SIGQUIT, &sa, NULL) == -1)
+	{
+		perror("sigaction");
+		exit(EXIT_FAILURE);
+	}
+	// `^\` を表示しないように端末設定を変更
+	disable_echoctl();
 }
 
 // シェル処理関数
