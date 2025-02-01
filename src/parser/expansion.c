@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/02/01 10:06:29 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/02 06:30:45 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ char	*get_env_str(char *str, size_t *len)
 		i += 1;
 	}
 	env_str[i] = '\0';
-	printf("Extracted environment variable name: %s, Length: %zu\n", env_str,
-		*len);
 	return (env_str);
 }
 

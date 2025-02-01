@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_error1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 13:05:40 by karai             #+#    #+#             */
-/*   Updated: 2025/02/01 09:46:24 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/02 06:37:55 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	parse_error_quote(char *input)
 			inside_double_quote = false;
 		else if (inside_single_quote && *input == '\'')
 			inside_single_quote = false;
-		else if (!inside_double_quote && !inside_double_quote)
+		else if (!inside_double_quote && !inside_single_quote)
 		{
 			if (*input == '\"')
 				inside_double_quote = true;
