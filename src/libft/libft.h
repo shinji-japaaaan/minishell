@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 19:35:33 by karai             #+#    #+#             */
-/*   Updated: 2024/10/30 19:54:43 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/01 10:01:28 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <limits.h>
 # include <stddef.h>
 # include <stdint.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <limits.h>
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -53,5 +53,6 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
+int		ft_strcmp(const char *s1, const char *s2);
 
 #endif

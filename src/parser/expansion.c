@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/02/01 09:53:26 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/01 10:06:29 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,21 +60,21 @@ char	*replace_to_env_val(char *str, char *env_str, int last_status)
 	char	*str_bef;
 
 	str_bef = str;
-	env_str_len = strlen(env_str);
-	if (strcmp(env_str, "?") == 0)
+	env_str_len = ft_strlen(env_str);
+	if (ft_strcmp(env_str, "?") == 0)
 		env_val = ft_itoa(last_status);
 	else
 		env_val = getenv(env_str);
 	if (env_val == NULL)
 		env_val_len = 0;
 	else
-		env_val_len = strlen(env_val);
-	new_len = strlen(str) - env_str_len - 1 + env_val_len;
+		env_val_len = ft_strlen(env_val);
+	new_len = ft_strlen(str) - env_str_len - 1 + env_val_len;
 	new_str = (char *)malloc(sizeof(char) * (new_len + 1));
 	i = 0;
 	while (*str)
 	{
-		if (*str == '$' && strncmp(str + 1, env_str, env_str_len) == 0)
+		if (*str == '$' && ft_strncmp(str + 1, env_str, env_str_len) == 0)
 		{
 			ft_strcpy(&new_str[i], env_val);
 			i += env_val_len;

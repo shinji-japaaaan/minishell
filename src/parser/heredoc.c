@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:25:28 by karai             #+#    #+#             */
-/*   Updated: 2025/02/01 09:52:15 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/01 10:03:16 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	heredoc_read(t_redirect *node, char *str_eof)
 		line = readline("> ");
 		if (line == NULL)
 			break ;
-		if (strcmp(line, str_eof) == 0)
+		if (ft_strcmp(line, str_eof) == 0)
 		{
 			free(line);
 			break ;

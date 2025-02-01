@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 09:45:42 by karai             #+#    #+#             */
-/*   Updated: 2025/02/01 09:48:30 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/01 10:06:33 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	parse_error_unexpected_str_judge(char *str)
 {
 	if (ft_strncmp(str, "||", 2) == 0 || ft_strncmp(str, "<<<", 3) == 0
-		|| strncmp(str, ">>>", 3) == 0)
+		|| ft_strncmp(str, ">>>", 3) == 0)
 		return (true);
 	return (false);
 }
@@ -39,9 +39,8 @@ bool	parse_error_unexpected_str(char *input)
 				inside_double_quote = true;
 			else if (*input == '\'')
 				inside_single_quote = true;
-			else
-				if (parse_error_unexpected_str_judge(input))
-					return (true);
+			else if (parse_error_unexpected_str_judge(input))
+				return (true);
 		}
 		input += 1;
 	}

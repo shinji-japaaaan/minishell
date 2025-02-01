@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:18:22 by karai             #+#    #+#             */
-/*   Updated: 2025/02/01 09:54:13 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/01 10:02:52 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 TokenType	get_token_type(char *str)
 {
-	if (strcmp(str, "|") == 0)
+	if (ft_strcmp(str, "|") == 0)
 		return (TYPE_PIPE);
-	if (strcmp(str, "<") == 0)
+	if (ft_strcmp(str, "<") == 0)
 		return (TYPE_REDIRECT_IN);
-	if (strcmp(str, ">") == 0)
+	if (ft_strcmp(str, ">") == 0)
 		return (TYPE_REDIRECT_OUT);
-	if (strcmp(str, "<<") == 0)
+	if (ft_strcmp(str, "<<") == 0)
 		return (TYPE_HEREDOC);
-	if (strcmp(str, ">>") == 0)
+	if (ft_strcmp(str, ">>") == 0)
 		return (TYPE_REDIRECT_APPEND);
 	return (TYPE_COMMAND);
 }
