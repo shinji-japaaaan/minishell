@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:18:22 by karai             #+#    #+#             */
-/*   Updated: 2025/01/20 21:27:33 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/01 09:54:13 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,16 @@ TokenType	get_token_type(char *str)
 
 void	assign_token_types(t_linked_list *list_head)
 {
-	t_linked_list *ptr_temp;
+	t_linked_list	*ptr_temp;
 
 	ptr_temp = list_head->next;
-	while(ptr_temp)
+	while (ptr_temp)
 	{
 		ptr_temp->token_type = get_token_type(ptr_temp->content);
 		ptr_temp = ptr_temp->next;
 	}
 }
 
-// not implementing here doc for now
 int	is_delimeter(char *str)
 {
 	if (str[0] == '\0')
@@ -62,8 +61,6 @@ size_t	split_len(char *input)
 	inside_single_quote = false;
 	inside_double_quote = false;
 	len = 0;
-	// while (*input != '\0' && is_blank(*input))
-	// 	input += 1;
 	if (is_delimeter(input) != 0)
 		return (is_delimeter(input));
 	while (input[len])
@@ -84,22 +81,20 @@ size_t	split_len(char *input)
 	return (len);
 }
 
-void tokenize_input(t_linked_list *head, char *input)
+void	tokenize_input(t_linked_list *head, char *input)
 {
-    size_t len;
-    char *str_temp;
+	size_t	len;
+	char	*str_temp;
 
-    while (*input != '\0')
-    {
-        while (*input != '\0' && is_blank(*input))
-            input += 1;
-        if (*input == '\0')
-            break;
-        len = split_len(input);
-        str_temp = strdup_len(input, len);
-        linked_list_append(head, str_temp);
-        input += len;
-    }
+	while (*input != '\0')
+	{
+		while (*input != '\0' && is_blank(*input))
+			input += 1;
+		if (*input == '\0')
+			break ;
+		len = split_len(input);
+		str_temp = strdup_len(input, len);
+		linked_list_append(head, str_temp);
+		input += len;
+	}
 }
-
-

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:25:28 by karai             #+#    #+#             */
-/*   Updated: 2025/01/31 22:57:36 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/01 09:52:15 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ void	heredoc_close(t_cmd_invoke *node)
 	{
 		if (temp_ptr->token_type == TYPE_HEREDOC)
 		{
-			close(temp_ptr->fd);
+			if (close(temp_ptr->fd) == -1)
+				perror("close failed");
 		}
 		temp_ptr = temp_ptr->next;
 	}

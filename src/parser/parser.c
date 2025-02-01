@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/01/27 20:56:04 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/01 09:43:19 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
 		}
 		ptr_temp = ptr_temp->next;
 	}
-	return (*list_head); // list_headの値を返す
+	return (*list_head);
 }
 
 void	expand_env_variables_in_list(t_linked_list *list_head, int last_status)
@@ -49,10 +49,10 @@ t_cmd_invoke	*parser(char *input, int last_status)
 	head = linked_list_init(head);
 	if (head == NULL)
 	{
-		fprintf(stderr, "Failed to initialize linked list.\n");
-		return (NULL); // 適切なエラーハンドリング
+		ft_putendl_fd("Failed to initialize linked list.", 2);
+		return (NULL);
 	}
-	tokenize_input(head, input); // トークン化処理を呼び出し
+	tokenize_input(head, input);
 	assign_token_types(head);
 	expand_env_variables_in_list(head, last_status);
 	remove_quotes_from_tokens(head);
