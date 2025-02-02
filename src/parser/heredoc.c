@@ -6,11 +6,31 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:25:28 by karai             #+#    #+#             */
-/*   Updated: 2025/02/01 10:03:16 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/02 08:59:00 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+int	check_interrupt(void)
+{
+	if (global_pid)
+		rl_done = 1;
+	return (0);
+}
+
+void	handle_sigint_heredoc(int signum)
+{
+	(void)signum;
+	global_pid = 1;
+}
+
+void	setup_signal_handler_heredoc(void)
+{
+	global_pid = 0;
+	rl_done = 0;
+	signal(SIGINT, handle_sigint_heredoc);
+}
 
 void	heredoc_read(t_redirect *node, char *str_eof)
 {
@@ -19,12 +39,14 @@ void	heredoc_read(t_redirect *node, char *str_eof)
 
 	if (pipe(pipefd) < 0)
 		perror("heredoc pipe failed");
-	while (1)
+	setup_signal_handler_heredoc();
+	rl_event_hook = check_interrupt;
+	while (!global_pid)
 	{
 		line = readline("> ");
 		if (line == NULL)
 			break ;
-		if (ft_strcmp(line, str_eof) == 0)
+		if (global_pid || ft_strcmp(line, str_eof) == 0)
 		{
 			free(line);
 			break ;
@@ -32,11 +54,12 @@ void	heredoc_read(t_redirect *node, char *str_eof)
 		ft_putendl_fd(line, pipefd[1]);
 		free(line);
 	}
+	rl_event_hook = NULL;
 	close(pipefd[1]);
 	node->fd = pipefd[0];
 }
 
-void	heredoc_redirect_list(t_redirect *head_redirect_in)
+int	heredoc_redirect_list(t_redirect *head_redirect_in)
 {
 	t_redirect	*temp_ptr;
 
@@ -46,9 +69,12 @@ void	heredoc_redirect_list(t_redirect *head_redirect_in)
 		if (temp_ptr->token_type == TYPE_HEREDOC)
 		{
 			heredoc_read(temp_ptr, temp_ptr->filename);
+			if (global_pid)
+				return (130);
 		}
 		temp_ptr = temp_ptr->next;
 	}
+	return (0);
 }
 
 void	heredoc_main(t_cmd_invoke *head_cmd)
@@ -66,14 +92,18 @@ void	heredoc_main(t_cmd_invoke *head_cmd)
 void	heredoc_close(t_cmd_invoke *node)
 {
 	t_redirect	*temp_ptr;
+	struct stat	st;
 
 	temp_ptr = node->redirect_head;
 	while (temp_ptr)
 	{
 		if (temp_ptr->token_type == TYPE_HEREDOC)
 		{
-			if (close(temp_ptr->fd) == -1)
-				perror("close failed");
+			if (fstat(temp_ptr->fd, &st) == 0)
+			{
+				if (close(temp_ptr->fd) == -1)
+					perror("close failed");
+			}
 		}
 		temp_ptr = temp_ptr->next;
 	}

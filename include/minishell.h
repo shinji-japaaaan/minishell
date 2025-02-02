@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:00:06 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/31 22:00:09 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/02 07:59:02 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,11 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+// extern int		interrupted;
+
 extern pid_t	global_pid;
 void			setup_signal_handler(void);
+// void	handle_sigint(int signum, siginfo_t *info, void *context);
 void			handle_sigint(int signum);
 
 #endif /* MINISHELL_H */

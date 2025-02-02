@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 09:09:44 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/02 09:38:03 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,12 +193,18 @@ void	process_shell(char **env)
 		// 内部コマンドの処理を外だし関数で呼び出す
 		if (is_internal_commands(command) && parsed_list->next->next == NULL)
 		{
-			heredoc_main(parsed_list);
-			last_status = open_redirect(parsed_list->next, true);
-			// sleep(1);
-			if (last_status == 0)
-				last_status = handle_internal_commands(parsed_list->next, env);
-			reset_redirect(parsed_list->next);
+			last_status = heredoc_redirect_list(parsed_list->next->redirect_head);
+			// printf("last status %d\n", last_status);
+			if (!last_status)
+			{
+				last_status = open_redirect(parsed_list->next, true);
+				if (last_status == 0)
+					last_status = handle_internal_commands(parsed_list->next,
+							env);
+				reset_redirect(parsed_list->next);
+			}
+			else
+				heredoc_close(parsed_list->next);
 		}
 		else
 			// 外部コマンドの処理

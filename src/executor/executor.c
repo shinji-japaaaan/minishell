@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/01/31 23:15:08 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/02 08:11:12 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,18 @@ void	close_fd_in_child(t_cmd_invoke *node)
 }
 
 void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
-		bool is_first)
+		bool is_first, int interrupted)
 {
 	int			status;
 	extern char	**environ;
 	char		*path;
 
+	if (interrupted)
+	{
+		heredoc_close(temp_ptr);
+		free_all(&head);
+		exit(130);
+	}
 	if (is_first && temp_ptr->next != NULL)
 		cmd_execute_first(temp_ptr);
 	else if (!is_first && temp_ptr->next == NULL)
@@ -87,6 +93,7 @@ int	cmd_execute_main(t_cmd_invoke *head)
 {
 	t_cmd_invoke	*temp_ptr;
 	bool			is_first;
+	int				interrupted;
 
 	is_first = true;
 	temp_ptr = head->next;
@@ -97,11 +104,12 @@ int	cmd_execute_main(t_cmd_invoke *head)
 			pipe(temp_ptr->nxt_pipefd);
 			temp_ptr->next->bef_pipefd = temp_ptr->nxt_pipefd;
 		}
-		heredoc_redirect_list(temp_ptr->redirect_head);
+		interrupted = heredoc_redirect_list(temp_ptr->redirect_head);
 		temp_ptr->pid = fork();
-		global_pid = temp_ptr->pid;
+		if (temp_ptr->pid != 0)
+			global_pid = temp_ptr->pid;
 		if (temp_ptr->pid == 0)
-			cmd_execute_child(head, temp_ptr, is_first);
+			cmd_execute_child(head, temp_ptr, is_first, interrupted);
 		cmd_execute_parent(temp_ptr, &is_first);
 		temp_ptr = temp_ptr->next;
 	}

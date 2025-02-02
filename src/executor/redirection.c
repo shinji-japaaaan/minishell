@@ -6,13 +6,11 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/01/29 21:30:09 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/01 23:44:28 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// char	buffer[1000];
 
 int	open_redirect(t_cmd_invoke *node, bool is_parent)
 {
