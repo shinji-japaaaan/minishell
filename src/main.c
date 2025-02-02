@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 20:16:56 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/02 20:38:21 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ int handle_internal_commands(t_cmd_invoke *parsed_list, char **env) {
     } else if (strcmp(command, "export") == 0) {
         return export_variable(&env, args[1]); // `export_variable()` の戻り値を適切に扱う
     } else if (strcmp(command, "unset") == 0) {
-        return (unset_variable(&env, args[1]), 1);
+		if (args[1] == NULL) {
+            return 0;
+        }
+        return (unset_variable(&env, args[1]));
     } else {
         return 0;
     }

@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 20:15:56 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/02 20:46:03 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,19 +185,24 @@ int export_variable(char ***env, char *arg) {
     return 0;
 }
 
-
-void unset_variable(char ***env, char *arg) {
+int unset_variable(char ***env, char *arg) {
     int i = 0, j = 0;
 
     for (; (*env)[i]; i++) {
+        // 環境変数の名前が一致し、'='で区切られている場合に削除
         if (strncmp((*env)[i], arg, strlen(arg)) == 0 && (*env)[i][strlen(arg)] == '=') {
             free((*env)[i]);
         } else {
             (*env)[j++] = (*env)[i];
         }
     }
+
     (*env)[j] = NULL;
+
+    // Bashと同じ動作に合わせ、変数が見つからなくても終了コードは0とする
+    return 0;  // 変数が見つからなくても、終了コードは0にする（Bashに合わせる）
 }
+
 
 // int main(int argc, char **argv, char **envp) {
 //     char **environment = copy_environment(envp);
