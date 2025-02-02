@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 06:19:51 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/02 09:09:44 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	handle_internal_commands(t_cmd_invoke *parsed_list, char **env)
 	}
 	else if (strcmp(command, "pwd") == 0)
 	{
-		return (print_working_directory(), 1);
+		return (print_working_directory());
 	}
 	else if (strcmp(command, "env") == 0)
 	{

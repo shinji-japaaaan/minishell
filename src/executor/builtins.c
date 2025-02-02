@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 06:26:23 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/02 09:10:18 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,14 @@ void echo_command(char **args)
 }
 
 
-void print_working_directory() {
+int print_working_directory() {
     char cwd[1024];
     if (getcwd(cwd, sizeof(cwd)) != NULL) {
         printf("%s\n", cwd);
+        return (0);
     } else {
         perror("pwd failed");
+        return (1);
     }
 }
 
