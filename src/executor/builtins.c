@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 09:10:18 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/02 18:22:42 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@ void print_environment(char **env) {
 }
 
 void export_variable(char ***env, char *arg) {
-    if (!arg || !strchr(arg, '=')) {
-        fprintf(stderr, "export: invalid argument\n");
+    if (!arg || strchr(arg, '=') == NULL || arg[0] == '=' || strchr(arg, '=') == arg) {
+        // `export hello` の場合はエラーではなく無視する
         return;
     }
 
@@ -130,20 +130,19 @@ void export_variable(char ***env, char *arg) {
         }
     }
 
-    // 新しい変数を追加
-    char **new_env = realloc(*env, (i + 2) * sizeof(char *));
+    // 環境変数が存在しない場合、新たに追加
+    char **new_env = realloc(*env, sizeof(char *) * (i + 2)); // 新しい要素を追加
     if (!new_env) {
         perror("realloc failed");
         exit(1);
     }
-
-    new_env[i] = strdup(arg);
-    if (!new_env[i]) {
+    *env = new_env;
+    (*env)[i] = strdup(arg);
+    if (!(*env)[i]) {
         perror("strdup failed");
         exit(1);
     }
-    new_env[i + 1] = NULL;
-    *env = new_env;
+    (*env)[i + 1] = NULL; // NULL 終端を追加
 }
 
 void unset_variable(char ***env, char *arg) {

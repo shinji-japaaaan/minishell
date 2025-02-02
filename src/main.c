@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 09:38:03 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/02 18:21:58 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,16 @@ int	handle_internal_commands(t_cmd_invoke *parsed_list, char **env)
 	{
 		return (print_environment(env), 1);
 	}
-	else if (strncmp(command, "export", 7) == 0)
-	{
-		return (export_variable(&env, args[1]), 1);
-	}
+	else if (strncmp(command, "export", 7) == 0) {
+        // 引数が不足している場合、エラーメッセージを表示
+        if (!args[1]) 
+            return 0;
+        else
+		{
+			export_variable(&env, args[1]);
+			return 0;
+		}
+    }
 	else if (strncmp(command, "unset", 5) == 0)
 	{
 		return (unset_variable(&env, args[1]), 1);
