@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 18:21:58 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/02 20:16:56 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,50 +14,26 @@
 
 pid_t	global_pid = 0;
 
-int	handle_internal_commands(t_cmd_invoke *parsed_list, char **env)
-{
-	char	*command;
-
-	command = parsed_list->cmd_list[0];
-	char **args = parsed_list->cmd_list; // 引数リストを直接取得
-	if (strcmp(command, "cd") == 0)
-	{
-		return (change_directory(args[1]), 1);
-	}
-	else if (strcmp(command, "exit") == 0)
-	{
-		return (exit_shell(env), 1);
-	}
-	else if (strcmp(command, "echo") == 0)
-	{
-		return (echo_command(args), 0);
-	}
-	else if (strcmp(command, "pwd") == 0)
-	{
-		return (print_working_directory());
-	}
-	else if (strcmp(command, "env") == 0)
-	{
-		return (print_environment(env), 1);
-	}
-	else if (strncmp(command, "export", 7) == 0) {
-        // 引数が不足している場合、エラーメッセージを表示
-        if (!args[1]) 
-            return 0;
-        else
-		{
-			export_variable(&env, args[1]);
-			return 0;
-		}
+int handle_internal_commands(t_cmd_invoke *parsed_list, char **env) {
+    char *command = parsed_list->cmd_list[0];
+    char **args = parsed_list->cmd_list; // 引数リストを直接取得
+    if (strcmp(command, "cd") == 0) {
+        return (change_directory(args[1]), 1);
+    } else if (strcmp(command, "exit") == 0) {
+        return (exit_shell(env), 1);
+    } else if (strcmp(command, "echo") == 0) {
+        return (echo_command(args), 0);
+    } else if (strcmp(command, "pwd") == 0) {
+        return (print_working_directory());
+    } else if (strcmp(command, "env") == 0) {
+        return (print_environment(env), 1);
+    } else if (strcmp(command, "export") == 0) {
+        return export_variable(&env, args[1]); // `export_variable()` の戻り値を適切に扱う
+    } else if (strcmp(command, "unset") == 0) {
+        return (unset_variable(&env, args[1]), 1);
+    } else {
+        return 0;
     }
-	else if (strncmp(command, "unset", 5) == 0)
-	{
-		return (unset_variable(&env, args[1]), 1);
-	}
-	else
-	{
-		return (0);
-	}
 }
 
 bool	is_internal_commands(char *command)

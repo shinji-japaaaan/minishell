@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 18:22:42 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/02 20:15:56 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,39 +111,80 @@ void print_environment(char **env) {
     }
 }
 
-void export_variable(char ***env, char *arg) {
-    if (!arg || strchr(arg, '=') == NULL || arg[0] == '=' || strchr(arg, '=') == arg) {
-        // `export hello` の場合はエラーではなく無視する
+#include <stdio.h>
+
+void print_env(char **env) {
+    if (!env || !env[0]) {
         return;
     }
+    for (int i = 0; env[i]; i++) {
+        printf("declare -x %s\n", env[i]);
+    }
+}
 
+
+int is_valid_identifier(const char *arg) {
+    // 変数名が無効な場合（例: 数字で始まる、特殊文字を含む）
+    if (!arg || (!isalpha(arg[0]) && arg[0] != '_')) {
+        return 0;
+    }
+    for (int i = 1; arg[i] && arg[i] != '='; i++) {
+        if (!isalnum(arg[i]) && arg[i] != '_') {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+
+int export_variable(char ***env, char *arg) {
+    if (!arg) {
+        print_env(*env); // 引数なしの場合、環境変数一覧を表示
+        return 0;
+    }
+
+    // `is_valid_identifier()` を `=` なしの変数名にも適用
+    if (!is_valid_identifier(arg)) {
+        fprintf(stderr, "export: `%s': not a valid identifier\n", arg);
+        return 1; // Bash と同じ exit code 1
+    }
+
+    // `=` を含まない場合はエラーにはしない（Bash と同じ仕様）
+    if (!strchr(arg, '=')) {
+        return 0;
+    }
+
+    // 既存の変数を更新
     int i = 0;
+    size_t name_len = strchr(arg, '=') - arg;
     for (; (*env)[i]; i++) {
-        if (strncmp((*env)[i], arg, strchr(arg, '=') - arg) == 0) {
+        if (strncmp((*env)[i], arg, name_len) == 0 && (*env)[i][name_len] == '=') {
             free((*env)[i]);
             (*env)[i] = strdup(arg);
             if (!(*env)[i]) {
                 perror("strdup failed");
-                exit(1);
+                return 1;
             }
-            return;
+            return 0;
         }
     }
 
-    // 環境変数が存在しない場合、新たに追加
-    char **new_env = realloc(*env, sizeof(char *) * (i + 2)); // 新しい要素を追加
+    // 新しい環境変数を追加
+    char **new_env = realloc(*env, sizeof(char *) * (i + 2));
     if (!new_env) {
         perror("realloc failed");
-        exit(1);
+        return 1;
     }
     *env = new_env;
     (*env)[i] = strdup(arg);
     if (!(*env)[i]) {
         perror("strdup failed");
-        exit(1);
+        return 1;
     }
     (*env)[i + 1] = NULL; // NULL 終端を追加
+    return 0;
 }
+
 
 void unset_variable(char ***env, char *arg) {
     int i = 0, j = 0;
