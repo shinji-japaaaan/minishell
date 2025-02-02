@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 20:46:03 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/02 20:58:02 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,21 @@ void free_environment(char **env) {
     free(env);
 }
 
-void change_directory(char *path) {
+int change_directory(char *path) {
     if (!path || strcmp(path, "~") == 0) {
         path = getenv("HOME");
         if (!path) {
             write(STDERR_FILENO, "cd failed: HOME not set\n", 24);
-            return;
+            return 1;  // HOME が設定されていない場合は失敗として1を返す
         }
     }
+    
     if (chdir(path) == -1) {
         perror("cd failed");
+        return 1;  // cdが失敗した場合は1を返す
     }
+
+    return 0;  // 成功した場合は0を返す
 }
 
 void exit_shell(char **env) {

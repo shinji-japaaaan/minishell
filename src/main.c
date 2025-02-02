@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 20:38:21 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/02 21:02:30 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,14 @@ pid_t	global_pid = 0;
 
 int handle_internal_commands(t_cmd_invoke *parsed_list, char **env) {
     char *command = parsed_list->cmd_list[0];
-    char **args = parsed_list->cmd_list; // 引数リストを直接取得
+    char **args = parsed_list->cmd_list;
+
     if (strcmp(command, "cd") == 0) {
-        return (change_directory(args[1]), 1);
+        if (args[1] == NULL || strcmp(args[1], "$PWD") == 0) {
+            // $PWD の場合、現在のディレクトリに移動
+            return change_directory(getenv("PWD"));
+        }
+        return change_directory(args[1]);  // 他の引数の場合はそのパスに移動
     } else if (strcmp(command, "exit") == 0) {
         return (exit_shell(env), 1);
     } else if (strcmp(command, "echo") == 0) {
@@ -30,7 +35,7 @@ int handle_internal_commands(t_cmd_invoke *parsed_list, char **env) {
     } else if (strcmp(command, "export") == 0) {
         return export_variable(&env, args[1]); // `export_variable()` の戻り値を適切に扱う
     } else if (strcmp(command, "unset") == 0) {
-		if (args[1] == NULL) {
+        if (args[1] == NULL) {
             return 0;
         }
         return (unset_variable(&env, args[1]));
