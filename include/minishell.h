@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:00:06 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 07:59:02 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/02 18:01:35 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <termios.h>
 
 // extern int		interrupted;
 
