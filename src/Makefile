@@ -7,6 +7,7 @@ CFLAGS = -Wall -Wextra -Werror -Iinclude -I./libft -g -O0
 
 # Source files
 SRCS = main.c \
+	   history.c \
        parser/tokenize.c \
        parser/parser.c \
        parser/expansion.c \
@@ -17,7 +18,6 @@ SRCS = main.c \
 	   parser/parse_error1.c\
 	   parser/parse_error2.c\
 	   parser/heredoc.c\
-	   ../bonus/history.c \
 	   executor/builtins.c \
 	   executor/executor.c \
 	   executor/cmd_execute.c \

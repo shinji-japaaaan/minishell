@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/03 20:55:36 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/03 22:22:17 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,9 +251,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;          // argc を無視
 	(void)argv;          // argv を無視
-	(void)envp;
-	// char **env = duplicate_env(envp);  // `envp` をコピーする
-	extern char **env;
+
+	char **env = duplicate_env(envp);  // `envp` をコピーする
 	process_shell(&env); // 入力受付関数を呼び出し
 	free_env(env);  // 環境変数のメモリを解放
 	return (0);
