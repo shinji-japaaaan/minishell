@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 20:58:02 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/03 20:02:05 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,6 @@ char **copy_environment(char **envp) {
     return copy;
 }
 
-// 環境変数を解放する関数
-void free_environment(char **env) {
-    for (int i = 0; env[i]; i++) {
-        free(env[i]);
-    }
-    free(env);
-}
-
 int change_directory(char *path) {
     if (!path || strcmp(path, "~") == 0) {
         path = getenv("HOME");
@@ -61,11 +53,37 @@ int change_directory(char *path) {
     return 0;  // 成功した場合は0を返す
 }
 
-void exit_shell(char **env) {
-    printf("Exiting shell...\n");
-    free_environment(env); // 環境変数の解放
-    exit(0);
+void free_environment(char **env) {
+    if (!env) return;  // NULL ポインタのチェック
+
+    for (int i = 0; env[i]; i++) {
+        free(env[i]);
+    }
+    free(env); // env の二重解放を防ぐ
+    env = NULL; // 解放後に NULL をセットしてダングリングポインタを防ぐ
 }
+
+
+void exit_shell(char **args) {
+    if (args[1] && args[2]) {
+        write(STDERR_FILENO, "exit: too many arguments\n", 25);
+        exit(1); // 引数が多すぎる場合はエラーコード1
+    }
+    
+    if (args[1]) {
+        char *endptr;
+        long code = strtol(args[1], &endptr, 10);
+
+        if (*endptr != '\0') {
+            write(STDERR_FILENO, "exit: numeric argument required\n", 33);
+            exit(255); // 数値以外が含まれている場合
+        }
+        exit((int)code); // 数値が有効ならそのままexit
+    }
+    
+    exit(0); // 引数がない場合は正常終了
+}
+
 
 void echo_command(char **args)
 {

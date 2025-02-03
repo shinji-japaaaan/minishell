@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/03 05:15:19 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/03 20:01:21 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int handle_internal_commands(t_cmd_invoke *parsed_list, char **env) {
         }
         return change_directory(args[1]);
     } else if (strcmp(command, "exit") == 0) {
-        return (exit_shell(env), 1);
+        exit_shell(args); // exit コマンド処理を exit_shell に委譲
+        return 1; // 実際にはここには到達しないが、必須の return
     } else if (strcmp(command, "echo") == 0) {
         return (echo_command(args), 0);
     } else if (strcmp(command, "pwd") == 0) {
@@ -36,7 +37,7 @@ int handle_internal_commands(t_cmd_invoke *parsed_list, char **env) {
     } else if (strcmp(command, "env") == 0) {
         return (print_environment(env), 1);
     } else if (strcmp(command, "export") == 0) {
-        return export_variable(&env, args[1]);
+        return export_variable(&env, args[1]); // `export_variable()` の戻り値を適切に扱う
     } else if (strcmp(command, "unset") == 0) {
         if (args[1] == NULL) {
             return 0;
@@ -46,7 +47,6 @@ int handle_internal_commands(t_cmd_invoke *parsed_list, char **env) {
         return 0;
     }
 }
-
 
 bool	is_internal_commands(char *command)
 {
