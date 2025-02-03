@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/03 22:22:17 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/04 05:30:47 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,9 @@ int handle_internal_commands(t_cmd_invoke *parsed_list, char ***env) {
     char **args = parsed_list->cmd_list;
 
     if (strcmp(command, "cd") == 0) {
-        if (args[1] && args[2]) {
-            write(STDERR_FILENO, "cd: too many arguments\n", 23);
-            return 1;  // Bash では exit code 1
-        }
-        if (args[1] == NULL || strcmp(args[1], "$PWD") == 0) {
-            return change_directory(getenv("PWD"));
-        }
-        return change_directory(args[1]);
+        return change_directory(args[1], args);
     } else if (strcmp(command, "exit") == 0) {
-        exit_shell(args); // exit コマンド処理を exit_shell に委譲
-        return 1; // 実際にはここには到達しないが、必須の return
+        return (exit_shell(args), 1);
     } else if (strcmp(command, "echo") == 0) {
         return (echo_command(args), 0);
     } else if (strcmp(command, "pwd") == 0) {
@@ -39,14 +31,12 @@ int handle_internal_commands(t_cmd_invoke *parsed_list, char ***env) {
     } else if (strcmp(command, "export") == 0) {
         return export_variable(env, args[1]);
     } else if (strcmp(command, "unset") == 0) {
-        if (args[1] == NULL) {
-            return 0;
-        }
-        return (unset_variable(env, args[1]));
+        return unset_variable(env, args[1]);
     } else {
         return 0;
     }
 }
+
 
 bool	is_internal_commands(char *command)
 {

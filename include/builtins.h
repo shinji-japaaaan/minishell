@@ -4,7 +4,7 @@
 # include "parser.h"
 
 // 内部コマンドで使用する関数群の宣言
-int 	change_directory(char *path);
+int     change_directory(char *path, char **args);
 void    exit_shell(char **args);
 void	echo_command(char **args);
 int     print_working_directory(void);

@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/03 20:06:37 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/04 05:31:45 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,26 @@ char **copy_environment(char **envp) {
     return copy;
 }
 
-int change_directory(char *path) {
+int change_directory(char *path, char **args) {
+    if (args[1] && args[2]) {
+        write(STDERR_FILENO, "cd: too many arguments\n", 23);
+        return 1;
+    }
     if (!path || strcmp(path, "~") == 0) {
         path = getenv("HOME");
         if (!path) {
             write(STDERR_FILENO, "cd failed: HOME not set\n", 24);
-            return 1;  // HOME が設定されていない場合は失敗として1を返す
+            return 1;
         }
     }
-    
+    if (strcmp(path, "$PWD") == 0) {
+        path = getenv("PWD");
+    }
     if (chdir(path) == -1) {
         perror("cd failed");
-        return 1;  // cdが失敗した場合は1を返す
+        return 1;
     }
-
-    return 0;  // 成功した場合は0を返す
+    return 0;
 }
 
 void free_environment(char **env) {
@@ -209,23 +214,20 @@ int export_variable(char ***env, char *arg) {
     return 0;
 }
 
-
 int unset_variable(char ***env, char *arg) {
+    if (arg == NULL) {
+        return 0; // 引数がない場合、何もしない
+    }
     int i = 0, j = 0;
-
     for (; (*env)[i]; i++) {
-        // 環境変数の名前が一致し、'='で区切られている場合に削除
         if (strncmp((*env)[i], arg, strlen(arg)) == 0 && (*env)[i][strlen(arg)] == '=') {
             free((*env)[i]);
         } else {
             (*env)[j++] = (*env)[i];
         }
     }
-
     (*env)[j] = NULL;
-
-    // Bashと同じ動作に合わせ、変数が見つからなくても終了コードは0とする
-    return 0;  // 変数が見つからなくても、終了コードは0にする（Bashに合わせる）
+    return 0;
 }
 
 
