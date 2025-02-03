@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/02 08:11:12 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/03 20:16:47 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 		execve(path, temp_ptr->cmd_list, environ);
 	}
 	else
-		exit(handle_internal_commands(temp_ptr, environ));
+		exit(handle_internal_commands(temp_ptr, &environ));
 }
 
 void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first)

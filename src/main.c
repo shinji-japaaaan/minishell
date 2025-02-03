@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/03 20:01:21 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/03 20:15:32 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 pid_t	global_pid = 0;
 
-int handle_internal_commands(t_cmd_invoke *parsed_list, char **env) {
+int handle_internal_commands(t_cmd_invoke *parsed_list, char ***env) {
     char *command = parsed_list->cmd_list[0];
     char **args = parsed_list->cmd_list;
 
@@ -35,14 +35,14 @@ int handle_internal_commands(t_cmd_invoke *parsed_list, char **env) {
     } else if (strcmp(command, "pwd") == 0) {
         return (print_working_directory());
     } else if (strcmp(command, "env") == 0) {
-        return (print_environment(env), 1);
+        return (print_environment(*env), 1);
     } else if (strcmp(command, "export") == 0) {
-        return export_variable(&env, args[1]); // `export_variable()` の戻り値を適切に扱う
+        return export_variable(env, args[1]);
     } else if (strcmp(command, "unset") == 0) {
         if (args[1] == NULL) {
             return 0;
         }
-        return (unset_variable(&env, args[1]));
+        return (unset_variable(env, args[1]));
     } else {
         return 0;
     }
@@ -133,7 +133,7 @@ void setup_signal_handler(void)
 }
 
 // シェル処理関数
-void	process_shell(char **env)
+void	process_shell(char ***env)
 {
 	char			*input;
 	t_cmd_invoke	*parsed_list;
@@ -214,10 +214,45 @@ void	process_shell(char **env)
 	rl_clear_history();
 }
 
+char **duplicate_env(char **envp) {
+    int count = 0;
+    while (envp[count]) count++;
+
+    char **env = malloc((count + 1) * sizeof(char *));
+    if (!env) {
+        perror("malloc failed");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < count; i++) {
+        env[i] = strdup(envp[i]);  // 環境変数をコピー
+        if (!env[i]) {
+            perror("strdup failed");
+            exit(EXIT_FAILURE);
+        }
+    }
+    env[count] = NULL;  // NULL 終端を追加
+    return env;
+}
+
+void free_env(char **env) {
+    if (!env) {
+        return;  // NULL チェック
+    }
+
+    for (int i = 0; env[i]; i++) {
+        free(env[i]);  // 各環境変数のメモリを解放
+    }
+    free(env);  // 環境変数リスト自体のメモリを解放
+}
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;          // argc を無視
 	(void)argv;          // argv を無視
-	process_shell(envp); // 入力受付関数を呼び出し
+	char **env = duplicate_env(envp);  // `envp` をコピーする
+	process_shell(&env); // 入力受付関数を呼び出し
+	free_env(env);  // 環境変数のメモリを解放
 	return (0);
 }

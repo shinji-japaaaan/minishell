@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/03 20:02:05 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/03 20:06:37 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int export_variable(char ***env, char *arg) {
         return 1; // Bash と同じ exit code 1
     }
 
-    // `=` を含まない場合はエラーにはしない（Bash と同じ仕様）
+    // `=` を含まない場合はエラーにせず成功（Bash と同じ仕様）
     if (!strchr(arg, '=')) {
         return 0;
     }
@@ -181,12 +181,13 @@ int export_variable(char ***env, char *arg) {
     size_t name_len = strchr(arg, '=') - arg;
     for (; (*env)[i]; i++) {
         if (strncmp((*env)[i], arg, name_len) == 0 && (*env)[i][name_len] == '=') {
-            free((*env)[i]);
-            (*env)[i] = strdup(arg);
-            if (!(*env)[i]) {
+            char *new_entry = strdup(arg);
+            if (!new_entry) {
                 perror("strdup failed");
                 return 1;
             }
+            free((*env)[i]);  // 古い変数を解放
+            (*env)[i] = new_entry;
             return 0;
         }
     }
@@ -204,8 +205,10 @@ int export_variable(char ***env, char *arg) {
         return 1;
     }
     (*env)[i + 1] = NULL; // NULL 終端を追加
+
     return 0;
 }
+
 
 int unset_variable(char ***env, char *arg) {
     int i = 0, j = 0;
