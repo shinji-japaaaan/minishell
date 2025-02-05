@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:18:22 by karai             #+#    #+#             */
-/*   Updated: 2025/02/01 10:02:52 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/06 05:18:22 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	is_delimeter(char *str)
 	return (0);
 }
 
-size_t	split_len(char *input)
+size_t	get_token_length(char *input)
 {
 	bool	inside_single_quote;
 	bool	inside_double_quote;
@@ -92,7 +92,7 @@ void	tokenize_input(t_linked_list *head, char *input)
 			input += 1;
 		if (*input == '\0')
 			break ;
-		len = split_len(input);
+		len = get_token_length(input);
 		str_temp = strdup_len(input, len);
 		linked_list_append(head, str_temp);
 		input += len;
