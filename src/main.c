@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/04 05:30:47 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/04 05:33:39 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int handle_internal_commands(t_cmd_invoke *parsed_list, char ***env) {
         return 0;
     }
 }
-
 
 bool	is_internal_commands(char *command)
 {
