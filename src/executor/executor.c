@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/03 20:16:47 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:36:50 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,38 @@ void	close_fd_in_child(t_cmd_invoke *node)
 	}
 }
 
-void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
-		bool is_first, int interrupted)
-{
-	int			status;
-	extern char	**environ;
-	char		*path;
+extern char **environ;  // environ を明示的に宣言
 
+void	handle_interruption(t_cmd_invoke *head, int interrupted)
+{
 	if (interrupted)
 	{
-		heredoc_close(temp_ptr);
+		heredoc_close(head);
 		free_all(&head);
 		exit(130);
 	}
-	if (is_first && temp_ptr->next != NULL)
-		cmd_execute_first(temp_ptr);
-	else if (!is_first && temp_ptr->next == NULL)
-		cmd_execute_last(temp_ptr);
-	else if (!is_first && temp_ptr->next != NULL)
-		cmd_execute_middle(temp_ptr);
+}
+
+void	handle_command_execution(t_cmd_invoke *temp_ptr, bool is_first)
+{
+	if (is_first)
+	{
+		if (temp_ptr->next != NULL)
+			cmd_execute_first(temp_ptr);
+	}
+	else
+	{
+		if (temp_ptr->next == NULL)
+			cmd_execute_last(temp_ptr);
+		else
+			cmd_execute_middle(temp_ptr);
+	}
+}
+
+void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr)
+{
+	int	status;
+
 	status = open_redirect(temp_ptr, false);
 	if (status != 0)
 	{
@@ -69,11 +82,26 @@ void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 		free_all(&head);
 		exit(status);
 	}
+}
+
+void	process_cmd_invoke(t_cmd_invoke *temp_ptr)  // 関数名を変更
+{
+	char	*path;
+
+	path = get_path_main(temp_ptr);  // 修正: t_cmd_invoke 型を渡す
+	execve(path, temp_ptr->cmd_list, environ);
+}
+
+void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
+		bool is_first, int interrupted)
+{
+	extern char	**environ;
+
+	handle_interruption(head, interrupted);
+	handle_command_execution(temp_ptr, is_first);
+	handle_open_redirect(head, temp_ptr);
 	if (!is_internal_commands(temp_ptr->cmd_list[0]))
-	{
-		path = get_path_main(temp_ptr);
-		execve(path, temp_ptr->cmd_list, environ);
-	}
+		process_cmd_invoke(temp_ptr);  // 新しい関数名を呼び出す
 	else
 		exit(handle_internal_commands(temp_ptr, &environ));
 }
