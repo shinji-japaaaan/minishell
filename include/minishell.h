@@ -6,14 +6,14 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:00:06 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/02 18:01:35 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/07 06:23:52 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../src/libft/libft.h"
+# include "../libft/libft.h"
 # include "builtins.h"
 # include "executor.h"
 # include "history.h" // history.h をインクルード
@@ -32,11 +32,9 @@
 # include <unistd.h>
 # include <termios.h>
 
-// extern int		interrupted;
-
 extern pid_t	global_pid;
-void			setup_signal_handler(void);
-// void	handle_sigint(int signum, siginfo_t *info, void *context);
-void			handle_sigint(int signum);
+void    process_shell(char ***env);
+void	setup_signal_handler(void);
+void   	handle_sigint(int signum);
 
 #endif /* MINISHELL_H */

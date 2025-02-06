@@ -5,31 +5,37 @@ minishell/
 │   ├── parser.h      # パーサ関連のヘッダファイル
 │   ├── executor.h    # コマンド実行関連のヘッダファイル
 │   ├── utils.h       # ユーティリティ関数のヘッダファイル
-│   ├── signals.h     # シグナル処理関連のヘッダファイル
-│   └── bonus.h       # ボーナス機能専用ヘッダファイル
 ├── src/              # ソースコードを格納
 │   ├── main.c        # エントリーポイント
-│   ├── history.c     # 履歴管理
+│   ├── process_shell/  
+│   │   ├── process_shell.c # シェルのプロセス開始
+│   │   ├── signal.c        # シグナル処理関連のコード
+│   │   └── history.c       # 履歴管理
 │   ├── parser/       # パーサ関連のコード
-│   │   ├── tokenizer.c
-│   │   └── parser.c
+│   │   ├── tokenize.c
+│   │   ├── parser.c
+│   │   ├── expansion.c
+│   │   ├── linked_list.c
+│   │   ├── remove_quote.c
+│   │   ├── utils.c
+│   │   ├── make_cmd.c
+│   │   ├── parse_error1.c
+│   │   ├── parse_error2.c
+│   │   └── heredoc.c
 │   ├── executor/     # コマンド実行関連のコード
-│   │   ├── executor.c
 │   │   ├── builtins.c
+│   │   ├── executor.c
+│   │   ├── cmd_execute.c
+│   │   ├── executor_utils.c
+│   │   ├── get_path.c
+│   │   ├── get_path_utils.c
+│   │   ├── free1.c
+│   │   ├── free2.c
 │   │   ├── redirection.c
-│   │   └── pipeline.c# パイプ処理専用コード
-│   ├── signals/      # シグナル処理関連のコード
-│   │   └── signals.c
-│   ├── utils/        # ユーティリティ関数
-│   │   └── utils.c
-│   └── bonus/        # ボーナス機能関連のコード
-│       ├── logical_ops.c # &&、||の実装
-│       ├── wildcard.c# ワイルドカードの展開
-│       ├── auto_complete.c # 補完機能（オプション）
-│       └── history.c # コマンド履歴管理
+│   │   └── handle_redirect.c
 ├── libft/            # 42のlibftを再利用する場合（オプション）
 ├── Makefile          # コンパイル用のMakefile
-└── README.md         # プロジェクトの説明
+├── README.md         # プロジェクトの説明
 └── tests/            # テスト関連
     ├── test_cases.sh # 自動テスト用のシェルスクリプト
     └── inputs/       # テスト入力用ファイル
