@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/02 08:08:13 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/06 21:17:18 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,17 @@ typedef struct s_cmd_invoke
 	int						out_fd;
 }							t_cmd_invoke;
 
+typedef struct s_cmd_state
+{
+	t_linked_list	*list_ptr_temp;
+	t_cmd_invoke	*cmd_ptr_temp;
+	bool			is_filename;
+	TokenType		bef_token_type;
+	bool			is_pipe;
+	size_t			cmd_len;
+	size_t			i;
+}	t_cmd_state;
+
 // 関数プロトタイプ
 
 // expansion.c
@@ -100,7 +111,6 @@ bool						is_blank(char c);
 void						ft_strcpy(char *dst, char *src);
 
 // make_cmd.c
-size_t						ft_cmd_len_list(t_cmd_invoke *head);
 t_redirect					*redirect_init(t_redirect *new_node);
 t_cmd_invoke				*cmd_invoke_init(t_cmd_invoke *new_node);
 size_t						ft_cmd_len(t_linked_list *node);
