@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 23:43:43 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 07:31:37 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # define NON_COMMAND 127
 # define NO_PERMISSION 126
+
+extern char	**environ;
 
 // executor.c
 int		parent_process_wait(t_cmd_invoke *head);

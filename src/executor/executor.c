@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 23:59:33 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 07:31:24 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,6 @@ void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr)
 		exit(status);
 	}
 }
-
-extern char	**environ;
 
 void	process_cmd_invoke(t_cmd_invoke *temp_ptr) // 関数名を変更
 {
