@@ -8,7 +8,7 @@ CFLAGS = -Wall -Wextra -Werror -Iinclude -I./libft -g -O0
 # Source files
 SRCS = src/main.c \
 	   src/process_shell/process_shell.c \
-		src/process_shell/signal_main.c \
+	   src/process_shell/signal_main.c \
 	   src/process_shell/signal_exec.c \
 	   src/process_shell/history.c \
        src/parser/tokenize.c \
@@ -23,6 +23,7 @@ SRCS = src/main.c \
 	   src/parser/parse_error2.c \
 	   src/parser/heredoc.c \
 	   src/parser/ft_getenv.c\
+	   src/parser/signal.c\
 	   src/executor/builtins.c \
 	   src/executor/executor.c \
 	   src/executor/cmd_execute.c \

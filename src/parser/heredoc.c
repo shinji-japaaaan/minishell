@@ -3,34 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:25:28 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 20:21:39 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 07:02:21 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-int	check_interrupt(void)
-{
-	if (global_pid)
-		rl_done = 1;
-	return (0);
-}
-
-void	handle_sigint_heredoc(int signum)
-{
-	(void)signum;
-	global_pid = 1;
-}
-
-void	setup_signal_handler_heredoc(void)
-{
-	global_pid = 0;
-	rl_done = 0;
-	signal(SIGINT, handle_sigint_heredoc);
-}
 
 void	heredoc_read(t_redirect *node, char *str_eof, char **env)
 {

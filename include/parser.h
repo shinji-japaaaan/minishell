@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 23:09:17 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/08 07:04:25 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,11 @@ char						*heredoc_expansion(char *input, char **env);
 int							ft_cmp_for_getenv(char *str, char *env_str,
 								size_t *len);
 char						*ft_getenv(char *str, char **env);
+
+//sinal.c
+void						setup_signal_handler_heredoc(void);
+void						handle_sigint_heredoc(int signum);
+int							check_interrupt(void);
 
 #endif
 

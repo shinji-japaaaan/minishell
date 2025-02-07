@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/07 18:56:30 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 07:13:59 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@ void	free_env(char **env)
 {
 	if (!env)
 	{
-		return ; // NULL チェック
+		return ;
 	}
-	for (int i = 0; env[i]; i++)
+	int i = 0;
+	while (env[i])
 	{
-		free(env[i]); // 各環境変数のメモリを解放
+		free(env[i]);
+		i++;
 	}
-	free(env); // 環境変数リスト自体のメモリを解放
+	free(env);
 }
 
 char	**duplicate_env(char **envp)
@@ -39,25 +41,28 @@ char	**duplicate_env(char **envp)
 		perror("malloc failed");
 		exit(EXIT_FAILURE);
 	}
-	for (int i = 0; i < count; i++)
+	int i = 0;
+	while (i < count)
 	{
-		env[i] = strdup(envp[i]); // 環境変数をコピー
+		env[i] = strdup(envp[i]);
 		if (!env[i])
 		{
 			perror("strdup failed");
 			exit(EXIT_FAILURE);
 		}
+		i++;
 	}
-	env[count] = NULL; // NULL 終端を追加
+	env[count] = NULL;
 	return (env);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	(void)argc; // argc を無視
-	(void)argv; // argv を無視
-	char **env = duplicate_env(envp); // `envp` をコピーする
-	process_shell(&env);              // 入力受付関数を呼び出し
-	free_env(env);                    // 環境変数のメモリを解放
+	(void)argc;
+	(void)argv;
+	char **env = duplicate_env(envp);
+	process_shell(&env);
+	free_env(env);
 	return (0);
 }
+
