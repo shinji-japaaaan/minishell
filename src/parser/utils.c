@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:20:24 by karai             #+#    #+#             */
-/*   Updated: 2025/02/01 09:55:10 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/07 22:11:09 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+bool	is_name_character(char c)
+{
+	if (ft_isalnum(c) || c == '_')
+		return (true);
+	else
+		return (false);
+}
 
 char	*strdup_len(char *str, size_t n)
 {

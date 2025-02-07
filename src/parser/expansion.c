@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 20:20:00 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/07 22:28:37 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-bool	is_name_character(char c)
-{
-	if (ft_isalnum(c) || c == '_')
-		return (true);
-	else
-		return (false);
-}
 
 char	*get_env_str(char *str, size_t *len)
 {
@@ -37,13 +29,6 @@ char	*get_env_str(char *str, size_t *len)
 		env_str[i] = str[i];
 	env_str[*len] = '\0';
 	return (env_str);
-}
-
-char	*get_env_value(char *env_str, int last_status, char **env)
-{
-	if (ft_strcmp(env_str, "?") == 0)
-		return (ft_itoa(last_status));
-	return (ft_getenv(env_str, env));
 }
 
 char	*replace_env(char *str, char *env_str, char *env_val)
@@ -73,12 +58,16 @@ char	*replace_env(char *str, char *env_str, char *env_val)
 	return (new_str);
 }
 
-char	*replace_env_var(char *str, char *env_str, int last_status, char **env)
+char	*expand_env_variable(char *str, char *env_str, int last_status, char **env)
 {
 	char	*env_val;
 	char	*new_str;
 
-	env_val = get_env_value(env_str, last_status, env);
+	env_val = NULL;
+	if (ft_strcmp(env_str, "?") == 0)
+		env_val = ft_itoa(last_status);
+	else
+		env_val = ft_getenv(env_str, env);
 	if (!env_val)
 		env_val = "";
 	new_str = replace_env(str, env_str, env_val);
@@ -107,7 +96,7 @@ char	*handle_dollar(char *str, size_t *i, int last_status, char **env)
 	}
 	if (env_str != NULL)
 	{
-		str = replace_env_var(str, env_str, last_status, env);
+		str = expand_env_variable(str, env_str, last_status, env);
 		*i = -1;
 	}
 	return (str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 19:54:37 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/07 22:12:10 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void						tokenize_input(t_linked_list *head, char *input);
 char						*strdup_len(char *str, size_t n);
 bool						is_blank(char c);
 void						ft_strcpy(char *dst, char *src);
+bool						is_name_character(char c);
 
 // make_cmd.c
 t_redirect					*redirect_init(t_redirect *new_node);
