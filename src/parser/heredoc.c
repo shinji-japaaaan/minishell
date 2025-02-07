@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:25:28 by karai             #+#    #+#             */
-/*   Updated: 2025/02/02 08:59:00 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/07 20:21:39 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	setup_signal_handler_heredoc(void)
 	signal(SIGINT, handle_sigint_heredoc);
 }
 
-void	heredoc_read(t_redirect *node, char *str_eof)
+void	heredoc_read(t_redirect *node, char *str_eof, char **env)
 {
 	char	*line;
 	int		pipefd[2];
@@ -51,6 +51,7 @@ void	heredoc_read(t_redirect *node, char *str_eof)
 			free(line);
 			break ;
 		}
+		line = heredoc_expansion(line, env);
 		ft_putendl_fd(line, pipefd[1]);
 		free(line);
 	}
@@ -59,7 +60,7 @@ void	heredoc_read(t_redirect *node, char *str_eof)
 	node->fd = pipefd[0];
 }
 
-int	heredoc_redirect_list(t_redirect *head_redirect_in)
+int	heredoc_redirect_list(t_redirect *head_redirect_in, char **env)
 {
 	t_redirect	*temp_ptr;
 
@@ -68,7 +69,7 @@ int	heredoc_redirect_list(t_redirect *head_redirect_in)
 	{
 		if (temp_ptr->token_type == TYPE_HEREDOC)
 		{
-			heredoc_read(temp_ptr, temp_ptr->filename);
+			heredoc_read(temp_ptr, temp_ptr->filename, env);
 			if (global_pid)
 				return (130);
 		}
@@ -77,14 +78,14 @@ int	heredoc_redirect_list(t_redirect *head_redirect_in)
 	return (0);
 }
 
-void	heredoc_main(t_cmd_invoke *head_cmd)
+void	heredoc_main(t_cmd_invoke *head_cmd, char **env)
 {
 	t_cmd_invoke	*temp_ptr;
 
 	temp_ptr = head_cmd->next;
 	while (temp_ptr)
 	{
-		heredoc_redirect_list(temp_ptr->redirect_head);
+		heredoc_redirect_list(temp_ptr->redirect_head, env);
 		temp_ptr = temp_ptr->next;
 	}
 }
@@ -107,6 +108,21 @@ void	heredoc_close(t_cmd_invoke *node)
 		}
 		temp_ptr = temp_ptr->next;
 	}
+}
+
+char	*heredoc_expansion(char *input, char **env)
+{
+	size_t	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '$' && (input[i + 1] == '?' || is_name_character(input[i
+					+ 1])))
+			input = handle_dollar(input, &i, 0, env);
+		i += 1;
+	}
+	return (input);
 }
 
 // void	heredoc_read_main(t_redirect *head_redirect)

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 19:10:10 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/07 20:20:00 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,8 @@ char	*expansion(char *str, int last_status, char **env)
 			state = 0;
 		else if (state == 2 && str[i] == '\"')
 			state = 0;
-		else if (state != 1 && str[i] == '$')
+		else if (state != 1 && str[i] == '$' && (str[i + 1] == '?'
+				|| is_name_character(str[i + 1])))
 			str = handle_dollar(str, &i, last_status, env);
 		i++;
 	}

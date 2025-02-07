@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/06 21:36:50 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:00:45 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first)
 	*is_first = false;
 }
 
-int	cmd_execute_main(t_cmd_invoke *head)
+int	cmd_execute_main(t_cmd_invoke *head, char **env)
 {
 	t_cmd_invoke	*temp_ptr;
 	bool			is_first;
@@ -132,7 +132,7 @@ int	cmd_execute_main(t_cmd_invoke *head)
 			pipe(temp_ptr->nxt_pipefd);
 			temp_ptr->next->bef_pipefd = temp_ptr->nxt_pipefd;
 		}
-		interrupted = heredoc_redirect_list(temp_ptr->redirect_head);
+		interrupted = heredoc_redirect_list(temp_ptr->redirect_head, env);
 		temp_ptr->pid = fork();
 		if (temp_ptr->pid != 0)
 			global_pid = temp_ptr->pid;
