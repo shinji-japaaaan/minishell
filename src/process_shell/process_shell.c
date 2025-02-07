@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/08 06:45:29 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/08 07:22:15 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,44 +17,30 @@ int		g_signal = 0;
 
 int	handle_internal_commands(t_cmd_invoke *parsed_list, char ***env)
 {
-	char	*command;
+	char	*cmd;
 	char	**args;
+	int		result;
 
-	command = parsed_list->cmd_list[0];
+	cmd = parsed_list->cmd_list[0];
 	args = parsed_list->cmd_list;
-	if (ft_strcmp(command, "cd") == 0)
-	{
-		return (change_directory(args[1], args));
-	}
-	else if (ft_strcmp(command, "exit") == 0)
-	{
-		return (exit_shell(args), 1);
-	}
-	else if (ft_strcmp(command, "echo") == 0)
-	{
-		return (echo_command(args), 0);
-	}
-	else if (ft_strcmp(command, "pwd") == 0)
-	{
-		return (print_working_directory());
-	}
-	else if (ft_strcmp(command, "env") == 0)
-	{
-		return (print_environment(*env), 1);
-	}
-	else if (ft_strcmp(command, "export") == 0)
-	{
-		return (export_variable(env, args[1]));
-	}
-	else if (ft_strcmp(command, "unset") == 0)
-	{
-		return (unset_variable(env, args[1]));
-	}
-	else
-	{
-		return (0);
-	}
+	result = 0;
+	if (ft_strcmp(cmd, "cd") == 0)
+		result = change_directory(args[1], args);
+	else if (ft_strcmp(cmd, "exit") == 0)
+		exit_shell(args);
+	else if (ft_strcmp(cmd, "echo") == 0)
+		echo_command(args);
+	else if (ft_strcmp(cmd, "pwd") == 0)
+		result = print_working_directory();
+	else if (ft_strcmp(cmd, "env") == 0)
+		print_environment(*env);
+	else if (ft_strcmp(cmd, "export") == 0)
+		result = export_variable(env, args[1]);
+	else if (ft_strcmp(cmd, "unset") == 0)
+		result = unset_variable(env, args[1]);
+	return (result);
 }
+
 
 bool	is_internal_commands(char *command)
 {
