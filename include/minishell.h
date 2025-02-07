@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:00:06 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/07 06:23:52 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/07 23:46:15 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,13 @@
 # include <termios.h>
 
 extern pid_t	global_pid;
-void    process_shell(char ***env);
-void	setup_signal_handler(void);
-void   	handle_sigint(int signum);
+extern int		g_signal;
+void			process_shell(char ***env);
+void			sig_handler_main(int signum);
+void			disable_echoctl(void);
+void			set_sig_handler_main(void);
+void			set_sig_handler_child(void);
+void			set_sig_during_exec(void);
+void			sig_during_exec(int signum);
 
 #endif /* MINISHELL_H */

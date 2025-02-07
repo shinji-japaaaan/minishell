@@ -6,13 +6,14 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/07 20:01:10 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/07 23:52:43 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 pid_t	global_pid = 0;
+int		g_signal = 0;
 
 int	handle_internal_commands(t_cmd_invoke *parsed_list, char ***env)
 {
@@ -132,13 +133,14 @@ void	process_shell(char ***env)
 	History	*history;
 	int		last_status;
 
-	setup_signal_handler();
 	history = init_history(MAX_HISTORY);
 	load_history_from_file(HISTORY_FILE, history);
 	last_status = 0;
 	while (1)
 	{
 		global_pid = 0;
+		g_signal = 0;
+		set_sig_handler_main();
 		input = readline("minishell> ");
 		if (!input)
 			break ;
@@ -147,6 +149,8 @@ void	process_shell(char ***env)
 			free(input);
 			continue ;
 		}
+		if (g_signal == SIGINT)
+			last_status = 130;
 		handle_input(input, history, &last_status, env);
 	}
 	save_history_to_file(HISTORY_FILE, history);

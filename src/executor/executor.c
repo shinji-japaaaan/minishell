@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 20:00:45 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/07 23:59:33 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	parent_process_wait(t_cmd_invoke *head)
 {
 	int				status;
 	t_cmd_invoke	*temp_ptr;
+	int				ret_status;
 
 	temp_ptr = head->next;
 	while (temp_ptr)
@@ -25,7 +26,15 @@ int	parent_process_wait(t_cmd_invoke *head)
 		temp_ptr = temp_ptr->next;
 	}
 	if (WIFSIGNALED(status))
-		return (status + 128);
+	{
+		ret_status = (WTERMSIG(status)) + 128;
+		// printf("st %d %d\n",status, ret_status);
+		if (ret_status == 130)
+			write(1, "\n", 1);
+		else if (ret_status == 131)
+			ft_putendl_fd("Quit (core dumped)", 1);
+		return (ret_status);
+	}
 	return (WEXITSTATUS(status));
 }
 
@@ -40,18 +49,6 @@ void	close_fd_in_child(t_cmd_invoke *node)
 	{
 		close(temp_ptr->stdio_backup);
 		temp_ptr = temp_ptr->next;
-	}
-}
-
-extern char **environ;  // environ を明示的に宣言
-
-void	handle_interruption(t_cmd_invoke *head, int interrupted)
-{
-	if (interrupted)
-	{
-		heredoc_close(head);
-		free_all(&head);
-		exit(130);
 	}
 }
 
@@ -84,24 +81,25 @@ void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr)
 	}
 }
 
-void	process_cmd_invoke(t_cmd_invoke *temp_ptr)  // 関数名を変更
-{
-	char	*path;
+extern char	**environ;
 
-	path = get_path_main(temp_ptr);  // 修正: t_cmd_invoke 型を渡す
+void	process_cmd_invoke(t_cmd_invoke *temp_ptr) // 関数名を変更
+{
+	char *path;
+
+	path = get_path_main(temp_ptr); // 修正: t_cmd_invoke 型を渡す
 	execve(path, temp_ptr->cmd_list, environ);
 }
 
 void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
-		bool is_first, int interrupted)
+		bool is_first)
 {
 	extern char	**environ;
 
-	handle_interruption(head, interrupted);
 	handle_command_execution(temp_ptr, is_first);
 	handle_open_redirect(head, temp_ptr);
 	if (!is_internal_commands(temp_ptr->cmd_list[0]))
-		process_cmd_invoke(temp_ptr);  // 新しい関数名を呼び出す
+		process_cmd_invoke(temp_ptr); // 新しい関数名を呼び出す
 	else
 		exit(handle_internal_commands(temp_ptr, &environ));
 }
@@ -121,10 +119,10 @@ int	cmd_execute_main(t_cmd_invoke *head, char **env)
 {
 	t_cmd_invoke	*temp_ptr;
 	bool			is_first;
-	int				interrupted;
 
 	is_first = true;
 	temp_ptr = head->next;
+	set_sig_during_exec();
 	while (temp_ptr)
 	{
 		if (temp_ptr->next != NULL)
@@ -132,12 +130,13 @@ int	cmd_execute_main(t_cmd_invoke *head, char **env)
 			pipe(temp_ptr->nxt_pipefd);
 			temp_ptr->next->bef_pipefd = temp_ptr->nxt_pipefd;
 		}
-		interrupted = heredoc_redirect_list(temp_ptr->redirect_head, env);
+		heredoc_redirect_list(temp_ptr->redirect_head, env);
 		temp_ptr->pid = fork();
-		if (temp_ptr->pid != 0)
-			global_pid = temp_ptr->pid;
 		if (temp_ptr->pid == 0)
-			cmd_execute_child(head, temp_ptr, is_first, interrupted);
+		{
+			set_sig_handler_child();
+			cmd_execute_child(head, temp_ptr, is_first);
+		}
 		cmd_execute_parent(temp_ptr, &is_first);
 		temp_ptr = temp_ptr->next;
 	}
