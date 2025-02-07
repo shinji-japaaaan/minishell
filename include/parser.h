@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 22:12:10 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/07 23:09:17 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,8 @@ t_redirect					*redirect_append(t_redirect *redirect_head,
 								char *content, TokenType token_type);
 t_cmd_invoke				*make_cmd(t_linked_list *list_head,
 								t_cmd_invoke *cmd_head);
+t_cmd_invoke				*init_new_cmd(t_cmd_invoke *cmd_ptr_temp);
+void						init_cmd_list(t_cmd_state *state);
 
 // parse_error.c
 bool						parse_error_quote(char *input);

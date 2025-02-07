@@ -17,6 +17,7 @@ SRCS = src/main.c \
        src/parser/remove_quote.c \
        src/parser/utils.c \
 	   src/parser/make_cmd.c \
+	   src/parser/cmd_init.c \
 	   src/parser/parse_error1.c \
 	   src/parser/parse_error2.c \
 	   src/parser/heredoc.c \
