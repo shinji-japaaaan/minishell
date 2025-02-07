@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_shell.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/07 20:01:10 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/07 23:14:30 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,31 +21,31 @@ int	handle_internal_commands(t_cmd_invoke *parsed_list, char ***env)
 
 	command = parsed_list->cmd_list[0];
 	args = parsed_list->cmd_list;
-	if (strcmp(command, "cd") == 0)
+	if (ft_strcmp(command, "cd") == 0)
 	{
 		return (change_directory(args[1], args));
 	}
-	else if (strcmp(command, "exit") == 0)
+	else if (ft_strcmp(command, "exit") == 0)
 	{
 		return (exit_shell(args), 1);
 	}
-	else if (strcmp(command, "echo") == 0)
+	else if (ft_strcmp(command, "echo") == 0)
 	{
 		return (echo_command(args), 0);
 	}
-	else if (strcmp(command, "pwd") == 0)
+	else if (ft_strcmp(command, "pwd") == 0)
 	{
 		return (print_working_directory());
 	}
-	else if (strcmp(command, "env") == 0)
+	else if (ft_strcmp(command, "env") == 0)
 	{
 		return (print_environment(*env), 1);
 	}
-	else if (strcmp(command, "export") == 0)
+	else if (ft_strcmp(command, "export") == 0)
 	{
 		return (export_variable(env, args[1]));
 	}
-	else if (strcmp(command, "unset") == 0)
+	else if (ft_strcmp(command, "unset") == 0)
 	{
 		return (unset_variable(env, args[1]));
 	}
@@ -57,15 +57,15 @@ int	handle_internal_commands(t_cmd_invoke *parsed_list, char ***env)
 
 bool	is_internal_commands(char *command)
 {
-	if (strcmp(command, "cd") == 0)
+	if (ft_strcmp(command, "cd") == 0)
 		return (true);
-	else if (strcmp(command, "exit") == 0)
+	else if (ft_strcmp(command, "exit") == 0)
 		return (true);
-	else if (strcmp(command, "echo") == 0)
+	else if (ft_strcmp(command, "echo") == 0)
 		return (true);
-	else if (strcmp(command, "pwd") == 0)
+	else if (ft_strcmp(command, "pwd") == 0)
 		return (true);
-	else if (strcmp(command, "env") == 0)
+	else if (ft_strcmp(command, "env") == 0)
 		return (true);
 	else if (strncmp(command, "export", 7) == 0)
 		return (true);
