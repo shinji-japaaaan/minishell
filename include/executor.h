@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 20:00:37 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/07 23:43:43 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 int		parent_process_wait(t_cmd_invoke *head);
 void	close_fd_in_child(t_cmd_invoke *node);
 void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
-			bool is_first, int interrupted);
+			bool is_first);
 void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first);
 int		cmd_execute_main(t_cmd_invoke *head, char **env);
 
