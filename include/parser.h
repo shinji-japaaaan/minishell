@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/06 21:17:18 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:11:46 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ typedef struct s_cmd_invoke
 
 typedef struct s_cmd_state
 {
-	t_linked_list	*list_ptr_temp;
-	t_cmd_invoke	*cmd_ptr_temp;
-	bool			is_filename;
-	TokenType		bef_token_type;
-	bool			is_pipe;
-	size_t			cmd_len;
-	size_t			i;
-}	t_cmd_state;
+	t_linked_list			*list_ptr_temp;
+	t_cmd_invoke			*cmd_ptr_temp;
+	bool					is_filename;
+	TokenType				bef_token_type;
+	bool					is_pipe;
+	size_t					cmd_len;
+	size_t					i;
+}							t_cmd_state;
 
 // 関数プロトタイプ
 
@@ -78,7 +78,13 @@ bool						is_name_character(char c);
 char						*get_env_str(char *str, size_t *strdup_len);
 char						*replace_to_env_val(char *str, char *env_str,
 								int last_status);
-char						*expansion(char *str, int last_status);
+char						*expansion(char *str, int last_status, char **env);
+char						*handle_dollar(char *str, size_t *i,
+								int last_status, char **env);
+char						*replace_env_var(char *str, char *env_str,
+								int last_status, char **env);
+char						*get_env_value(char *env_str, int last_status,
+								char **env);
 
 // linked_list.c
 void						linked_list_print(t_linked_list *list_head);
@@ -91,8 +97,8 @@ t_linked_list				*linked_list_init(t_linked_list *head);
 // parser.c
 t_linked_list				remove_quotes_from_tokens(t_linked_list *list_head);
 void						expand_env_variables_in_list(t_linked_list *list_head,
-								int last_status);
-t_cmd_invoke				*parser(char *input, int last_status);
+								int last_status, char **env);
+t_cmd_invoke				*parser(char *input, int last_status, char **env);
 
 // remove_quote.cS
 size_t						remove_quote_get_newlen(char *str);
@@ -129,12 +135,17 @@ bool						parse_error_consecutive_pipe(t_linked_list *head);
 
 // heredoc.c
 void						heredoc_read(t_redirect *node, char *str_eof);
-int						heredoc_redirect_list(t_redirect *head_redirect_in);
+int							heredoc_redirect_list(t_redirect *head_redirect_in);
 void						heredoc_main(t_cmd_invoke *head_cmd);
 void						heredoc_close(t_cmd_invoke *node);
 void						heredoc_read_main(t_redirect *head_redirect);
 void						heredoc_read_rev(t_redirect *node, char *str_eof);
 void						heredoc_pipe_open(t_redirect *head_redirect);
+
+// ft_getenv.c
+int							ft_cmp_for_getenv(char *str, char *env_str,
+								size_t *len);
+char						*ft_getenv(char *str, char **env);
 
 #endif
 

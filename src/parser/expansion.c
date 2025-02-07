@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/02/06 05:13:20 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:10:10 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ char	*get_env_str(char *str, size_t *len)
 	return (env_str);
 }
 
-char	*get_env_value(char *env_str, int last_status)
+char	*get_env_value(char *env_str, int last_status, char **env)
 {
 	if (ft_strcmp(env_str, "?") == 0)
 		return (ft_itoa(last_status));
-	return (getenv(env_str));
+	return (ft_getenv(env_str, env));
 }
 
 char	*replace_env(char *str, char *env_str, char *env_val)
@@ -59,7 +59,8 @@ char	*replace_env(char *str, char *env_str, char *env_val)
 	i = 0;
 	while (*str)
 	{
-		if (*str == '$' && ft_strncmp(str + 1, env_str, ft_strlen(env_str)) == 0)
+		if (*str == '$' && ft_strncmp(str + 1, env_str,
+				ft_strlen(env_str)) == 0)
 		{
 			ft_strcpy(&new_str[i], env_val);
 			i += ft_strlen(env_val);
@@ -72,12 +73,12 @@ char	*replace_env(char *str, char *env_str, char *env_val)
 	return (new_str);
 }
 
-char	*replace_env_var(char *str, char *env_str, int last_status)
+char	*replace_env_var(char *str, char *env_str, int last_status, char **env)
 {
 	char	*env_val;
 	char	*new_str;
 
-	env_val = get_env_value(env_str, last_status);
+	env_val = get_env_value(env_str, last_status, env);
 	if (!env_val)
 		env_val = "";
 	new_str = replace_env(str, env_str, env_val);
@@ -86,8 +87,7 @@ char	*replace_env_var(char *str, char *env_str, int last_status)
 	return (new_str);
 }
 
-
-char	*handle_dollar(char *str, size_t *i, int last_status)
+char	*handle_dollar(char *str, size_t *i, int last_status, char **env)
 {
 	char	*env_str;
 	size_t	len;
@@ -107,13 +107,13 @@ char	*handle_dollar(char *str, size_t *i, int last_status)
 	}
 	if (env_str != NULL)
 	{
-		str = replace_env_var(str, env_str, last_status);
+		str = replace_env_var(str, env_str, last_status, env);
 		*i = -1;
 	}
 	return (str);
 }
 
-char	*expansion(char *str, int last_status)
+char	*expansion(char *str, int last_status, char **env)
 {
 	size_t	i;
 	int		state;
@@ -133,9 +133,8 @@ char	*expansion(char *str, int last_status)
 		else if (state == 2 && str[i] == '\"')
 			state = 0;
 		else if (state != 1 && str[i] == '$')
-			str = handle_dollar(str, &i, last_status);
+			str = handle_dollar(str, &i, last_status, env);
 		i++;
 	}
 	return (str);
 }
-

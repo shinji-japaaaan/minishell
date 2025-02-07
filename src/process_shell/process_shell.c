@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_shell.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/07 07:34:56 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/07 18:58:19 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	handle_input(char *input, History *history, int *last_status, char ***env)
 		free(input);
 		return;
 	}
-	parsed_list = parser(input, *last_status);
+	parsed_list = parser(input, *last_status, *env);
 	if (!parsed_list)
 	{
 		ft_putendl_fd("Error: Failed to parse input.", 2);

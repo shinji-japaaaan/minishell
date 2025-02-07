@@ -20,6 +20,7 @@ SRCS = src/main.c \
 	   src/parser/parse_error1.c \
 	   src/parser/parse_error2.c \
 	   src/parser/heredoc.c \
+	   src/parser/ft_getenv.c\
 	   src/executor/builtins.c \
 	   src/executor/executor.c \
 	   src/executor/cmd_execute.c \
@@ -29,7 +30,7 @@ SRCS = src/main.c \
 	   src/executor/free1.c \
 	   src/executor/free2.c \
 	   src/executor/redirection.c \
-	   src/executor/handle_redirect.c
+	   src/executor/handle_redirect.c\
 
 
 # Object files (SRCSから.oファイルを生成)
