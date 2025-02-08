@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:00:06 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/08 16:10:19 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 18:41:15 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # include <termios.h>
 # include <unistd.h>
 
-extern pid_t	global_pid;
 extern int		g_signal;
 void			process_shell(char ***env);
 void			sig_handler_main(int signum);

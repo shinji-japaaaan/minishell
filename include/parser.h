@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 18:08:12 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 18:39:15 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,22 +136,28 @@ bool						parse_error_consecutive_redirect(t_linked_list *head);
 bool						parse_error_consecutive_pipe(t_linked_list *head);
 
 // heredoc.c
-void						heredoc_read(t_redirect *node, char *str_eof, char **env, int *last_status);
-void							heredoc_redirect_list(t_redirect *head_redirect_in,
+void						heredoc_read(t_redirect *node, char *str_eof,
 								char **env, int *last_status);
-void						heredoc_main(t_cmd_invoke *head_cmd, char **env, int *last_status);
+void						heredoc_redirect_list(t_redirect *head_redirect_in,
+								char **env, int *last_status);
+void						heredoc_main(t_cmd_invoke *head_cmd, char **env,
+								int *last_status);
 void						heredoc_close(t_cmd_invoke *node);
-void						heredoc_read_main(t_redirect *head_redirect, int *last_status);
+void						heredoc_read_main(t_redirect *head_redirect,
+								int *last_status);
 void						heredoc_read_rev(t_redirect *node, char *str_eof);
 void						heredoc_pipe_open(t_redirect *head_redirect);
-char						*heredoc_expansion(char *input, char **env, int *last_status);
+char						*heredoc_expansion(char *input, char **env,
+								int *last_status);
+void						heredoc_read_loop(char *str_eof, char **env,
+								int pipefd[2], int *last_status);
 
 // ft_getenv.c
 int							ft_cmp_for_getenv(char *str, char *env_str,
 								size_t *len);
 char						*ft_getenv(char *str, char **env);
 
-//sinal.c
+// sinal.c
 void						setup_signal_handler_heredoc(void);
 void						handle_sigint_heredoc(int signum);
 int							check_interrupt(void);

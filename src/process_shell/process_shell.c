@@ -6,13 +6,12 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/08 18:20:12 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 18:41:51 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-pid_t	global_pid = 0;
 int		g_signal = 0;
 
 void	execute_shell_command(t_cmd_invoke *parsed_list, char *command,
