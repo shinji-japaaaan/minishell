@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 19:01:54 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 21:27:34 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ t_cmd_invoke	*parser(char *input, int last_status, char **env)
 	t_linked_list	*head;
 	t_cmd_invoke	*cmd_head;
 
-	head = NULL;
-	head = linked_list_init(head);
+	head = linked_list_init(NULL);
 	if (head == NULL)
 	{
 		ft_putendl_fd("Failed to initialize linked list.", 2);
