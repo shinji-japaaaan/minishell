@@ -15,4 +15,16 @@ void	execute_command(t_linked_list *parsed_list);
 int		handle_internal_commands(t_cmd_invoke *parsed_list, char ***env);
 bool	is_internal_commands(char *command);
 
+//builtin_utils.c
+int     print_and_return(char **env);
+int     is_valid_identifier(const char *arg);
+int     handle_invalid_identifier(char *arg);
+int     ft_strncmp(const char *s1, const char *s2, size_t n);
+int     handle_existing_variable(char ***env, char *arg, int i);
+int     add_new_variable(char ***env, char *arg, int i);
+void    *ft_realloc(void *ptr, size_t size);
+int     is_numeric(char *str);
+void    put_str(int fd, char *str);
+void    free_environment(char **env);
+
 #endif
