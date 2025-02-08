@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 07:04:25 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/08 18:08:12 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ typedef struct s_redirect
 	TokenType				token_type;
 	int						pipefd[2];
 	int						fd;
-	int						fd1;
 	int						stdio_backup;
 	struct s_redirect		*next;
 }							t_redirect;
@@ -137,15 +136,15 @@ bool						parse_error_consecutive_redirect(t_linked_list *head);
 bool						parse_error_consecutive_pipe(t_linked_list *head);
 
 // heredoc.c
-void						heredoc_read(t_redirect *node, char *str_eof, char **env);
-int							heredoc_redirect_list(t_redirect *head_redirect_in,
-								char **env);
-void						heredoc_main(t_cmd_invoke *head_cmd, char **env);
+void						heredoc_read(t_redirect *node, char *str_eof, char **env, int *last_status);
+void							heredoc_redirect_list(t_redirect *head_redirect_in,
+								char **env, int *last_status);
+void						heredoc_main(t_cmd_invoke *head_cmd, char **env, int *last_status);
 void						heredoc_close(t_cmd_invoke *node);
-void						heredoc_read_main(t_redirect *head_redirect);
+void						heredoc_read_main(t_redirect *head_redirect, int *last_status);
 void						heredoc_read_rev(t_redirect *node, char *str_eof);
 void						heredoc_pipe_open(t_redirect *head_redirect);
-char						*heredoc_expansion(char *input, char **env);
+char						*heredoc_expansion(char *input, char **env, int *last_status);
 
 // ft_getenv.c
 int							ft_cmp_for_getenv(char *str, char *env_str,

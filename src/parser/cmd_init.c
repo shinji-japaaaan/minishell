@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:53:20 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/07 23:07:52 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/08 18:08:02 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_redirect	*redirect_init(t_redirect *new_node)
 	new_node = (t_redirect *)malloc(sizeof(t_redirect));
 	new_node->filename = NULL;
 	new_node->token_type = TYPE_DEFAULT;
+	new_node->fd = -1;
+	new_node->stdio_backup = -1;
 	new_node->next = NULL;
 	return (new_node);
 }

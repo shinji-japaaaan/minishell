@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/01 23:44:28 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 18:27:27 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,21 @@ int	open_redirect(t_cmd_invoke *node, bool is_parent)
 
 void	reset_redirect_out(t_redirect *node)
 {
+	struct stat	st;
+
 	if (dup2(node->stdio_backup, STDOUT_FILENO) == -1)
 	{
 		perror("Error restoring STDOUT");
 		exit(EXIT_FAILURE);
 	}
-	close(node->stdio_backup);
+	if (fstat(node->stdio_backup, &st) == 0)
+		close(node->stdio_backup);
 }
 
 void	reset_redirect_in(t_redirect *node)
 {
+	struct stat	st;
+
 	if (dup2(node->stdio_backup, STDIN_FILENO) == -1)
 	{
 		perror("Error restoring STDIN");
@@ -47,9 +52,11 @@ void	reset_redirect_in(t_redirect *node)
 	}
 	if (node->token_type == TYPE_HEREDOC)
 	{
-		close(node->fd);
+		if (fstat(node->fd, &st) == 0)
+			close(node->fd);
 	}
-	close(node->stdio_backup);
+	if (fstat(node->stdio_backup, &st) == 0)
+		close(node->stdio_backup);
 }
 
 void	reset_redirect_recursive(t_redirect *node)

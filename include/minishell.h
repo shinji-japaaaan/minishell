@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:00:06 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/07 23:46:15 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 16:10:19 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <unistd.h>
 # include <termios.h>
+# include <unistd.h>
 
 extern pid_t	global_pid;
 extern int		g_signal;
@@ -41,5 +41,7 @@ void			set_sig_handler_main(void);
 void			set_sig_handler_child(void);
 void			set_sig_during_exec(void);
 void			sig_during_exec(int signum);
+void			set_sig_during_heredoc(void);
+void			sig_during_heredoc(int signum);
 
 #endif /* MINISHELL_H */

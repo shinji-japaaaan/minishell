@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 07:31:24 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:42:12 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	parent_process_wait(t_cmd_invoke *head)
 	if (WIFSIGNALED(status))
 	{
 		ret_status = (WTERMSIG(status)) + 128;
-		// printf("st %d %d\n",status, ret_status);
 		if (ret_status == 130)
 			write(1, "\n", 1);
 		else if (ret_status == 131)
@@ -113,11 +112,14 @@ void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first)
 	*is_first = false;
 }
 
-int	cmd_execute_main(t_cmd_invoke *head, char **env)
+int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status)
 {
 	t_cmd_invoke	*temp_ptr;
 	bool			is_first;
 
+	heredoc_main(head, env, last_status);
+	if (g_signal == SIGINT)
+		return (*last_status);
 	is_first = true;
 	temp_ptr = head->next;
 	set_sig_during_exec();
@@ -128,7 +130,6 @@ int	cmd_execute_main(t_cmd_invoke *head, char **env)
 			pipe(temp_ptr->nxt_pipefd);
 			temp_ptr->next->bef_pipefd = temp_ptr->nxt_pipefd;
 		}
-		heredoc_redirect_list(temp_ptr->redirect_head, env);
 		temp_ptr->pid = fork();
 		if (temp_ptr->pid == 0)
 		{

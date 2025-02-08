@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 07:31:37 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:24:15 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	close_fd_in_child(t_cmd_invoke *node);
 void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 			bool is_first);
 void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first);
-int		cmd_execute_main(t_cmd_invoke *head, char **env);
+int		cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status);
 
 // cmd_execute.c
 void	cmd_execute_first(t_cmd_invoke *node);

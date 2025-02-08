@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:13:41 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/07 23:03:52 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/08 17:57:26 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	sig_handler_main(int signum)
 {
+	printf("signum %d\n", signum);
 	if (signum == SIGINT)
 	{
 		g_signal = SIGINT;

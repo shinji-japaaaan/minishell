@@ -3,44 +3,83 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:25:28 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 07:02:21 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/08 18:09:12 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	heredoc_read(t_redirect *node, char *str_eof, char **env)
+// void	heredoc_read_loop(void)
+// {
+// 	char	*line;
+
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (line == NULL)
+// 		{
+// 			if (g_signal == SIGINT)
+// 				return (*last_status = 130, (void)0);
+// 			ft_putstr_fd("bash: warning: here-document delimited by end-of-file (wanted '",
+// 				2);
+// 			ft_putstr_fd(str_eof, 2);
+// 			ft_putstr_fd("')\n", 2);
+// 			return ;
+// 		}
+// 		if (ft_strcmp(line, str_eof) == 0)
+// 			return (free(line), (void)0);
+// 		line = heredoc_expansion(line, env, last_status);
+// 		ft_putendl_fd(line, pipefd[1]);
+// 		free(line);
+// 	}
+// }
+
+void	heredoc_read(t_redirect *node, char *str_eof, char **env,
+		int *last_status)
 {
 	char	*line;
 	int		pipefd[2];
+	int		stdio_backup;
 
 	if (pipe(pipefd) < 0)
 		perror("heredoc pipe failed");
-	setup_signal_handler_heredoc();
-	rl_event_hook = check_interrupt;
-	while (!global_pid)
+	stdio_backup = dup(0);
+	while (1)
 	{
 		line = readline("> ");
 		if (line == NULL)
+		{
+			if (g_signal == SIGINT)
+			{
+				*last_status = 130;
+				break ;
+			}
+			ft_putstr_fd("bash: warning: here-document delimited by end-of-file (wanted '",
+				2);
+			ft_putstr_fd(str_eof, 2);
+			ft_putstr_fd("')\n", 2);
 			break ;
-		if (global_pid || ft_strcmp(line, str_eof) == 0)
+		}
+		if (ft_strcmp(line, str_eof) == 0)
 		{
 			free(line);
 			break ;
 		}
-		line = heredoc_expansion(line, env);
+		line = heredoc_expansion(line, env, last_status);
 		ft_putendl_fd(line, pipefd[1]);
 		free(line);
 	}
-	rl_event_hook = NULL;
+	dup2(stdio_backup, 0);
+	close(stdio_backup);
 	close(pipefd[1]);
 	node->fd = pipefd[0];
 }
 
-int	heredoc_redirect_list(t_redirect *head_redirect_in, char **env)
+void	heredoc_redirect_list(t_redirect *head_redirect_in, char **env,
+		int *last_status)
 {
 	t_redirect	*temp_ptr;
 
@@ -49,24 +88,35 @@ int	heredoc_redirect_list(t_redirect *head_redirect_in, char **env)
 	{
 		if (temp_ptr->token_type == TYPE_HEREDOC)
 		{
-			heredoc_read(temp_ptr, temp_ptr->filename, env);
-			if (global_pid)
-				return (130);
+			heredoc_read(temp_ptr, temp_ptr->filename, env, last_status);
+			if (g_signal == SIGINT)
+				break ;
 		}
 		temp_ptr = temp_ptr->next;
 	}
-	return (0);
 }
 
-void	heredoc_main(t_cmd_invoke *head_cmd, char **env)
+void	heredoc_main(t_cmd_invoke *head_cmd, char **env, int *last_status)
 {
 	t_cmd_invoke	*temp_ptr;
 
+	set_sig_during_heredoc();
 	temp_ptr = head_cmd->next;
 	while (temp_ptr)
 	{
-		heredoc_redirect_list(temp_ptr->redirect_head, env);
+		heredoc_redirect_list(temp_ptr->redirect_head, env, last_status);
+		if (g_signal == SIGINT)
+			break ;
 		temp_ptr = temp_ptr->next;
+	}
+	if (g_signal == SIGINT)
+	{
+		temp_ptr = head_cmd->next;
+		while (temp_ptr)
+		{
+			heredoc_close(temp_ptr);
+			temp_ptr = temp_ptr->next;
+		}
 	}
 }
 
@@ -90,7 +140,7 @@ void	heredoc_close(t_cmd_invoke *node)
 	}
 }
 
-char	*heredoc_expansion(char *input, char **env)
+char	*heredoc_expansion(char *input, char **env, int *last_status)
 {
 	size_t	i;
 
@@ -99,7 +149,7 @@ char	*heredoc_expansion(char *input, char **env)
 	{
 		if (input[i] == '$' && (input[i + 1] == '?' || is_name_character(input[i
 					+ 1])))
-			input = handle_dollar(input, &i, 0, env);
+			input = handle_dollar(input, &i, *last_status, env);
 		i += 1;
 	}
 	return (input);

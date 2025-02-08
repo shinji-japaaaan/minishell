@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_exec.c                                      :+:      :+:    :+:   */
+/*   signal_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/07 22:12:51 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 15:53:45 by karai            ###   ########.fr       */
+/*   Created: 2025/02/08 15:54:03 by karai             #+#    #+#             */
+/*   Updated: 2025/02/08 15:58:38 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	set_sig_during_exec(void)
+void	set_sig_during_heredoc(void)
 {
 	struct sigaction	sa;
 
@@ -24,7 +24,7 @@ void	set_sig_during_exec(void)
 		perror("sigaction");
 		exit(EXIT_FAILURE);
 	}
-	// sa.sa_handler = sig_during_exec;
+	sa.sa_handler = sig_during_heredoc;
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 	{
 		perror("sigaction");
@@ -32,29 +32,12 @@ void	set_sig_during_exec(void)
 	}
 }
 
-void	set_sig_handler_child(void)
+void	sig_during_heredoc(int signum)
 {
-	struct sigaction	sa;
-
-	sigemptyset(&sa.sa_mask);
-	sa.sa_handler = SIG_DFL;
-	sa.sa_flags = 0;
-	if (sigaction(SIGINT, &sa, NULL) == -1)
+	if (signum == SIGINT)
 	{
-		perror("sigaction");
-		exit(EXIT_FAILURE);
-	}
-	if (sigaction(SIGQUIT, &sa, NULL) == -1)
-	{
-		perror("sigaction");
-		exit(EXIT_FAILURE);
+		g_signal = SIGINT;
+		ft_putendl_fd("", 1);
+		close(0);
 	}
 }
-
-// void sig_during_exec(int signum)
-// {
-// 	if (signum == SIGQUIT)
-// 	{
-// 		g_signal = signum;
-// 	}
-// }
