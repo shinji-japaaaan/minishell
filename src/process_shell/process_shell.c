@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/08 07:30:43 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/08 14:12:02 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,52 +14,6 @@
 
 pid_t	global_pid = 0;
 int		g_signal = 0;
-
-int	handle_internal_commands(t_cmd_invoke *parsed_list, char ***env)
-{
-	char	*cmd;
-	char	**args;
-	int		result;
-
-	cmd = parsed_list->cmd_list[0];
-	args = parsed_list->cmd_list;
-	result = 0;
-	if (ft_strcmp(cmd, "cd") == 0)
-		result = change_directory(args[1], args);
-	else if (ft_strcmp(cmd, "exit") == 0)
-		exit_shell(args);
-	else if (ft_strcmp(cmd, "echo") == 0)
-		echo_command(args);
-	else if (ft_strcmp(cmd, "pwd") == 0)
-		result = print_working_directory();
-	else if (ft_strcmp(cmd, "env") == 0)
-		print_environment(*env);
-	else if (ft_strcmp(cmd, "export") == 0)
-		result = export_variable(env, args[1]);
-	else if (ft_strcmp(cmd, "unset") == 0)
-		result = unset_variable(env, args[1]);
-	return (result);
-}
-
-bool	is_internal_commands(char *command)
-{
-	if (ft_strcmp(command, "cd") == 0)
-		return (true);
-	else if (ft_strcmp(command, "exit") == 0)
-		return (true);
-	else if (ft_strcmp(command, "echo") == 0)
-		return (true);
-	else if (ft_strcmp(command, "pwd") == 0)
-		return (true);
-	else if (ft_strcmp(command, "env") == 0)
-		return (true);
-	else if (strncmp(command, "export", 7) == 0)
-		return (true);
-	else if (strncmp(command, "unset", 5) == 0)
-		return (true);
-	else
-		return (false);
-}
 
 void	execute_shell_command(t_cmd_invoke *parsed_list, char *command,
 		int *last_status, char ***env)
@@ -112,33 +66,44 @@ void	handle_input(char *input, History *history, int *last_status,
 	free(input);
 }
 
-void	process_shell(char ***env)
+void reset_global_state(void)
 {
-	char	*input;
-	History	*history;
-	int		last_status;
+	global_pid = 0;
+	g_signal = 0;
+}
+
+void handle_user_input(char *input, History *history, int *last_status, char ***env)
+{
+	if (*input == '\0')
+	{
+		free(input);
+		return;
+	}
+	if (g_signal == SIGINT)
+		*last_status = 130;
+	handle_input(input, history, last_status, env);
+}
+
+void process_shell(char ***env)
+{
+	char *input;
+	History *history;
+	int last_status;
 
 	history = init_history(MAX_HISTORY);
 	load_history_from_file(HISTORY_FILE, history);
 	last_status = 0;
 	while (1)
 	{
-		global_pid = 0;
-		g_signal = 0;
+		reset_global_state();
 		set_sig_handler_main();
 		input = readline("minishell> ");
 		if (!input)
-			break ;
-		if (*input == '\0')
-		{
-			free(input);
-			continue ;
-		}
-		if (g_signal == SIGINT)
-			last_status = 130;
-		handle_input(input, history, &last_status, env);
+			break;
+		handle_user_input(input, history, &last_status, env);
 	}
 	save_history_to_file(HISTORY_FILE, history);
 	free_history(history);
 	rl_clear_history();
 }
+

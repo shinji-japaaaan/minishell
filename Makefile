@@ -24,6 +24,7 @@ SRCS = src/main.c \
 	   src/parser/heredoc.c \
 	   src/parser/ft_getenv.c\
 	   src/parser/signal.c\
+	   src/executor/handle_internal_commands.c \
 	   src/executor/builtins.c \
 	   src/executor/builtins_utils.c \
 	   src/executor/builtins_export_utils.c \

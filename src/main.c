@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/08 07:13:59 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/08 14:01:12 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ char	**duplicate_env(char **envp)
 		if (!env[i])
 		{
 			perror("strdup failed");
+			while (--i >= 0)
+				free(env[i]);
 			exit(EXIT_FAILURE);
 		}
 		i++;

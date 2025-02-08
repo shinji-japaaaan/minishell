@@ -3,6 +3,9 @@
 
 # include "parser.h"
 
+int	    handle_internal_commands(t_cmd_invoke *parsed_list, char ***env);
+bool	is_internal_commands(char *command);
+
 // 内部コマンドで使用する関数群の宣言
 int     change_directory(char *path, char **args);
 void    exit_shell(char **args);
