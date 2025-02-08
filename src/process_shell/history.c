@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:12:05 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/03 22:41:00 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/08 14:37:06 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,34 +51,50 @@ void save_history_to_file(const char *filename, History *history) {
 
     int i = 0;
     while (i < history->count) {
-        write(fd, history->entries[i], strlen(history->entries[i]));
+        write(fd, history->entries[i], ft_strlen(history->entries[i]));
         write(fd, "\n", 1);
         i++;
     }
-
     close(fd);
 }
 
-void load_history_from_file(const char *filename, History *history) {
-    int fd = open(filename, O_RDONLY);
-    if (fd == -1) {
-        return;
-    }
+void	process_line(char *start, char *end, History *history)
+{
+	char	*line;
 
-    char buffer[BUFFER_SIZE];
-    ssize_t bytes;
-    char *line;
+	*end = '\0';
+	line = malloc(ft_strlen(start) + 1);
+	if (line != NULL)
+	{
+		ft_strcpy(line, start);
+		add_to_history(history, line);
+		add_history(line);
+		free(line);
+	}
+}
 
-    while ((bytes = read(fd, buffer, sizeof(buffer) - 1)) > 0) {
-        buffer[bytes] = '\0';
-        line = strtok(buffer, "\n");
-        while (line) {
-            add_to_history(history, line);
-            add_history(line);
-            line = strtok(NULL, "\n");
-        }
-    }
-    close(fd);
+void	load_history_from_file(const char *filename, History *history)
+{
+	int		fd;
+	ssize_t	bytes;
+	char	buffer[BUFFER_SIZE + 1];
+	char	*start;
+	char	*end;
+
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return ;
+	while ((bytes = read(fd, buffer, BUFFER_SIZE)) > 0)
+	{
+		buffer[bytes] = '\0';
+		start = buffer;
+		while ((end = ft_strchr(start, '\n')) != NULL)
+		{
+			process_line(start, end, history);
+			start = end + 1;
+		}
+	}
+	close(fd);
 }
 
 void free_history(History *history) {
