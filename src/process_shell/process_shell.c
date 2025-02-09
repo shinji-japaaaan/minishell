@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 17:43:29 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 18:29:51 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,18 @@ void	free_history(t_History *history)
 {
 	int	i;
 
-	i = 0;
-	while (i < history->count)
+	if (!history)
+		return;
+	if (history->entries)
 	{
-		free(history->entries[i]);
-		i += 1;
+		i = 0;
+		while (i < history->count)
+		{
+			free(history->entries[i]);
+			i++;
+		}
+		free(history->entries);
 	}
-	free(history->entries);
 	free(history);
 }
 
