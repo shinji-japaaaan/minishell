@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:45:13 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 11:06:14 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 11:14:06 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,14 @@ char	*copy_without_quotes(char *str, char *new_str)
 	size_t	i;
 	size_t	j;
 	int		state;
+	int		prev_state;
 
 	i = 0;
 	j = 0;
 	state = 0;
 	while (str[i])
 	{
-		int prev_state = state;
+		prev_state = state;
 		state = handle_state(state, str[i]);
 		if (!(prev_state == 0 && state != 0) && !(prev_state != 0 && state == 0))
 			new_str[j++] = str[i];
