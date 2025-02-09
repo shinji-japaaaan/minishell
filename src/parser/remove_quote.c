@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:45:13 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 10:44:08 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 11:06:14 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,27 @@ size_t	get_new_len_without_quotes(char *str)
 	{
 		if (state == 0 && (str[i] == '\'' || str[i] == '\"'))
 			state = (str[i] == '\'') + 1;
-		else if ((state == 1 && str[i] == '\'') || (state == 2 && str[i] == '\"'))
+		else if ((state == 2 && str[i] == '\'') || (state == 1 && str[i] == '\"'))
 			state = 0;
 		else
 			len++;
 		i++;
 	}
 	return (len);
+}
+
+static int	handle_state(int state, char c)
+{
+	if (state == 0)
+	{
+		if (c == '\'')
+			return 1;
+		if (c == '"')
+			return 2;
+	}
+	else if ((state == 1 && c == '\'') || (state == 2 && c == '"'))
+		return 0;
+	return state;
 }
 
 char	*copy_without_quotes(char *str, char *new_str)
@@ -45,24 +59,16 @@ char	*copy_without_quotes(char *str, char *new_str)
 	state = 0;
 	while (str[i])
 	{
-		if (state == 0)
-		{
-			if (str[i] == '\'')
-				state = 1;
-			else if (str[i] == '\"')
-				state = 2;
-			else
-				new_str[j++] = str[i];
-		}
-		else if ((state == 1 && str[i] == '\'') || (state == 2 && str[i] == '\"'))
-			state = 0;
-		else
+		int prev_state = state;
+		state = handle_state(state, str[i]);
+		if (!(prev_state == 0 && state != 0) && !(prev_state != 0 && state == 0))
 			new_str[j++] = str[i];
 		i++;
 	}
 	new_str[j] = '\0';
 	return (new_str);
 }
+
 
 char	*remove_quote(char *str)
 {
