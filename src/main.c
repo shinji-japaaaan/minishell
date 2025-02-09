@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 14:07:22 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 17:38:38 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,21 @@ void	free_env(char **env)
 	free(env);
 }
 
+void	handle_malloc_failure(void)
+{
+	perror("malloc failed");
+	exit(EXIT_FAILURE);
+}
+
+void	handle_strdup_failure(char **env, int i)
+{
+	perror("strdup failed");
+	while (--i >= 0)
+		free(env[i]);
+	free(env);
+	exit(EXIT_FAILURE);
+}
+
 char	**duplicate_env(char **envp)
 {
 	int		count;
@@ -40,21 +55,13 @@ char	**duplicate_env(char **envp)
 		count++;
 	env = malloc((count + 1) * sizeof(char *));
 	if (!env)
-	{
-		perror("malloc failed");
-		exit(EXIT_FAILURE);
-	}
+		handle_malloc_failure();
 	i = 0;
 	while (i < count)
 	{
 		env[i] = ft_strdup(envp[i]);
 		if (!env[i])
-		{
-			perror("strdup failed");
-			while (--i >= 0)
-				free(env[i]);
-			exit(EXIT_FAILURE);
-		}
+			handle_strdup_failure(env, i);
 		i++;
 	}
 	env[count] = NULL;
