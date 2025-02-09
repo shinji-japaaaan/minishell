@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:45:13 by karai             #+#    #+#             */
-/*   Updated: 2025/02/06 05:31:09 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 10:44:08 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*remove_quote(char *str)
 	new_str = (char *)malloc(sizeof(char) * (new_len + 1));
 	if (!new_str)
 		return (NULL);
-	new_str = copy_without_quotes(str, new_str);
+	copy_without_quotes(str, new_str);
 	free(str);
 	return (new_str);
 }
