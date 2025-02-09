@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:13:41 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/08 17:57:26 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:04:56 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 void	sig_handler_main(int signum)
 {
-	printf("signum %d\n", signum);
 	if (signum == SIGINT)
 	{
-		g_signal = SIGINT;
+		g_signal = signum;
 		write(STDOUT_FILENO, "\n", 1); // 改行のみ表示
 		rl_replace_line("", 0);        // 入力行をクリア
 		rl_on_new_line();              // 新しい行に移動

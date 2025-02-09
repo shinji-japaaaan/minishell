@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 11:49:02 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:20:34 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	parent_process_wait(t_cmd_invoke *head)
 	while (temp_ptr)
 	{
 		waitpid(temp_ptr->pid, &status, 0);
-		// heredoc_close(temp_ptr);
 		temp_ptr = temp_ptr->next;
 	}
 	temp_ptr = head->next;
@@ -37,7 +36,7 @@ int	parent_process_wait(t_cmd_invoke *head)
 		if (ret_status == 130)
 			write(1, "\n", 1);
 		else if (ret_status == 131)
-			ft_putendl_fd("Quit (core dumped)", 1);
+			ft_putendl_fd("Quit (core dumped)", 2);
 		return (ret_status);
 	}
 	return (WEXITSTATUS(status));
@@ -86,11 +85,11 @@ void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr)
 	}
 }
 
-void	process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env) // 関数名を変更
+void	process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env)
 {
-	char *path;
+	char	*path;
 
-	path = get_path_main(temp_ptr, env); // 修正: t_cmd_invoke 型を渡す
+	path = get_path_main(temp_ptr, env);
 	execve(path, temp_ptr->cmd_list, env);
 }
 
@@ -100,7 +99,7 @@ void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 	handle_command_execution(temp_ptr, is_first);
 	handle_open_redirect(head, temp_ptr);
 	if (!is_internal_commands(temp_ptr->cmd_list[0]))
-		process_cmd_invoke(temp_ptr, env); // 新しい関数名を呼び出す
+		process_cmd_invoke(temp_ptr, env);
 	else
 		exit(handle_internal_commands(temp_ptr, &env));
 }
