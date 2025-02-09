@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 17:42:12 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 09:59:06 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,25 +80,23 @@ void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr)
 	}
 }
 
-void	process_cmd_invoke(t_cmd_invoke *temp_ptr) // 関数名を変更
+void	process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env) // 関数名を変更
 {
 	char *path;
 
-	path = get_path_main(temp_ptr); // 修正: t_cmd_invoke 型を渡す
-	execve(path, temp_ptr->cmd_list, environ);
+	path = get_path_main(temp_ptr, env); // 修正: t_cmd_invoke 型を渡す
+	execve(path, temp_ptr->cmd_list, env);
 }
 
 void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
-		bool is_first)
+		bool is_first, char **env)
 {
-	extern char	**environ;
-
 	handle_command_execution(temp_ptr, is_first);
 	handle_open_redirect(head, temp_ptr);
 	if (!is_internal_commands(temp_ptr->cmd_list[0]))
-		process_cmd_invoke(temp_ptr); // 新しい関数名を呼び出す
+		process_cmd_invoke(temp_ptr, env); // 新しい関数名を呼び出す
 	else
-		exit(handle_internal_commands(temp_ptr, &environ));
+		exit(handle_internal_commands(temp_ptr, &env));
 }
 
 void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first)
@@ -134,7 +132,7 @@ int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status)
 		if (temp_ptr->pid == 0)
 		{
 			set_sig_handler_child();
-			cmd_execute_child(head, temp_ptr, is_first);
+			cmd_execute_child(head, temp_ptr, is_first, env);
 		}
 		cmd_execute_parent(temp_ptr, &is_first);
 		temp_ptr = temp_ptr->next;

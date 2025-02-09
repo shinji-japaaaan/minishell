@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:09:45 by karai             #+#    #+#             */
-/*   Updated: 2025/01/31 23:19:45 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 10:01:27 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,13 @@ char	*get_path_cmd_not_find_path(char **cmd)
 	return (NULL);
 }
 
-char	*get_path_main(t_cmd_invoke *node)
+char	*get_path_main(t_cmd_invoke *node, char **env)
 {
 	char	*path_env;
 
 	if (is_full_relative_path(node->cmd_list[0]) == false)
 	{
-		path_env = getenv("PATH");
+		path_env = ft_getenv("PATH", env);
 		return (get_path_cmd(path_env, node->cmd_list));
 		ft_putstr_fd(node->cmd_list[0], 2);
 		ft_putendl_fd(" command not found", 2);

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 16:24:15 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 09:59:46 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,11 @@
 # define NON_COMMAND 127
 # define NO_PERMISSION 126
 
-extern char	**environ;
-
 // executor.c
 int		parent_process_wait(t_cmd_invoke *head);
 void	close_fd_in_child(t_cmd_invoke *node);
 void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
-			bool is_first);
+			bool is_first, char **env);
 void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first);
 int		cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status);
 
@@ -48,7 +46,7 @@ void	free_linked_list_all(t_linked_list **head_list);
 char	*get_path_cmd(char *path_env, char **cmd);
 char	*get_path_cmd_part(char **dir_array, char **cmd, char *tmp_str);
 char	*get_path_cmd_not_find_path(char **cmd);
-char	*get_path_main(t_cmd_invoke *node);
+char	*get_path_main(t_cmd_invoke *node, char **env);
 
 // get_path_utils.c
 int		is_access(char *full_path);
