@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_shell.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 18:29:51 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:08:42 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	free_history(t_History *history)
 	int	i;
 
 	if (!history)
-		return;
+		return ;
 	if (history->entries)
 	{
 		i = 0;
@@ -33,10 +33,11 @@ void	free_history(t_History *history)
 	free(history);
 }
 
-void	execute_shell_command(t_cmd_invoke *parsed_list, char *command,
-		int *last_status, char ***env)
+void	execute_shell_command(t_cmd_invoke *parsed_list, int *last_status,
+		char ***env, t_History *history)
 {
-	if (is_internal_commands(command) && parsed_list->next->next == NULL)
+	if (is_internal_commands(parsed_list->next->cmd_list[0])
+		&& parsed_list->next->next == NULL)
 	{
 		heredoc_main(parsed_list, *env, last_status);
 		if (g_signal != SIGINT)
@@ -49,14 +50,14 @@ void	execute_shell_command(t_cmd_invoke *parsed_list, char *command,
 		}
 	}
 	else
-		*last_status = cmd_execute_main(parsed_list, *env, last_status);
+		*last_status = cmd_execute_main(parsed_list, *env, last_status,
+				history);
 }
 
 void	handle_input(char *input, t_History *history, int *last_status,
 		char ***env)
 {
 	t_cmd_invoke	*parsed_list;
-	char			*command;
 
 	if (*input)
 	{
@@ -76,8 +77,7 @@ void	handle_input(char *input, t_History *history, int *last_status,
 		free(input);
 		return ;
 	}
-	command = parsed_list->next->cmd_list[0];
-	execute_shell_command(parsed_list, command, last_status, env);
+	execute_shell_command(parsed_list, last_status, env, history);
 	free_all(&parsed_list);
 	free(input);
 }

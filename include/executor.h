@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 13:57:01 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 22:24:30 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,23 @@
 # define NON_COMMAND 127
 # define NO_PERMISSION 126
 
+# include "history.h"
+
 // executor.c
 int		parent_process_wait(t_cmd_invoke *head);
 void	close_fd_in_child(t_cmd_invoke *node);
 void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 			bool is_first, char **env);
 void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first);
-int		cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status);
+int		cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status,
+			t_History *history);
 
 // cmd_execute.c
 void	cmd_execute_first(t_cmd_invoke *node);
 void	cmd_execute_last(t_cmd_invoke *node);
 void	cmd_execute_middle(t_cmd_invoke *node);
+void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
+			char **env);
 
 // cmd_execute_utils.c
 void	perror_exit(char *str, char **str_array1, char **str_array2,

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 13:20:34 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 22:35:50 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ void	handle_command_execution(t_cmd_invoke *temp_ptr, bool is_first)
 	}
 }
 
-void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr)
+void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
+		char **env)
 {
 	int	status;
 
@@ -81,6 +82,7 @@ void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr)
 	{
 		close_fd_in_child(temp_ptr);
 		free_all(&head);
+		free_env(env);
 		exit(status);
 	}
 }
@@ -96,12 +98,20 @@ void	process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env)
 void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 		bool is_first, char **env)
 {
+	int	status;
+
 	handle_command_execution(temp_ptr, is_first);
-	handle_open_redirect(head, temp_ptr);
+	handle_open_redirect(head, temp_ptr, env);
 	if (!is_internal_commands(temp_ptr->cmd_list[0]))
 		process_cmd_invoke(temp_ptr, env);
 	else
-		exit(handle_internal_commands(temp_ptr, &env));
+	{
+		status = handle_internal_commands(temp_ptr, &env);
+		close_fd_in_child(temp_ptr);
+		free_all(&head);
+		free_env(env);
+		exit(status);
+	}
 }
 
 void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first)
@@ -115,7 +125,8 @@ void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first)
 	*is_first = false;
 }
 
-int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status)
+int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status,
+		t_History *history)
 {
 	t_cmd_invoke	*temp_ptr;
 	bool			is_first;
@@ -136,6 +147,7 @@ int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status)
 		temp_ptr->pid = fork();
 		if (temp_ptr->pid == 0)
 		{
+			free_history(history);
 			heredoc_close_nu(head, temp_ptr);
 			set_sig_handler_child();
 			cmd_execute_child(head, temp_ptr, is_first, env);

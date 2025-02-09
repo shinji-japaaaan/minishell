@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtins1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 17:28:31 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 21:53:40 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	change_directory(char *path, char **args)
+int	change_directory(char *path, char **args, char **env)
 {
 	if (args[1] && args[2])
 	{
@@ -21,7 +21,7 @@ int	change_directory(char *path, char **args)
 	}
 	if (!path || ft_strcmp(path, "~") == 0)
 	{
-		path = getenv("HOME");
+		path = ft_getenv("HOME", env);
 		if (!path)
 		{
 			write(STDERR_FILENO, "cd failed: HOME not set\n", 24);
@@ -30,7 +30,7 @@ int	change_directory(char *path, char **args)
 	}
 	if (ft_strcmp(path, "$PWD") == 0)
 	{
-		path = getenv("PWD");
+		path = ft_getenv("PWD", env);
 	}
 	if (chdir(path) == -1)
 	{

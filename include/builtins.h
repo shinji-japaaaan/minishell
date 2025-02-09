@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:43 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 13:54:40 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 22:26:47 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		handle_internal_commands(t_cmd_invoke *parsed_list, char ***env);
 bool	is_internal_commands(char *command);
 
 // 内部コマンドで使用する関数群の宣言
-int		change_directory(char *path, char **args);
+int		change_directory(char *path, char **args, char **env);
 void	exit_shell(char **args);
 void	echo_command(char **args);
 int		print_working_directory(void);
@@ -40,6 +40,6 @@ int		add_new_variable(char ***env, char *arg, int i);
 void	*ft_realloc(void *ptr, size_t size);
 int		is_numeric(char *str);
 void	put_str(int fd, char *str);
-void	free_environment(char **env);
+void	free_env(char **env);
 
 #endif
