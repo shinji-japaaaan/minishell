@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 09:59:06 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 11:49:02 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ int	parent_process_wait(t_cmd_invoke *head)
 	while (temp_ptr)
 	{
 		waitpid(temp_ptr->pid, &status, 0);
+		// heredoc_close(temp_ptr);
+		temp_ptr = temp_ptr->next;
+	}
+	temp_ptr = head->next;
+	while (temp_ptr)
+	{
 		heredoc_close(temp_ptr);
 		temp_ptr = temp_ptr->next;
 	}
@@ -131,6 +137,7 @@ int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status)
 		temp_ptr->pid = fork();
 		if (temp_ptr->pid == 0)
 		{
+			heredoc_close_nu(head, temp_ptr);
 			set_sig_handler_child();
 			cmd_execute_child(head, temp_ptr, is_first, env);
 		}

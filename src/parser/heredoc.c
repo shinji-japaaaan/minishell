@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:25:28 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 18:37:44 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 11:48:14 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,22 @@ void	heredoc_close(t_cmd_invoke *node)
 	}
 }
 
+void	heredoc_close_nu(t_cmd_invoke *head_cmd, t_cmd_invoke *now)
+{
+	t_cmd_invoke	*temp_ptr;
+	bool			is_delete;
+
+	is_delete = false;
+	temp_ptr = head_cmd->next;
+	while (temp_ptr)
+	{
+		if (temp_ptr == now)
+			is_delete = true;
+		else if (is_delete)
+			heredoc_close(temp_ptr);
+		temp_ptr = temp_ptr->next;
+	}
+}
 char	*heredoc_expansion(char *input, char **env, int *last_status)
 {
 	size_t	i;

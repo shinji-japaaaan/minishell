@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 18:39:15 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 11:31:36 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,8 @@ void						heredoc_redirect_list(t_redirect *head_redirect_in,
 void						heredoc_main(t_cmd_invoke *head_cmd, char **env,
 								int *last_status);
 void						heredoc_close(t_cmd_invoke *node);
+void						heredoc_close_nu(t_cmd_invoke *head_cmd,
+								t_cmd_invoke *now);
 void						heredoc_read_main(t_redirect *head_redirect,
 								int *last_status);
 void						heredoc_read_rev(t_redirect *node, char *str_eof);
