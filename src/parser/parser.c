@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 21:27:34 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:24:47 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
 	return (*list_head);
 }
 
-void	expand_env_variables_in_list(t_linked_list *list_head, int last_status, char **env)
+void	expand_env_variables_in_list(t_linked_list *list_head, int last_status,
+		char **env)
 {
 	t_linked_list	*ptr_temp;
 

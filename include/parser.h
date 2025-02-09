@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 11:31:36 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:33:53 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct s_cmd_state
 // 関数プロトタイプ
 
 // expansion.c
-bool						is_name_character(char c);
+bool						is_nc(char c);
 char						*get_env_str(char *str, size_t *strdup_len);
 char						*replace_to_env_val(char *str, char *env_str,
 								int last_status);
@@ -114,7 +114,7 @@ void						tokenize_input(t_linked_list *head, char *input);
 char						*strdup_len(char *str, size_t n);
 bool						is_blank(char c);
 void						ft_strcpy(char *dst, char *src);
-bool						is_name_character(char c);
+bool						is_nc(char c);
 
 // make_cmd.c
 t_redirect					*redirect_init(t_redirect *new_node);

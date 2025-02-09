@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 13:06:27 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:40:05 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ void	execute_shell_command(t_cmd_invoke *parsed_list, char *command,
 {
 	if (is_internal_commands(command) && parsed_list->next->next == NULL)
 	{
-		// heredoc_redirect_list(parsed_list->next->redirect_head,
-		// 		*env, last_status);
 		heredoc_main(parsed_list, *env, last_status);
 		if (g_signal != SIGINT)
 		{

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:12:05 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 12:18:56 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:45:29 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,13 @@ void	load_history_from_file(const char *filename, History *history)
 
 void	free_history(History *history)
 {
-	for (int i = 0; i < history->count; i++)
+	int	i;
+
+	i = 0;
+	while (i < history->count)
 	{
 		free(history->entries[i]);
+		i += 1;
 	}
 	free(history->entries);
 	free(history);

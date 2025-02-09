@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_quote.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:45:13 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 11:06:14 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:24:06 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ size_t	get_new_len_without_quotes(char *str)
 	{
 		if (state == 0 && (str[i] == '\'' || str[i] == '\"'))
 			state = (str[i] == '\'') + 1;
-		else if ((state == 2 && str[i] == '\'') || (state == 1 && str[i] == '\"'))
+		else if ((state == 2 && str[i] == '\'') || (state == 1
+				&& str[i] == '\"'))
 			state = 0;
 		else
 			len++;
@@ -39,13 +40,13 @@ static int	handle_state(int state, char c)
 	if (state == 0)
 	{
 		if (c == '\'')
-			return 1;
+			return (1);
 		if (c == '"')
-			return 2;
+			return (2);
 	}
 	else if ((state == 1 && c == '\'') || (state == 2 && c == '"'))
-		return 0;
-	return state;
+		return (0);
+	return (state);
 }
 
 char	*copy_without_quotes(char *str, char *new_str)
@@ -53,22 +54,23 @@ char	*copy_without_quotes(char *str, char *new_str)
 	size_t	i;
 	size_t	j;
 	int		state;
+	int		prev_state;
 
 	i = 0;
 	j = 0;
 	state = 0;
 	while (str[i])
 	{
-		int prev_state = state;
+		prev_state = state;
 		state = handle_state(state, str[i]);
-		if (!(prev_state == 0 && state != 0) && !(prev_state != 0 && state == 0))
+		if (!(prev_state == 0 && state != 0) && !(prev_state != 0
+				&& state == 0))
 			new_str[j++] = str[i];
 		i++;
 	}
 	new_str[j] = '\0';
 	return (new_str);
 }
-
 
 char	*remove_quote(char *str)
 {
@@ -83,5 +85,3 @@ char	*remove_quote(char *str)
 	free(str);
 	return (new_str);
 }
-
-

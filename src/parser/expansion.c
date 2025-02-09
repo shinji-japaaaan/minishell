@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 22:28:37 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:33:47 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_env_str(char *str, size_t *len)
 
 	*len = 0;
 	i = 0;
-	while (str[i] && is_name_character(str[i]))
+	while (str[i] && is_nc(str[i]))
 		i++;
 	*len = i;
 	env_str = (char *)malloc(sizeof(char) * (i + 1));
@@ -58,7 +58,8 @@ char	*replace_env(char *str, char *env_str, char *env_val)
 	return (new_str);
 }
 
-char	*expand_env_variable(char *str, char *env_str, int last_status, char **env)
+char	*expand_env_variable(char *str, char *env_str, int last_status,
+		char **env)
 {
 	char	*env_val;
 	char	*new_str;
@@ -122,7 +123,7 @@ char	*expansion(char *str, int last_status, char **env)
 		else if (state == 2 && str[i] == '\"')
 			state = 0;
 		else if (state != 1 && str[i] == '$' && (str[i + 1] == '?'
-				|| is_name_character(str[i + 1])))
+				|| is_nc(str[i + 1])))
 			str = handle_dollar(str, &i, last_status, env);
 		i++;
 	}
