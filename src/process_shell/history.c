@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:12:05 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 13:51:05 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 17:43:17 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,18 +110,4 @@ void	load_history_from_file(const char *filename, t_History *history)
 		}
 	}
 	close(fd);
-}
-
-void	free_history(t_History *history)
-{
-	int	i;
-
-	i = 0;
-	while (i < history->count)
-	{
-		free(history->entries[i]);
-		i += 1;
-	}
-	free(history->entries);
-	free(history);
 }

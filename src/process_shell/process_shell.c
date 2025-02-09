@@ -3,16 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   process_shell.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 14:09:23 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 17:43:29 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 int		g_signal = 0;
+
+void	free_history(t_History *history)
+{
+	int	i;
+
+	i = 0;
+	while (i < history->count)
+	{
+		free(history->entries[i]);
+		i += 1;
+	}
+	free(history->entries);
+	free(history);
+}
 
 void	execute_shell_command(t_cmd_invoke *parsed_list, char *command,
 		int *last_status, char ***env)
