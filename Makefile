@@ -23,6 +23,7 @@ SRCS = src/main.c \
 	   src/parser/parse_error1.c \
 	   src/parser/parse_error2.c \
 	   src/parser/heredoc.c \
+	   src/parser/heredoc_read.c\
 	   src/parser/ft_getenv.c\
 	   src/executor/handle_internal_commands.c \
 	   src/executor/builtins.c \

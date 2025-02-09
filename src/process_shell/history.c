@@ -3,67 +3,82 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:12:05 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/08 14:37:06 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:51:05 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-History *init_history(int max_size) {
-    History *history = malloc(sizeof(History));
-    if (!history) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-    history->entries = malloc(max_size * sizeof(char *));
-    if (!history->entries) {
-        free(history);
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-    history->count = 0;
-    history->max_size = max_size;
-    return history;
+t_History	*init_history(int max_size)
+{
+	t_History	*history;
+
+	history = malloc(sizeof(t_History));
+	if (!history)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	history->entries = malloc(max_size * sizeof(char *));
+	if (!history->entries)
+	{
+		free(history);
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	history->count = 0;
+	history->max_size = max_size;
+	return (history);
 }
 
-void add_to_history(History *history, const char *line) {
-    if (history->count == history->max_size) {
-        free(history->entries[0]);
-        int i = 0;
-        while (i < history->count - 1) {
-            history->entries[i] = history->entries[i + 1];
-            i++;
-        }
-        history->count--;
-    }
-    history->entries[history->count++] = strdup(line);
+void	add_to_history(t_History *history, const char *line)
+{
+	int	i;
+
+	if (history->count == history->max_size)
+	{
+		free(history->entries[0]);
+		i = 0;
+		while (i < history->count - 1)
+		{
+			history->entries[i] = history->entries[i + 1];
+			i++;
+		}
+		history->count--;
+	}
+	history->entries[history->count++] = ft_strdup(line);
 }
 
-void save_history_to_file(const char *filename, History *history) {
-    int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd == -1) {
-        perror("open");
-        return;
-    }
+void	save_history_to_file(const char *filename, t_History *history)
+{
+	int	fd;
+	int	i;
 
-    int i = 0;
-    while (i < history->count) {
-        write(fd, history->entries[i], ft_strlen(history->entries[i]));
-        write(fd, "\n", 1);
-        i++;
-    }
-    close(fd);
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		perror("open");
+		return ;
+	}
+	i = 0;
+	while (i < history->count)
+	{
+		write(fd, history->entries[i], ft_strlen(history->entries[i]));
+		write(fd, "\n", 1);
+		i++;
+	}
+	close(fd);
 }
 
-void	process_line(char *start, char *end, History *history)
+void	process_line(char *start, char *end, t_History *history)
 {
 	char	*line;
 
 	*end = '\0';
-	line = malloc(ft_strlen(start) + 1);
+	line = (char *)ft_calloc(sizeof(char), (ft_strlen(start) + 1));
 	if (line != NULL)
 	{
 		ft_strcpy(line, start);
@@ -73,7 +88,7 @@ void	process_line(char *start, char *end, History *history)
 	}
 }
 
-void	load_history_from_file(const char *filename, History *history)
+void	load_history_from_file(const char *filename, t_History *history)
 {
 	int		fd;
 	ssize_t	bytes;
@@ -97,10 +112,16 @@ void	load_history_from_file(const char *filename, History *history)
 	close(fd);
 }
 
-void free_history(History *history) {
-    for (int i = 0; i < history->count; i++) {
-        free(history->entries[i]);
-    }
-    free(history->entries);
-    free(history);
+void	free_history(t_History *history)
+{
+	int	i;
+
+	i = 0;
+	while (i < history->count)
+	{
+		free(history->entries[i]);
+		i += 1;
+	}
+	free(history->entries);
+	free(history);
 }

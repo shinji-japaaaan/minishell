@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 18:39:15 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 14:03:07 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,20 @@ typedef enum e_token_type
 	TYPE_HEREDOC,
 	TYPE_REDIRECT_APPEND,
 	TYPE_DEFAULT
-}							TokenType;
+}							t_TokenType;
 
 // リスト構造体の定義
 typedef struct s_linked_list
 {
 	char					*content;
-	TokenType				token_type;
+	t_TokenType				token_type;
 	struct s_linked_list	*next;
 }							t_linked_list;
 
 typedef struct s_redirect
 {
 	char					*filename;
-	TokenType				token_type;
+	t_TokenType				token_type;
 	int						pipefd[2];
 	int						fd;
 	int						stdio_backup;
@@ -64,7 +64,7 @@ typedef struct s_cmd_state
 	t_linked_list			*list_ptr_temp;
 	t_cmd_invoke			*cmd_ptr_temp;
 	bool					is_filename;
-	TokenType				bef_token_type;
+	t_TokenType				bef_token_type;
 	bool					is_pipe;
 	size_t					cmd_len;
 	size_t					i;
@@ -73,7 +73,7 @@ typedef struct s_cmd_state
 // 関数プロトタイプ
 
 // expansion.c
-bool						is_name_character(char c);
+bool						is_nc(char c);
 char						*get_env_str(char *str, size_t *strdup_len);
 char						*replace_to_env_val(char *str, char *env_str,
 								int last_status);
@@ -86,8 +86,6 @@ char						*get_env_value(char *env_str, int last_status,
 								char **env);
 
 // linked_list.c
-void						linked_list_print(t_linked_list *list_head);
-void						linked_list_print_with_token(t_linked_list *list_head);
 void						linked_list_free(t_cmd_invoke *list_head);
 void						linked_list_append(t_linked_list *list_head,
 								char *str);
@@ -95,7 +93,7 @@ t_linked_list				*linked_list_init(t_linked_list *head);
 
 // parser.c
 t_linked_list				remove_quotes_from_tokens(t_linked_list *list_head);
-void						expand_env_variables_in_list(t_linked_list *list_head,
+void						expand_env_var_in_list(t_linked_list *list_head,
 								int last_status, char **env);
 t_cmd_invoke				*parser(char *input, int last_status, char **env);
 
@@ -104,7 +102,7 @@ size_t						remove_quote_get_newlen(char *str);
 char						*remove_quote(char *str);
 
 // tokenize.c
-TokenType					get_token_type(char *str);
+t_TokenType					get_token_type(char *str);
 void						assign_token_types(t_linked_list *list_head);
 int							is_delimeter(char *str);
 size_t						split_len(char *input);
@@ -114,14 +112,14 @@ void						tokenize_input(t_linked_list *head, char *input);
 char						*strdup_len(char *str, size_t n);
 bool						is_blank(char c);
 void						ft_strcpy(char *dst, char *src);
-bool						is_name_character(char c);
+bool						is_nc(char c);
 
 // make_cmd.c
 t_redirect					*redirect_init(t_redirect *new_node);
 t_cmd_invoke				*cmd_invoke_init(t_cmd_invoke *new_node);
 size_t						ft_cmd_len(t_linked_list *node);
 t_redirect					*redirect_append(t_redirect *redirect_head,
-								char *content, TokenType token_type);
+								char *content, t_TokenType token_type);
 t_cmd_invoke				*make_cmd(t_linked_list *list_head,
 								t_cmd_invoke *cmd_head);
 t_cmd_invoke				*init_new_cmd(t_cmd_invoke *cmd_ptr_temp);
@@ -132,7 +130,7 @@ bool						parse_error_quote(char *input);
 bool						parse_error_unexpected_str_judge(char *str);
 bool						parse_error_unexpected_str(char *input);
 bool						parse_error_last_token(t_linked_list *head);
-bool						parse_error_consecutive_redirect(t_linked_list *head);
+bool						parse_error_consec_red(t_linked_list *head);
 bool						parse_error_consecutive_pipe(t_linked_list *head);
 
 // heredoc.c
@@ -143,6 +141,8 @@ void						heredoc_redirect_list(t_redirect *head_redirect_in,
 void						heredoc_main(t_cmd_invoke *head_cmd, char **env,
 								int *last_status);
 void						heredoc_close(t_cmd_invoke *node);
+void						heredoc_close_nu(t_cmd_invoke *head_cmd,
+								t_cmd_invoke *now);
 void						heredoc_read_main(t_redirect *head_redirect,
 								int *last_status);
 void						heredoc_read_rev(t_redirect *node, char *str_eof);

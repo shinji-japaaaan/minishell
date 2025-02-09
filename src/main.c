@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 07:59:43 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/08 14:01:12 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 14:07:22 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 void	free_env(char **env)
 {
+	int	i;
+
 	if (!env)
 	{
 		return ;
 	}
-	int i = 0;
+	i = 0;
 	while (env[i])
 	{
 		free(env[i]);
@@ -31,6 +33,7 @@ char	**duplicate_env(char **envp)
 {
 	int		count;
 	char	**env;
+	int		i;
 
 	count = 0;
 	while (envp[count])
@@ -41,10 +44,10 @@ char	**duplicate_env(char **envp)
 		perror("malloc failed");
 		exit(EXIT_FAILURE);
 	}
-	int i = 0;
+	i = 0;
 	while (i < count)
 	{
-		env[i] = strdup(envp[i]);
+		env[i] = ft_strdup(envp[i]);
 		if (!env[i])
 		{
 			perror("strdup failed");
@@ -60,11 +63,12 @@ char	**duplicate_env(char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
+	char	**env;
+
 	(void)argc;
 	(void)argv;
-	char **env = duplicate_env(envp);
+	env = duplicate_env(envp);
 	process_shell(&env);
 	free_env(env);
 	return (0);
 }
-

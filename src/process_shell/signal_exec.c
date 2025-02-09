@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:12:51 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 15:53:45 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:39:35 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	set_sig_during_exec(void)
 		perror("sigaction");
 		exit(EXIT_FAILURE);
 	}
-	// sa.sa_handler = sig_during_exec;
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 	{
 		perror("sigaction");

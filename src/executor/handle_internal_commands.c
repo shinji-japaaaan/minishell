@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   internal_commands.c                                :+:      :+:    :+:   */
+/*   handle_internal_commands.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 14:09:29 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/08 14:09:50 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 14:12:23 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ bool	is_internal_commands(char *command)
 		return (true);
 	else if (ft_strcmp(command, "env") == 0)
 		return (true);
-	else if (strncmp(command, "export", 7) == 0)
+	else if (ft_strncmp(command, "export", 7) == 0)
 		return (true);
-	else if (strncmp(command, "unset", 5) == 0)
+	else if (ft_strncmp(command, "unset", 5) == 0)
 		return (true);
 	else
 		return (false);

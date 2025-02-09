@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:18:22 by karai             #+#    #+#             */
-/*   Updated: 2025/02/06 05:18:22 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:56:40 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-TokenType	get_token_type(char *str)
+t_TokenType	get_token_type(char *str)
 {
 	if (ft_strcmp(str, "|") == 0)
 		return (TYPE_PIPE);

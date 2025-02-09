@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   make_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/02/07 23:10:08 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:59:39 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 t_redirect	*redirect_append(t_redirect *redirect_head, char *content,
-		TokenType token_type)
+		t_TokenType token_type)
 {
 	t_redirect	*new_node;
 	t_redirect	*ptr_temp;
@@ -47,22 +47,21 @@ void	process_command_token(t_cmd_state *state)
 	}
 }
 
-void	process_token(t_cmd_state *state, TokenType type)
+void	process_token(t_cmd_state *state, t_TokenType type)
 {
 	if (type == TYPE_PIPE)
 	{
 		state->is_pipe = true;
 		free1dim(&(state->list_ptr_temp->content));
 	}
-	else if (type == TYPE_REDIRECT_IN || type == TYPE_HEREDOC ||
-			type == TYPE_REDIRECT_OUT || type == TYPE_REDIRECT_APPEND)
+	else if (type == TYPE_REDIRECT_IN || type == TYPE_HEREDOC
+		|| type == TYPE_REDIRECT_OUT || type == TYPE_REDIRECT_APPEND)
 	{
 		state->bef_token_type = state->list_ptr_temp->token_type;
 		state->is_filename = true;
 		free1dim(&(state->list_ptr_temp->content));
 	}
 }
-
 
 void	process_list_ptr_temp(t_cmd_state *state)
 {
@@ -73,11 +72,11 @@ void	process_list_ptr_temp(t_cmd_state *state)
 		state->is_pipe = false;
 		state->is_filename = false;
 	}
-	if (state->list_ptr_temp->token_type == TYPE_PIPE ||
-		state->list_ptr_temp->token_type == TYPE_REDIRECT_IN ||
-		state->list_ptr_temp->token_type == TYPE_HEREDOC ||
-		state->list_ptr_temp->token_type == TYPE_REDIRECT_OUT ||
-		state->list_ptr_temp->token_type == TYPE_REDIRECT_APPEND)
+	if (state->list_ptr_temp->token_type == TYPE_PIPE
+		|| state->list_ptr_temp->token_type == TYPE_REDIRECT_IN
+		|| state->list_ptr_temp->token_type == TYPE_HEREDOC
+		|| state->list_ptr_temp->token_type == TYPE_REDIRECT_OUT
+		|| state->list_ptr_temp->token_type == TYPE_REDIRECT_APPEND)
 	{
 		process_token(state, state->list_ptr_temp->token_type);
 	}
@@ -103,6 +102,3 @@ t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head)
 	}
 	return (cmd_head);
 }
-
-
-

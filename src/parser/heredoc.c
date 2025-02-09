@@ -6,53 +6,11 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:25:28 by karai             #+#    #+#             */
-/*   Updated: 2025/02/08 18:37:44 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:37:09 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	heredoc_read_loop(char *str_eof, char **env, int pipefd[2],
-		int *last_status)
-{
-	char	*line;
-
-	while (1)
-	{
-		line = readline("> ");
-		if (line == NULL)
-		{
-			if (g_signal == SIGINT)
-				return (*last_status = 130, (void)0);
-			ft_putstr_fd("bash: warning: here-document delimited by end-of-file (wanted '",
-				2);
-			ft_putstr_fd(str_eof, 2);
-			ft_putstr_fd("')\n", 2);
-			return ;
-		}
-		if (ft_strcmp(line, str_eof) == 0)
-			return (free(line), (void)0);
-		line = heredoc_expansion(line, env, last_status);
-		ft_putendl_fd(line, pipefd[1]);
-		free(line);
-	}
-}
-
-void	heredoc_read(t_redirect *node, char *str_eof, char **env,
-		int *last_status)
-{
-	int	pipefd[2];
-	int	stdio_backup;
-
-	if (pipe(pipefd) < 0)
-		perror("heredoc pipe failed");
-	stdio_backup = dup(0);
-	heredoc_read_loop(str_eof, env, pipefd, last_status);
-	dup2(stdio_backup, 0);
-	close(stdio_backup);
-	close(pipefd[1]);
-	node->fd = pipefd[0];
-}
 
 void	heredoc_redirect_list(t_redirect *head_redirect_in, char **env,
 		int *last_status)
@@ -116,6 +74,23 @@ void	heredoc_close(t_cmd_invoke *node)
 	}
 }
 
+void	heredoc_close_nu(t_cmd_invoke *head_cmd, t_cmd_invoke *now)
+{
+	t_cmd_invoke	*temp_ptr;
+	bool			is_delete;
+
+	is_delete = false;
+	temp_ptr = head_cmd->next;
+	while (temp_ptr)
+	{
+		if (temp_ptr == now)
+			is_delete = true;
+		else if (is_delete)
+			heredoc_close(temp_ptr);
+		temp_ptr = temp_ptr->next;
+	}
+}
+
 char	*heredoc_expansion(char *input, char **env, int *last_status)
 {
 	size_t	i;
@@ -123,63 +98,9 @@ char	*heredoc_expansion(char *input, char **env, int *last_status)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '$' && (input[i + 1] == '?' || is_name_character(input[i
-					+ 1])))
+		if (input[i] == '$' && (input[i + 1] == '?' || is_nc(input[i + 1])))
 			input = handle_dollar(input, &i, *last_status, env);
 		i += 1;
 	}
 	return (input);
 }
-
-// void	heredoc_read_main(t_redirect *head_redirect)
-// {
-// 	t_cmd_invoke	*temp_ptr;
-
-// 	temp_ptr = head_redirect->next;
-// 	while (temp_ptr)
-// 	{
-// 		heredoc_read_rev(temp_ptr, temp_ptr->filename);
-// 		temp_ptr = temp_ptr->next;
-// 	}
-// }
-
-// void	heredoc_read_rev(t_redirect *node, char *str_eof)
-// {
-// 	char	*line;
-
-// 	setup_signal_handler();
-// 	while (1)
-// 	{
-// 		// setup_signal_handler();
-// 		line = readline("> ");
-// 		if (line == NULL)
-// 			break ;
-// 		if (strcmp(line, str_eof) == 0)
-// 		{
-// 			free(line);
-// 			break ;
-// 		}
-// 		ft_putendl_fd(line, node->fd1);
-// 		free(line);
-// 	}
-// 	close(pipefd[1]);
-// }
-
-// void	heredoc_pipe_open(t_redirect *head_redirect)
-// {
-// 	t_redirect	*temp_ptr;
-// 	int			pipefd[2];
-
-// 	head_redirect->next;
-// 	while (temp_ptr)
-// 	{
-// 		if (temp_ptr->token_type == TYPE_HEREDOC)
-// 		{
-// 			if (pipe(pipefd) < 0)
-// 				perror("heredoc pipe failed");
-// 			temp_ptr->fd = pipefd[0];
-// 			temp_ptr->fd1 = pipefd[1];
-// 		}
-// 		temp_ptr = temp_ptr->next;
-// 	}
-// }

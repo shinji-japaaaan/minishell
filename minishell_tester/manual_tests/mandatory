@@ -10,7 +10,7 @@ cd obj
 echo $PWD $OLDPWD
 
 # invalid command, followed by empty input, should keep the exit code
-doesntexist
+doesntexistS
 
 echo $?
 

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:11:51 by karai             #+#    #+#             */
-/*   Updated: 2025/01/31 23:26:27 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:56:09 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	handle_redirect_heredoc(t_redirect *node, bool is_parent)
 	return (0);
 }
 
-int	handle_redirect(TokenType token_type, t_redirect *node, bool is_parent)
+int	handle_redirect(t_TokenType token_type, t_redirect *node, bool is_parent)
 {
 	int	status;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_error1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 13:05:40 by karai             #+#    #+#             */
-/*   Updated: 2025/02/02 06:37:55 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 14:03:41 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ bool	parse_error_quote(char *input)
 bool	parse_error_last_token(t_linked_list *head)
 {
 	t_linked_list	*temp_ptr;
-	TokenType		token_type;
+	t_TokenType		token_type;
 
 	temp_ptr = head->next;
 	while (temp_ptr)
@@ -67,10 +67,10 @@ bool	parse_error_last_token(t_linked_list *head)
 	return (false);
 }
 
-bool	parse_error_consecutive_redirect(t_linked_list *head)
+bool	parse_error_consec_red(t_linked_list *head)
 {
 	t_linked_list	*temp_ptr;
-	TokenType		token_type;
+	t_TokenType		token_type;
 	int				state;
 
 	temp_ptr = head->next;
@@ -96,7 +96,7 @@ bool	parse_error_consecutive_redirect(t_linked_list *head)
 bool	parse_error_consecutive_pipe(t_linked_list *head)
 {
 	t_linked_list	*temp_ptr;
-	TokenType		token_type;
+	t_TokenType		token_type;
 	int				state;
 
 	temp_ptr = head->next;

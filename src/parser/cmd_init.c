@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:53:20 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/08 18:08:02 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:24:37 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	init_cmd_list(t_cmd_state *state)
 {
 	state->cmd_len = ft_cmd_len(state->list_ptr_temp);
 	state->cmd_ptr_temp->cmd_list = (char **)malloc(sizeof(char *)
-		* (state->cmd_len + 1));
+			* (state->cmd_len + 1));
 	state->cmd_ptr_temp->cmd_list[state->cmd_len] = NULL;
 	state->i = 0;
 }
