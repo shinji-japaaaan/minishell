@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 09:59:46 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:57:01 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@ int		handle_redirect_out(t_redirect *node, bool is_parent);
 int		handle_redirect_append(t_redirect *node, bool is_parent);
 int		handle_redirect_in(t_redirect *node, bool is_parent);
 int		handle_redirect_heredoc(t_redirect *node, bool is_parent);
-int		handle_redirect(TokenType token_type, t_redirect *node, bool is_parent);
+int		handle_redirect(t_TokenType token_type, t_redirect *node,
+			bool is_parent);
 
 // hande}_redirect_parent.c
-int		handle_redirect_parent(TokenType token_type, t_redirect *node);
+int		handle_redirect_parent(t_TokenType token_type, t_redirect *node);
 int		open_redirect_parent(t_cmd_invoke *node);
 
 #endif

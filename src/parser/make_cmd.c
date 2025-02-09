@@ -6,14 +6,14 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 13:35:41 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:59:39 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 t_redirect	*redirect_append(t_redirect *redirect_head, char *content,
-		TokenType token_type)
+		t_TokenType token_type)
 {
 	t_redirect	*new_node;
 	t_redirect	*ptr_temp;
@@ -47,7 +47,7 @@ void	process_command_token(t_cmd_state *state)
 	}
 }
 
-void	process_token(t_cmd_state *state, TokenType type)
+void	process_token(t_cmd_state *state, t_TokenType type)
 {
 	if (type == TYPE_PIPE)
 	{

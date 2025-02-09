@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:10:32 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 09:58:57 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:49:07 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@
 # define BUFFER_SIZE 1024
 # define MAX_HISTORY 100
 
-typedef struct
+typedef struct s_History
 {
 	char	**entries;
 	int		count;
 	int		max_size;
-}			History;
+}			t_History;
 
-History		*init_history(int max_size);
-void		add_to_history(History *history, const char *line);
-void		save_history_to_file(const char *filename, History *history);
-void		load_history_from_file(const char *filename, History *history);
-void		free_history(History *history);
+t_History	*init_history(int max_size);
+void		add_to_history(t_History *history, const char *line);
+void		save_history_to_file(const char *filename, t_History *history);
+void		load_history_from_file(const char *filename, t_History *history);
+void		free_history(t_History *history);
 
 #endif

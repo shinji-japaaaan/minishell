@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 13:24:47 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 14:03:53 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
 	return (*list_head);
 }
 
-void	expand_env_variables_in_list(t_linked_list *list_head, int last_status,
+void	expand_env_var_in_list(t_linked_list *list_head, int last_status,
 		char **env)
 {
 	t_linked_list	*ptr_temp;
@@ -54,10 +54,10 @@ t_cmd_invoke	*parser(char *input, int last_status, char **env)
 	}
 	tokenize_input(head, input);
 	assign_token_types(head);
-	expand_env_variables_in_list(head, last_status, env);
+	expand_env_var_in_list(head, last_status, env);
 	remove_quotes_from_tokens(head);
 	if (parse_error_last_token(head) || parse_error_consecutive_pipe(head)
-		|| parse_error_consecutive_redirect(head))
+		|| parse_error_consec_red(head))
 	{
 		ft_putendl_fd("syntax error", 2);
 		free_linked_list_only_node(&head);

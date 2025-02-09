@@ -6,17 +6,17 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:12:05 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 13:45:29 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 13:51:05 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-History	*init_history(int max_size)
+t_History	*init_history(int max_size)
 {
-	History	*history;
+	t_History	*history;
 
-	history = malloc(sizeof(History));
+	history = malloc(sizeof(t_History));
 	if (!history)
 	{
 		perror("malloc");
@@ -34,7 +34,7 @@ History	*init_history(int max_size)
 	return (history);
 }
 
-void	add_to_history(History *history, const char *line)
+void	add_to_history(t_History *history, const char *line)
 {
 	int	i;
 
@@ -52,7 +52,7 @@ void	add_to_history(History *history, const char *line)
 	history->entries[history->count++] = ft_strdup(line);
 }
 
-void	save_history_to_file(const char *filename, History *history)
+void	save_history_to_file(const char *filename, t_History *history)
 {
 	int	fd;
 	int	i;
@@ -73,7 +73,7 @@ void	save_history_to_file(const char *filename, History *history)
 	close(fd);
 }
 
-void	process_line(char *start, char *end, History *history)
+void	process_line(char *start, char *end, t_History *history)
 {
 	char	*line;
 
@@ -88,7 +88,7 @@ void	process_line(char *start, char *end, History *history)
 	}
 }
 
-void	load_history_from_file(const char *filename, History *history)
+void	load_history_from_file(const char *filename, t_History *history)
 {
 	int		fd;
 	ssize_t	bytes;
@@ -112,7 +112,7 @@ void	load_history_from_file(const char *filename, History *history)
 	close(fd);
 }
 
-void	free_history(History *history)
+void	free_history(t_History *history)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 13:40:05 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/09 14:09:23 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	execute_shell_command(t_cmd_invoke *parsed_list, char *command,
 		*last_status = cmd_execute_main(parsed_list, *env, last_status);
 }
 
-void	handle_input(char *input, History *history, int *last_status,
+void	handle_input(char *input, t_History *history, int *last_status,
 		char ***env)
 {
 	t_cmd_invoke	*parsed_list;
@@ -63,7 +63,7 @@ void	handle_input(char *input, History *history, int *last_status,
 	free(input);
 }
 
-void	handle_user_input(char *input, History *history, int *last_status,
+void	handle_user_input(char *input, t_History *history, int *last_status,
 		char ***env)
 {
 	if (*input == '\0')
@@ -78,9 +78,9 @@ void	handle_user_input(char *input, History *history, int *last_status,
 
 void	process_shell(char ***env)
 {
-	char	*input;
-	History	*history;
-	int		last_status;
+	char		*input;
+	t_History	*history;
+	int			last_status;
 
 	history = init_history(MAX_HISTORY);
 	load_history_from_file(HISTORY_FILE, history);
