@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:12:05 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 17:43:17 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:27:27 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,19 @@ void	load_history_from_file(const char *filename, t_History *history)
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		return ;
-	while ((bytes = read(fd, buffer, BUFFER_SIZE)) > 0)
+	bytes = read(fd, buffer, BUFFER_SIZE);
+	while (bytes > 0)
 	{
 		buffer[bytes] = '\0';
 		start = buffer;
-		while ((end = ft_strchr(start, '\n')) != NULL)
+		end = ft_strchr(start, '\n');
+		while (end != NULL)
 		{
 			process_line(start, end, history);
 			start = end + 1;
+			end = ft_strchr(start, '\n');
 		}
+		bytes = read(fd, buffer, BUFFER_SIZE);
 	}
 	close(fd);
 }
