@@ -3,43 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   builtins1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 21:53:40 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/10 21:14:20 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	change_directory(char *path, char **args, char **env)
+int change_directory(char *path, char **args, char ***env)
 {
-	if (args[1] && args[2])
-	{
-		write(STDERR_FILENO, "cd: too many arguments\n", 23);
-		return (1);
-	}
-	if (!path || ft_strcmp(path, "~") == 0)
-	{
-		path = ft_getenv("HOME", env);
-		if (!path)
-		{
-			write(STDERR_FILENO, "cd failed: HOME not set\n", 24);
-			return (1);
-		}
-	}
-	if (ft_strcmp(path, "$PWD") == 0)
-	{
-		path = ft_getenv("PWD", env);
-	}
-	if (chdir(path) == -1)
-	{
-		perror("cd failed");
-		return (1);
-	}
-	return (0);
-}
+    char *current_dir;
 
+    if (args[1] && args[2])
+        return print_error("cd: too many arguments\n");
+    path = resolve_path(path);
+    if (!path)
+        return print_error("cd failed: HOME not set\n");
+    if (chdir(path) == -1)
+    {
+        perror("cd failed");
+        return (1);
+    }
+    current_dir = getcwd(NULL, 0);
+    if (!current_dir)
+        return (1);
+    if (update_pwd_env_var(env, current_dir) != 0)
+        return (free(current_dir), 1);
+    free(current_dir);
+    return (0);
+}
 void	exit_shell(char **args)
 {
 	int	exit_code;

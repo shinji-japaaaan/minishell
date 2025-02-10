@@ -29,6 +29,8 @@ SRCS = src/main.c \
 	   src/executor/builtins1.c \
 	   src/executor/builtins2.c \
 	   src/executor/builtins_utils.c \
+	   src/executor/builtins_cd_utils1.c \
+	   src/executor/builtins_cd_utils2.c \
 	   src/executor/builtins_export_utils.c \
 	   src/executor/executor.c \
 	   src/executor/cmd_execute.c \

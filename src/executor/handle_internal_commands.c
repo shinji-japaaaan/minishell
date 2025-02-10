@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_internal_commands.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 14:09:29 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 21:53:36 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/10 20:09:37 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	handle_internal_commands(t_cmd_invoke *parsed_list, char ***env)
 	args = parsed_list->cmd_list;
 	result = 0;
 	if (ft_strcmp(cmd, "cd") == 0)
-		result = change_directory(args[1], args, *env);
+		result = change_directory(args[1], args, env);
 	else if (ft_strcmp(cmd, "exit") == 0)
 		exit_shell(args);
 	else if (ft_strcmp(cmd, "echo") == 0)

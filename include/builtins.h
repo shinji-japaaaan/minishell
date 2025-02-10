@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:43 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 22:26:47 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/10 21:09:19 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		handle_internal_commands(t_cmd_invoke *parsed_list, char ***env);
 bool	is_internal_commands(char *command);
 
 // 内部コマンドで使用する関数群の宣言
-int		change_directory(char *path, char **args, char **env);
+int		change_directory(char *path, char **args, char ***env);
 void	exit_shell(char **args);
 void	echo_command(char **args);
 int		print_working_directory(void);
@@ -41,5 +41,10 @@ void	*ft_realloc(void *ptr, size_t size);
 int		is_numeric(char *str);
 void	put_str(int fd, char *str);
 void	free_env(char **env);
+
+int     update_pwd_env_var(char ***env, const char *new_pwd);
+char    *resolve_path(char *path);
+int     print_error(const char *msg);
+char	*ft_strcat(char *dest, const char *src);
 
 #endif
