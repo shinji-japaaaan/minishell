@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:20:24 by karai             #+#    #+#             */
-/*   Updated: 2025/02/10 21:05:49 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:10:59 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,15 @@ bool	is_blank(char c)
 		return (false);
 }
 
-void ft_strcpy(char *dest, char *src)
+void	ft_strcpy(char *dest, char *src)
 {
-    size_t i = 0;
+	size_t	i;
 
-    while (src[i] != '\0')
-    {
-        dest[i] = src[i];
-        i++;
-    }
-    dest[i] = '\0';
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
 }

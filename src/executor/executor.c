@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 09:23:13 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 10:12:32 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 	status = open_redirect(temp_ptr, false);
 	if (status != 0)
 	{
-		// close_fd_in_child(temp_ptr);
 		free_all(&head);
 		free_env(env);
 		exit(status);
@@ -94,7 +93,6 @@ void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 	else
 	{
 		status = handle_internal_commands(temp_ptr, &env);
-		// close_fd_in_child(temp_ptr);
 		free_all(&head);
 		free_env(env);
 		exit(status);

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:09:45 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 10:01:14 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 10:11:36 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,9 @@ char	*get_path_cmd_not_find_path(char **cmd, t_cmd_invoke *head, char **env)
 		ft_putstr_fd(cmd[0], 2);
 		ft_putendl_fd(" Permission denied", 2);
 		fext_incmdpath(NULL, head, env, NO_PERMISSION);
-		// free2dim(&cmd);
-		// exit(NO_PERMISSION);
 	}
 	perror(cmd[0]);
 	fext_incmdpath(NULL, head, env, NON_COMMAND);
-	// free2dim(&cmd);
-	// exit(NON_COMMAND);
 	return (NULL);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:43 by karai             #+#    #+#             */
-/*   Updated: 2025/02/10 21:09:19 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:14:26 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ int		is_numeric(char *str);
 void	put_str(int fd, char *str);
 void	free_env(char **env);
 
-int     update_pwd_env_var(char ***env, const char *new_pwd);
-char    *resolve_path(char *path);
-int     print_error(const char *msg);
+int		update_pwd_env_var(char ***env, const char *new_pwd);
+char	*resolve_path(char *path);
+int		print_error(const char *msg);
 char	*ft_strcat(char *dest, const char *src);
 
 #endif

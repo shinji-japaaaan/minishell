@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_cd_utils2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:59:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/10 21:14:51 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:12:53 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int print_error(const char *msg)
+int	print_error(const char *msg)
 {
-    write(STDERR_FILENO, msg, ft_strlen(msg));
-    return (1);
+	write(STDERR_FILENO, msg, ft_strlen(msg));
+	return (1);
 }
 
-char *resolve_path(char *path)
+char	*resolve_path(char *path)
 {
-    if (!path || ft_strcmp(path, "~") == 0)
-        return getenv("HOME");
-    if (ft_strcmp(path, "$PWD") == 0)
-        return getenv("PWD");
-    return path;
+	if (!path || ft_strcmp(path, "~") == 0)
+		return (getenv("HOME"));
+	if (ft_strcmp(path, "$PWD") == 0)
+		return (getenv("PWD"));
+	return (path);
 }
 
 char	*ft_strcat(char *dest, const char *src)
