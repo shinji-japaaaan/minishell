@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:43 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 10:14:26 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 20:10:25 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 int		handle_internal_commands(t_cmd_invoke *parsed_list, char ***env);
 bool	is_internal_commands(char *command);
 
-// 内部コマンドで使用する関数群の宣言
 int		change_directory(char *path, char **args, char ***env);
 void	exit_shell(char **args);
 void	echo_command(char **args);
@@ -30,7 +29,6 @@ void	execute_command(t_linked_list *parsed_list);
 int		handle_internal_commands(t_cmd_invoke *parsed_list, char ***env);
 bool	is_internal_commands(char *command);
 
-// builtin_utils.c
 int		print_and_return(char **env);
 int		is_valid_identifier(const char *arg);
 int		handle_invalid_identifier(char *arg);

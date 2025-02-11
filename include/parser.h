@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 17:58:41 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 20:11:14 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 # include <stdbool.h>
 
-// TokenTypeの定義（必要な場合）
 typedef enum e_token_type
 {
 	TYPE_COMMAND,
@@ -29,7 +28,6 @@ typedef enum e_token_type
 	TYPE_DEFAULT
 }							t_TokenType;
 
-// リスト構造体の定義
 typedef struct s_linked_list
 {
 	char					*content;
@@ -71,8 +69,6 @@ typedef struct s_cmd_state
 	size_t					cmd_len;
 	size_t					i;
 }							t_cmd_state;
-
-// 関数プロトタイプ
 
 // expansion.c
 bool						is_nc(char c);
@@ -172,5 +168,3 @@ void						handle_sigint_heredoc(int signum);
 int							check_interrupt(void);
 
 #endif
-
-/* ************************************************************************** */

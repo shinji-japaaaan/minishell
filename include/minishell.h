@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:00:06 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 22:08:45 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 20:10:44 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "../libft/libft.h"
 # include "builtins.h"
 # include "executor.h"
-# include "history.h" // history.h をインクルード
+# include "history.h"
 # include "parser.h"
 # include <fcntl.h>
 # include <readline/history.h>
