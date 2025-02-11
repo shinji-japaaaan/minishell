@@ -6,14 +6,14 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 16:53:25 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 17:13:39 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 t_redirect	*redirect_append(t_redirect *redirect_head, char *content,
-		t_TokenType token_type)
+		t_TokenType token_type, bool is_quote)
 {
 	t_redirect	*new_node;
 	t_redirect	*ptr_temp;
@@ -22,6 +22,7 @@ t_redirect	*redirect_append(t_redirect *redirect_head, char *content,
 	new_node = redirect_init(new_node);
 	if (new_node == NULL)
 		return (NULL);
+	new_node->is_quote = is_quote;
 	new_node->filename = content;
 	new_node->token_type = token_type;
 	ptr_temp = redirect_head;
@@ -46,7 +47,8 @@ t_cmd_state	*process_command_token(t_cmd_state *state)
 	else
 	{
 		if (redirect_append(state->cmd_ptr_temp->redirect_head,
-				state->list_ptr_temp->content, state->bef_token_type) == NULL)
+				state->list_ptr_temp->content, state->bef_token_type,
+				state->list_ptr_temp->is_quote) == NULL)
 			return (NULL);
 		state->is_filename = false;
 		state->bef_token_type = TYPE_COMMAND;

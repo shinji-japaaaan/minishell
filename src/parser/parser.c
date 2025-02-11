@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 16:51:16 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 17:17:10 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_linked_list	*remove_quotes_from_tokens(t_linked_list *list_head)
 		{
 			if (ptr_temp->content != NULL)
 			{
-				ptr_temp->content = remove_quote(ptr_temp->content);
+				ptr_temp->content = remove_quote(ptr_temp->content, ptr_temp);
 				if (ptr_temp->content == NULL)
 					return (free_linked_list_all(&list_head), NULL);
 			}

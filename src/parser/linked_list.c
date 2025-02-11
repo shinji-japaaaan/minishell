@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 22:10:28 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 16:09:49 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 17:08:35 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ t_linked_list	*linked_list_init(t_linked_list *new_node)
 	new_node->content = NULL;
 	new_node->next = NULL;
 	new_node->token_type = TYPE_DEFAULT;
+	new_node->is_quote = false;
 	return (new_node);
 }

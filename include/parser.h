@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 16:51:45 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 17:42:30 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_linked_list
 	char					*content;
 	t_TokenType				token_type;
 	struct s_linked_list	*next;
+	bool					is_quote;
 }							t_linked_list;
 
 typedef struct s_redirect
@@ -45,6 +46,7 @@ typedef struct s_redirect
 	int						fd;
 	int						stdio_backup;
 	struct s_redirect		*next;
+	bool					is_quote;
 }							t_redirect;
 
 typedef struct s_cmd_invoke
@@ -100,7 +102,7 @@ t_cmd_invoke				*parser(char *input, int last_status, char **env);
 
 // remove_quote.cS
 size_t						remove_quote_get_newlen(char *str);
-char						*remove_quote(char *str);
+char						*remove_quote(char *str, t_linked_list *node);
 
 // tokenize.c
 t_TokenType					get_token_type(char *str);
@@ -120,7 +122,8 @@ t_redirect					*redirect_init(t_redirect *new_node);
 t_cmd_invoke				*cmd_invoke_init(t_cmd_invoke *new_node);
 size_t						ft_cmd_len(t_linked_list *node);
 t_redirect					*redirect_append(t_redirect *redirect_head,
-								char *content, t_TokenType token_type);
+								char *content, t_TokenType token_type,
+								bool is_quote);
 t_cmd_invoke				*make_cmd(t_linked_list *list_head,
 								t_cmd_invoke *cmd_head);
 t_cmd_invoke				*init_new_cmd(t_cmd_invoke *cmd_ptr_temp);
@@ -150,8 +153,11 @@ void						heredoc_read_rev(t_redirect *node, char *str_eof);
 void						heredoc_pipe_open(t_redirect *head_redirect);
 char						*heredoc_expansion(char *input, char **env,
 								int *last_status);
-void						heredoc_read_loop(char *str_eof, char **env,
-								int pipefd[2], int *last_status);
+// void						heredoc_read_loop(char *str_eof, char **env,
+// 								int pipefd[2], int *last_status);
+void						heredoc_error_mess(char *str_eof, int *last_status);
+void						heredoc_stdio_restore(char *line, int stdio_backup,
+								int pipefd[2], t_redirect *node);
 
 // ft_getenv.c
 int							ft_cmp_for_getenv(char *str, char *env_str,

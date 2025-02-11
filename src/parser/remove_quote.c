@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_quote.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:45:13 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 17:20:23 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:17:58 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*copy_without_quotes(char *str, char *new_str)
 	return (new_str);
 }
 
-char	*remove_quote(char *str)
+char	*remove_quote(char *str, t_linked_list *node)
 {
 	char	*new_str;
 	size_t	new_len;
@@ -82,6 +82,8 @@ char	*remove_quote(char *str)
 	if (!new_str)
 		return (NULL);
 	copy_without_quotes(str, new_str);
+	if (new_len != ft_strlen(str))
+		node->is_quote = true;
 	free(str);
 	return (new_str);
 }
