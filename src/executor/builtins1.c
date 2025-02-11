@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 10:13:29 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 21:47:40 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	change_directory(char *path, char **args, char ***env)
 
 	if (args[1] && args[2])
 		return (print_error("cd: too many arguments\n"));
-	path = resolve_path(path);
+	path = resolve_path(path, env);
 	if (!path)
 		return (print_error("cd failed: HOME not set\n"));
 	if (chdir(path) == -1)
