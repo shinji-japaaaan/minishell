@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:53:20 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 13:11:39 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 16:48:50 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 t_redirect	*redirect_init(t_redirect *new_node)
 {
 	new_node = (t_redirect *)malloc(sizeof(t_redirect));
+	if (new_node == NULL)
+		return (NULL);
 	new_node->filename = NULL;
 	new_node->token_type = TYPE_DEFAULT;
 	new_node->fd = -1;
@@ -58,9 +60,13 @@ void	init_cmd_list(t_cmd_state *state)
 t_cmd_invoke	*cmd_invoke_init(t_cmd_invoke *new_node)
 {
 	new_node = (t_cmd_invoke *)malloc(sizeof(t_cmd_invoke));
+	if (new_node == NULL)
+		return (NULL);
 	new_node->cmd_list = NULL;
 	new_node->redirect_head = NULL;
 	new_node->redirect_head = redirect_init(new_node->redirect_head);
+	if (new_node->redirect_head == NULL)
+		return (free(new_node), NULL);
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -68,6 +74,8 @@ t_cmd_invoke	*cmd_invoke_init(t_cmd_invoke *new_node)
 t_cmd_invoke	*init_new_cmd(t_cmd_invoke *cmd_ptr_temp)
 {
 	cmd_ptr_temp->next = cmd_invoke_init(cmd_ptr_temp->next);
+	if (cmd_ptr_temp->next == NULL)
+		return (NULL);
 	cmd_ptr_temp = cmd_ptr_temp->next;
 	return (cmd_ptr_temp);
 }

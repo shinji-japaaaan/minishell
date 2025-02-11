@@ -6,13 +6,13 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 16:26:23 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 16:51:16 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
+t_linked_list	*remove_quotes_from_tokens(t_linked_list *list_head)
 {
 	t_linked_list	*ptr_temp;
 
@@ -22,11 +22,15 @@ t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
 		if (ptr_temp->token_type == TYPE_COMMAND)
 		{
 			if (ptr_temp->content != NULL)
+			{
 				ptr_temp->content = remove_quote(ptr_temp->content);
+				if (ptr_temp->content == NULL)
+					return (free_linked_list_all(&list_head), NULL);
+			}
 		}
 		ptr_temp = ptr_temp->next;
 	}
-	return (*list_head);
+	return (list_head);
 }
 
 t_linked_list	*expand_env_var_in_list(t_linked_list *list_head,
@@ -75,16 +79,20 @@ t_cmd_invoke	*parser(char *input, int last_status, char **env)
 	if (expand_env_var_in_list(head, last_status, env) == NULL)
 		return (ft_putendl_fd("Failed to expansion.", 2), NULL);
 	change_emp_to_null(head);
-	remove_quotes_from_tokens(head);
+	if (remove_quotes_from_tokens(head) == NULL)
+		return (ft_putendl_fd("Failed to remove quotes.", 2), NULL);
 	if (parse_error_last_token(head) || parse_error_consecutive_pipe(head)
 		|| parse_error_consec_red(head))
 	{
 		ft_putendl_fd("syntax error", 2);
-		free_linked_list_only_node(&head);
-		return (NULL);
+		return (free_linked_list_only_node(&head), NULL);
 	}
 	cmd_head = cmd_invoke_init(NULL);
+	if (cmd_head == NULL)
+		return (ft_putendl_fd("Failed to initialize cmd list.", 2), NULL);
 	cmd_head = make_cmd(head, cmd_head);
+	if (cmd_head == NULL)
+		return (ft_putendl_fd("Failed to make cmd.", 2), NULL);
 	free_linked_list_only_node(&head);
 	return (cmd_head);
 }
