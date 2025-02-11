@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:11:51 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 13:56:09 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 13:41:43 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,11 @@ int	handle_redirect(t_TokenType token_type, t_redirect *node, bool is_parent)
 {
 	int	status;
 
+	if (node->filename == NULL)
+	{
+		ft_putendl_fd("minishell: ambiguous redirect", 2);
+		return (1);
+	}
 	if (token_type == TYPE_REDIRECT_OUT)
 		status = handle_redirect_out(node, is_parent);
 	else if (token_type == TYPE_REDIRECT_APPEND)

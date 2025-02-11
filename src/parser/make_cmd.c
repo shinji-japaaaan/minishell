@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 13:05:36 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 13:41:52 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ void	process_command_token(t_cmd_state *state)
 	}
 	else
 	{
-		if (state->list_ptr_temp->content != NULL)
-			redirect_append(state->cmd_ptr_temp->redirect_head,
-				state->list_ptr_temp->content, state->bef_token_type);
+		redirect_append(state->cmd_ptr_temp->redirect_head,
+			state->list_ptr_temp->content, state->bef_token_type);
 		state->is_filename = false;
 		state->bef_token_type = TYPE_COMMAND;
 	}
