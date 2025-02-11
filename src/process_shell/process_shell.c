@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 12:20:51 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 15:56:05 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,15 @@ void	handle_input(char *input, t_History *history, int *last_status,
 	}
 	if (parse_error_quote(input) || parse_error_unexpected_str(input))
 	{
+		*last_status = 2;
 		ft_putendl_fd("syntax error", 2);
-		free(input);
-		return ;
+		return (free(input));
 	}
 	parsed_list = parser(input, *last_status, *env);
 	if (!parsed_list)
 	{
-		ft_putendl_fd("Error: Failed to parse input.", 2);
-		free(input);
-		return ;
+		*last_status = 2;
+		return (free(input));
 	}
 	execute_shell_command(parsed_list, last_status, env, history);
 	free_all(&parsed_list);
@@ -110,9 +109,7 @@ void	process_shell(char ***env)
 		set_sig_handler_main();
 		input = readline("minishell> ");
 		if (!input)
-		{
 			break ;
-		}
 		if (g_signal == SIGINT)
 			last_status = 130;
 		g_signal = 0;

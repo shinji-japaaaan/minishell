@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 14:04:28 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 15:17:44 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env,
 		t_cmd_invoke *head)
 {
 	char	*path;
+
 
 	if (temp_ptr->cmd_list[0][0] == '\0')
 	{

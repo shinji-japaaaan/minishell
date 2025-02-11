@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 23:27:30 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 09:49:00 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 15:21:16 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	free_all(t_cmd_invoke **cmd_head)
 void	fext_incmdpath(char **dir_array, t_cmd_invoke *head, char **env,
 		int exit_status)
 {
-	(void)head;
 	free2dim(&dir_array);
 	free_all(&head);
 	free_env(env);

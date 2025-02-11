@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 13:42:09 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 15:37:10 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	reset_redirect_in(t_redirect *node)
 {
 	struct stat	st;
 
-	if (dup2(node->stdio_backup, STDIN_FILENO) == -1)
+	if (fstat(node->stdio_backup, &st) == 0 && dup2(node->stdio_backup,
+			STDIN_FILENO) == -1)
 	{
 		perror("Error restoring STDIN");
 		exit(EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:11:51 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 13:41:43 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 15:12:27 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ int	handle_redirect_append(t_redirect *node, bool is_parent)
 
 int	handle_redirect_in(t_redirect *node, bool is_parent)
 {
-	int	fd;
+	int			fd;
+	struct stat	file_stat;
 
 	if (is_parent)
 	{
@@ -76,17 +77,16 @@ int	handle_redirect_in(t_redirect *node, bool is_parent)
 		if (node->stdio_backup == -1)
 			return (perror("Error saving STDIN"), EXIT_FAILURE);
 	}
+	stat(node->filename, &file_stat);
+	if (S_ISDIR(file_stat.st_mode))
+		return (ft_putendl_fd("-: Is a directory", 2), 1);
 	fd = open(node->filename, O_RDONLY);
 	if (fd == -1)
-	{
-		perror("Error opening file for input");
-		return (EXIT_FAILURE);
-	}
+		return (perror("Error opening file for input"), EXIT_FAILURE);
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
-		perror("Error redirecting input");
 		close(fd);
-		return (EXIT_FAILURE);
+		return (perror("Error redirecting input"), EXIT_FAILURE);
 	}
 	if (close(fd) == -1)
 		return (perror("Error close"), EXIT_FAILURE);
