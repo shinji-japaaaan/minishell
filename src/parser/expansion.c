@@ -6,28 +6,29 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 13:33:47 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 16:30:00 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*get_env_str(char *str, size_t *len)
+char	*get_env_str(char *str)
 {
 	size_t	i;
 	char	*env_str;
+	size_t	len;
 
-	*len = 0;
+	len = 0;
 	i = 0;
 	while (str[i] && is_nc(str[i]))
 		i++;
-	*len = i;
+	len = i;
 	env_str = (char *)malloc(sizeof(char) * (i + 1));
 	if (!env_str)
 		return (NULL);
 	while (i--)
 		env_str[i] = str[i];
-	env_str[*len] = '\0';
+	env_str[len] = '\0';
 	return (env_str);
 }
 
@@ -66,7 +67,15 @@ char	*expand_env_variable(char *str, char *env_str, int last_status,
 
 	env_val = NULL;
 	if (ft_strcmp(env_str, "?") == 0)
+	{
 		env_val = ft_itoa(last_status);
+		if (env_val == NULL)
+		{
+			free(env_str);
+			free(str);
+			return (NULL);
+		}
+	}
 	else
 		env_val = ft_getenv(env_str, env);
 	if (!env_val)
@@ -80,7 +89,6 @@ char	*expand_env_variable(char *str, char *env_str, int last_status,
 char	*handle_dollar(char *str, size_t *i, int last_status, char **env)
 {
 	char	*env_str;
-	size_t	len;
 
 	env_str = NULL;
 	if (str[*i + 1] == '?')
@@ -93,11 +101,15 @@ char	*handle_dollar(char *str, size_t *i, int last_status, char **env)
 	}
 	else if (!(str[*i + 1] == '\0' || is_blank(str[*i + 1])))
 	{
-		env_str = get_env_str(&str[*i + 1], &len);
+		env_str = get_env_str(&str[*i + 1]);
+		if (env_str == NULL)
+			return (NULL);
 	}
 	if (env_str != NULL)
 	{
 		str = expand_env_variable(str, env_str, last_status, env);
+		if (str == NULL)
+			return (NULL);
 		*i = -1;
 	}
 	return (str);
@@ -108,8 +120,6 @@ char	*expansion(char *str, int last_status, char **env)
 	size_t	i;
 	int		state;
 
-	if (!str)
-		return (NULL);
 	i = 0;
 	state = 0;
 	while (str[i])
@@ -124,7 +134,11 @@ char	*expansion(char *str, int last_status, char **env)
 			state = 0;
 		else if (state != 1 && str[i] == '$' && (str[i + 1] == '?'
 				|| is_nc(str[i + 1])))
+		{
 			str = handle_dollar(str, &i, last_status, env);
+			if (str == NULL)
+				return (NULL);
+		}
 		i++;
 	}
 	return (str);

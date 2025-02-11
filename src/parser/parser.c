@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 13:11:14 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 16:26:23 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ t_linked_list	remove_quotes_from_tokens(t_linked_list *list_head)
 	return (*list_head);
 }
 
-void	expand_env_var_in_list(t_linked_list *list_head, int last_status,
-		char **env)
+t_linked_list	*expand_env_var_in_list(t_linked_list *list_head,
+		int last_status, char **env)
 {
 	t_linked_list	*ptr_temp;
 
@@ -38,8 +38,11 @@ void	expand_env_var_in_list(t_linked_list *list_head, int last_status,
 	while (ptr_temp)
 	{
 		ptr_temp->content = expansion(ptr_temp->content, last_status, env);
+		if (ptr_temp->content == NULL)
+			return (free_linked_list_all(&list_head), NULL);
 		ptr_temp = ptr_temp->next;
 	}
+	return (list_head);
 }
 
 void	change_emp_to_null(t_linked_list *list_head)
@@ -65,13 +68,12 @@ t_cmd_invoke	*parser(char *input, int last_status, char **env)
 
 	head = linked_list_init(NULL);
 	if (head == NULL)
-	{
-		ft_putendl_fd("Failed to initialize linked list.", 2);
-		return (NULL);
-	}
-	tokenize_input(head, input);
+		return (ft_putendl_fd("Failed to initialize linked list.", 2), NULL);
+	if (tokenize_input(head, input) == NULL)
+		return (ft_putendl_fd("Failed to tokenize.", 2), NULL);
 	assign_token_types(head);
-	expand_env_var_in_list(head, last_status, env);
+	if (expand_env_var_in_list(head, last_status, env) == NULL)
+		return (ft_putendl_fd("Failed to expansion.", 2), NULL);
 	change_emp_to_null(head);
 	remove_quotes_from_tokens(head);
 	if (parse_error_last_token(head) || parse_error_consecutive_pipe(head)

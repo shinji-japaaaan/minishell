@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:18:22 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 13:56:40 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 16:07:34 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ size_t	get_token_length(char *input)
 	return (len);
 }
 
-void	tokenize_input(t_linked_list *head, char *input)
+t_linked_list	*tokenize_input(t_linked_list *head, char *input)
 {
 	size_t	len;
 	char	*str_temp;
@@ -94,7 +94,11 @@ void	tokenize_input(t_linked_list *head, char *input)
 			break ;
 		len = get_token_length(input);
 		str_temp = strdup_len(input, len);
-		linked_list_append(head, str_temp);
+		if (str_temp == NULL)
+			return (free_linked_list_all(&head), NULL);
+		if (linked_list_append(head, str_temp) == NULL)
+			return (NULL);
 		input += len;
 	}
+	return (head);
 }

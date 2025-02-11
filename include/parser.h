@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 11:37:51 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 16:30:46 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct s_cmd_state
 
 // expansion.c
 bool						is_nc(char c);
-char						*get_env_str(char *str, size_t *strdup_len);
+char						*get_env_str(char *str);
 char						*replace_to_env_val(char *str, char *env_str,
 								int last_status);
 char						*expansion(char *str, int last_status, char **env);
@@ -87,13 +87,13 @@ char						*get_env_value(char *env_str, int last_status,
 
 // linked_list.c
 void						linked_list_free(t_cmd_invoke *list_head);
-void						linked_list_append(t_linked_list *list_head,
+t_linked_list				*linked_list_append(t_linked_list *list_head,
 								char *str);
 t_linked_list				*linked_list_init(t_linked_list *head);
 
 // parser.c
 t_linked_list				remove_quotes_from_tokens(t_linked_list *list_head);
-void						expand_env_var_in_list(t_linked_list *list_head,
+t_linked_list				*expand_env_var_in_list(t_linked_list *list_head,
 								int last_status, char **env);
 void						change_emp_to_null(t_linked_list *head);
 t_cmd_invoke				*parser(char *input, int last_status, char **env);
@@ -107,7 +107,7 @@ t_TokenType					get_token_type(char *str);
 void						assign_token_types(t_linked_list *list_head);
 int							is_delimeter(char *str);
 size_t						split_len(char *input);
-void						tokenize_input(t_linked_list *head, char *input);
+t_linked_list				*tokenize_input(t_linked_list *head, char *input);
 
 // utils.c
 char						*strdup_len(char *str, size_t n);
