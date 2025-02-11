@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 11:52:59 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 13:05:36 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ void	process_command_token(t_cmd_state *state)
 	if (state->is_filename == false)
 	{
 		if (state->list_ptr_temp->content != NULL)
+		{
 			state->cmd_ptr_temp->cmd_list[state->i] = state->list_ptr_temp->content;
-		state->i += 1;
+			state->i += 1;
+		}
 	}
 	else
 	{

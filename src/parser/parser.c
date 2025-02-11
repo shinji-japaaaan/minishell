@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:11:06 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 12:30:14 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 13:11:14 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ t_cmd_invoke	*parser(char *input, int last_status, char **env)
 	expand_env_var_in_list(head, last_status, env);
 	change_emp_to_null(head);
 	remove_quotes_from_tokens(head);
-	// printf("after quote %s aa\n", head->next->next->next->content);
 	if (parse_error_last_token(head) || parse_error_consecutive_pipe(head)
 		|| parse_error_consec_red(head))
 	{
@@ -84,7 +83,6 @@ t_cmd_invoke	*parser(char *input, int last_status, char **env)
 	}
 	cmd_head = cmd_invoke_init(NULL);
 	cmd_head = make_cmd(head, cmd_head);
-	// printf("after make cmd %s aa\n", cmd_head->next->next->cmd_list[0]);
 	free_linked_list_only_node(&head);
 	return (cmd_head);
 }
