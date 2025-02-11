@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 06:54:57 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 20:12:57 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/11 22:28:29 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,3 @@ void	reset_redirect(t_cmd_invoke *node)
 		reset_redirect_recursive(redirect_head->next);
 	}
 }
-
