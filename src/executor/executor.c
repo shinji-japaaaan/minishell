@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 12:48:47 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 14:04:28 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,11 @@ int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status,
 	{
 		if (temp_ptr->next != NULL)
 		{
-			pipe(temp_ptr->nxt_pipefd);
+			if (pipe(temp_ptr->nxt_pipefd) < 0)
+			{
+				perror("pipe failed");
+				break ;
+			}
 			temp_ptr->next->bef_pipefd = temp_ptr->nxt_pipefd;
 		}
 		temp_ptr->pid = fork();

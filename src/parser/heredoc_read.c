@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:36:42 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 13:37:34 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 14:04:14 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ void	heredoc_read(t_redirect *node, char *str_eof, char **env,
 	int	stdio_backup;
 
 	if (pipe(pipefd) < 0)
+	{
 		perror("heredoc pipe failed");
+		return ;
+	}
 	stdio_backup = dup(0);
 	heredoc_read_loop(str_eof, env, pipefd, last_status);
 	dup2(stdio_backup, 0);
