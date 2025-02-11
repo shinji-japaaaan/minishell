@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:29:31 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 17:13:39 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 17:49:46 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ t_cmd_state	*process_command_token(t_cmd_state *state)
 	{
 		if (state->list_ptr_temp->content != NULL)
 		{
-			state->cmd_ptr_temp->cmd_list[state->i] = state->list_ptr_temp->content;
+			state->cpt->cmd_list[state->i] = state->list_ptr_temp->content;
 			state->i += 1;
 		}
 	}
 	else
 	{
-		if (redirect_append(state->cmd_ptr_temp->redirect_head,
+		if (redirect_append(state->cpt->redirect_head,
 				state->list_ptr_temp->content, state->bef_token_type,
 				state->list_ptr_temp->is_quote) == NULL)
 			return (NULL);
@@ -76,8 +76,8 @@ t_cmd_state	*process_list_ptr_temp(t_cmd_state *state)
 {
 	if (state->is_pipe)
 	{
-		state->cmd_ptr_temp = init_new_cmd(state->cmd_ptr_temp);
-		if (state->cmd_ptr_temp == NULL)
+		state->cpt = init_new_cmd(state->cpt);
+		if (state->cpt == NULL)
 			return (NULL);
 		init_cmd_list(state);
 		state->is_pipe = false;
@@ -104,7 +104,7 @@ t_cmd_invoke	*make_cmd(t_linked_list *list_head, t_cmd_invoke *cmd_head)
 	t_cmd_state	state;
 
 	state.list_ptr_temp = list_head->next;
-	state.cmd_ptr_temp = cmd_head;
+	state.cpt = cmd_head;
 	state.is_filename = false;
 	state.bef_token_type = TYPE_COMMAND;
 	state.is_pipe = true;

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 17:42:30 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 17:58:41 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_cmd_invoke
 typedef struct s_cmd_state
 {
 	t_linked_list			*list_ptr_temp;
-	t_cmd_invoke			*cmd_ptr_temp;
+	t_cmd_invoke			*cpt;
 	bool					is_filename;
 	t_TokenType				bef_token_type;
 	bool					is_pipe;
@@ -94,11 +94,13 @@ t_linked_list				*linked_list_append(t_linked_list *list_head,
 t_linked_list				*linked_list_init(t_linked_list *head);
 
 // parser.c
-t_linked_list				*remove_quotes_from_tokens(t_linked_list *list_head);
+t_linked_list				*remove_quotes_tokens(t_linked_list *list_head);
 t_linked_list				*expand_env_var_in_list(t_linked_list *list_head,
 								int last_status, char **env);
 void						change_emp_to_null(t_linked_list *head);
 t_cmd_invoke				*parser(char *input, int last_status, char **env);
+t_linked_list				*parse_for_ll(t_linked_list *head, char *input,
+								int last_status, char **env);
 
 // remove_quote.cS
 size_t						remove_quote_get_newlen(char *str);

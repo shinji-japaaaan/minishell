@@ -41,6 +41,7 @@ SRCS = src/main.c \
 	   src/executor/free2.c \
 	   src/executor/redirection.c \
 	   src/executor/handle_redirect.c\
+	   src/executor/executor_handle_fd.c\
 
 
 # Object files (SRCSから.oファイルを生成)

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:53:20 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 16:48:50 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 17:50:12 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ size_t	ft_cmd_len(t_linked_list *node)
 void	init_cmd_list(t_cmd_state *state)
 {
 	state->cmd_len = ft_cmd_len(state->list_ptr_temp);
-	state->cmd_ptr_temp->cmd_list = (char **)malloc(sizeof(char *)
-			* (state->cmd_len + 1));
-	state->cmd_ptr_temp->cmd_list[state->cmd_len] = NULL;
+	state->cpt->cmd_list = (char **)malloc(sizeof(char *) * (state->cmd_len
+				+ 1));
+	state->cpt->cmd_list[state->cmd_len] = NULL;
 	state->i = 0;
 }
 

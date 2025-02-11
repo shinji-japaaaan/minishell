@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 15:17:44 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 18:21:52 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	parent_process_wait(t_cmd_invoke *head)
 {
 	int				status;
 	t_cmd_invoke	*temp_ptr;
-	int				ret_status;
 
 	temp_ptr = head->next;
 	while (temp_ptr)
@@ -32,51 +31,20 @@ int	parent_process_wait(t_cmd_invoke *head)
 	}
 	if (WIFSIGNALED(status))
 	{
-		ret_status = (WTERMSIG(status)) + 128;
-		if (ret_status == 130)
+		status = (WTERMSIG(status)) + 128;
+		if (status == 130)
 			write(1, "\n", 1);
-		else if (ret_status == 131)
+		else if (status == 131)
 			ft_putendl_fd("Quit (core dumped)", 2);
-		return (ret_status);
+		return (status);
 	}
 	return (WEXITSTATUS(status));
-}
-
-void	handle_command_execution(t_cmd_invoke *temp_ptr, bool is_first)
-{
-	if (is_first)
-	{
-		if (temp_ptr->next != NULL)
-			cmd_execute_first(temp_ptr);
-	}
-	else
-	{
-		if (temp_ptr->next == NULL)
-			cmd_execute_last(temp_ptr);
-		else
-			cmd_execute_middle(temp_ptr);
-	}
-}
-
-void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
-		char **env)
-{
-	int	status;
-
-	status = open_redirect(temp_ptr, false);
-	if (status != 0)
-	{
-		free_all(&head);
-		free_env(env);
-		exit(status);
-	}
 }
 
 void	process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env,
 		t_cmd_invoke *head)
 {
 	char	*path;
-
 
 	if (temp_ptr->cmd_list[0][0] == '\0')
 	{
@@ -111,7 +79,7 @@ void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 	}
 }
 
-void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first)
+t_cmd_invoke	*cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first)
 {
 	if (*is_first == false)
 	{
@@ -120,6 +88,7 @@ void	cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first)
 	}
 	heredoc_close(temp_ptr);
 	*is_first = false;
+	return (temp_ptr->next);
 }
 
 int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status,
@@ -131,20 +100,14 @@ int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status,
 	heredoc_main(head, env, last_status);
 	if (g_signal == SIGINT)
 		return (*last_status);
+	set_sig_during_exec();
 	is_first = true;
 	temp_ptr = head->next;
-	set_sig_during_exec();
 	while (temp_ptr)
 	{
 		if (temp_ptr->next != NULL)
-		{
-			if (pipe(temp_ptr->nxt_pipefd) < 0)
-			{
-				perror("pipe failed");
+			if (cmd_pipe_connect(temp_ptr) == NULL)
 				break ;
-			}
-			temp_ptr->next->bef_pipefd = temp_ptr->nxt_pipefd;
-		}
 		temp_ptr->pid = fork();
 		if (temp_ptr->pid == 0)
 		{
@@ -153,8 +116,7 @@ int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status,
 			set_sig_handler_child();
 			cmd_execute_child(head, temp_ptr, is_first, env);
 		}
-		cmd_execute_parent(temp_ptr, &is_first);
-		temp_ptr = temp_ptr->next;
+		temp_ptr = cmd_execute_parent(temp_ptr, &is_first);
 	}
 	return (parent_process_wait(head));
 }
