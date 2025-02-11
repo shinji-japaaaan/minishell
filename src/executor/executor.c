@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 10:12:32 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 12:48:47 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,11 @@ void	process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env,
 {
 	char	*path;
 
+	if (temp_ptr->cmd_list[0][0] == '\0')
+	{
+		ft_putendl_fd("'' command not found", 2);
+		fext_incmdpath(NULL, head, env, NON_COMMAND);
+	}
 	path = get_path_main(temp_ptr, env, head);
 	execve(path, temp_ptr->cmd_list, env);
 }
@@ -88,6 +93,12 @@ void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 
 	handle_command_execution(temp_ptr, is_first);
 	handle_open_redirect(head, temp_ptr, env);
+	if (temp_ptr->cmd_list[0] == NULL)
+	{
+		free_all(&head);
+		free_env(env);
+		exit(0);
+	}
 	if (!is_internal_commands(temp_ptr->cmd_list[0]))
 		process_cmd_invoke(temp_ptr, env, head);
 	else

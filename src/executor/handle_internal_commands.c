@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_internal_commands.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 14:09:29 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/10 20:09:37 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:06:49 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	handle_internal_commands(t_cmd_invoke *parsed_list, char ***env)
 
 bool	is_internal_commands(char *command)
 {
+	if (command == NULL)
+		return (false);
 	if (ft_strcmp(command, "cd") == 0)
 		return (true);
 	else if (ft_strcmp(command, "exit") == 0)

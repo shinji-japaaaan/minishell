@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:53:20 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 13:24:37 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 12:22:31 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ size_t	ft_cmd_len(t_linked_list *node)
 		if (is_filename)
 			is_filename = false;
 		else if (node->token_type == TYPE_COMMAND && is_filename == false)
-			cmd_len += 1;
+		{
+			if (node->content != NULL)
+				cmd_len += 1;
+		}
 		else
 			is_filename = true;
 		node = node->next;

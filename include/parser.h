@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 09:12:03 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 14:03:07 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 11:37:51 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ t_linked_list				*linked_list_init(t_linked_list *head);
 t_linked_list				remove_quotes_from_tokens(t_linked_list *list_head);
 void						expand_env_var_in_list(t_linked_list *list_head,
 								int last_status, char **env);
+void						change_emp_to_null(t_linked_list *head);
 t_cmd_invoke				*parser(char *input, int last_status, char **env);
 
 // remove_quote.cS
