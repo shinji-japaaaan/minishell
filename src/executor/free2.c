@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 23:27:30 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 13:11:58 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 09:49:00 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,27 @@ void	free_redirect(t_redirect **redirect_head)
 	*redirect_head = NULL;
 }
 
+void	close_fd_in_child(t_cmd_invoke *node)
+{
+	t_redirect	*redirect_head;
+	t_redirect	*temp_ptr;
+	struct stat	st;
+
+	redirect_head = node->redirect_head;
+	temp_ptr = redirect_head->next;
+	while (temp_ptr)
+	{
+		if (fstat(temp_ptr->stdio_backup, &st) == 0)
+		{
+			close(temp_ptr->stdio_backup);
+		}
+		temp_ptr = temp_ptr->next;
+	}
+}
+
 void	free_cmd_node(t_cmd_invoke *node)
 {
+	close_fd_in_child(node);
 	free_redirect(&(node->redirect_head));
 	free2dim(&(node->cmd_list));
 	free(node);
@@ -50,33 +69,12 @@ void	free_all(t_cmd_invoke **cmd_head)
 	*cmd_head = NULL;
 }
 
-void	free_linked_list_only_node(t_linked_list **head_list)
+void	fext_incmdpath(char **dir_array, t_cmd_invoke *head, char **env,
+		int exit_status)
 {
-	t_linked_list	*nxt_ptr;
-	t_linked_list	*now_ptr;
-
-	now_ptr = *head_list;
-	while (now_ptr)
-	{
-		nxt_ptr = now_ptr->next;
-		free(now_ptr);
-		now_ptr = nxt_ptr;
-	}
-	*head_list = NULL;
-}
-
-void	free_linked_list_all(t_linked_list **head_list)
-{
-	t_linked_list	*nxt_ptr;
-	t_linked_list	*now_ptr;
-
-	now_ptr = *head_list;
-	while (now_ptr)
-	{
-		nxt_ptr = now_ptr->next;
-		free(now_ptr->content);
-		free(now_ptr);
-		now_ptr = nxt_ptr;
-	}
-	*head_list = NULL;
+	(void)head;
+	free2dim(&dir_array);
+	free_all(&head);
+	free_env(env);
+	exit(exit_status);
 }

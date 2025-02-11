@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 22:35:50 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 09:23:13 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,6 @@ int	parent_process_wait(t_cmd_invoke *head)
 	return (WEXITSTATUS(status));
 }
 
-void	close_fd_in_child(t_cmd_invoke *node)
-{
-	t_redirect	*redirect_head;
-	t_redirect	*temp_ptr;
-
-	redirect_head = node->redirect_head;
-	temp_ptr = redirect_head->next;
-	while (temp_ptr)
-	{
-		close(temp_ptr->stdio_backup);
-		temp_ptr = temp_ptr->next;
-	}
-}
-
 void	handle_command_execution(t_cmd_invoke *temp_ptr, bool is_first)
 {
 	if (is_first)
@@ -80,18 +66,19 @@ void	handle_open_redirect(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 	status = open_redirect(temp_ptr, false);
 	if (status != 0)
 	{
-		close_fd_in_child(temp_ptr);
+		// close_fd_in_child(temp_ptr);
 		free_all(&head);
 		free_env(env);
 		exit(status);
 	}
 }
 
-void	process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env)
+void	process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env,
+		t_cmd_invoke *head)
 {
 	char	*path;
 
-	path = get_path_main(temp_ptr, env);
+	path = get_path_main(temp_ptr, env, head);
 	execve(path, temp_ptr->cmd_list, env);
 }
 
@@ -103,11 +90,11 @@ void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 	handle_command_execution(temp_ptr, is_first);
 	handle_open_redirect(head, temp_ptr, env);
 	if (!is_internal_commands(temp_ptr->cmd_list[0]))
-		process_cmd_invoke(temp_ptr, env);
+		process_cmd_invoke(temp_ptr, env, head);
 	else
 	{
 		status = handle_internal_commands(temp_ptr, &env);
-		close_fd_in_child(temp_ptr);
+		// close_fd_in_child(temp_ptr);
 		free_all(&head);
 		free_env(env);
 		exit(status);

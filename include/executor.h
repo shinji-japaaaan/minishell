@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/02/09 22:24:30 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/11 09:33:30 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,15 @@ void	free_cmd_node(t_cmd_invoke *node);
 void	free_all(t_cmd_invoke **cmd_head);
 void	free_linked_list_only_node(t_linked_list **head_list);
 void	free_linked_list_all(t_linked_list **head_list);
+void	fext_incmdpath(char **dir_array, t_cmd_invoke *head, char **env,
+			int exit_status);
 
 // get_path.c
-char	*get_path_cmd(char *path_env, char **cmd);
-char	*get_path_cmd_part(char **dir_array, char **cmd, char *tmp_str);
-char	*get_path_cmd_not_find_path(char **cmd);
-char	*get_path_main(t_cmd_invoke *node, char **env);
+char	*get_path_cmd(char *path_env, char **cmd, t_cmd_invoke *head,
+			char **env);
+char	*get_path_cmd_part(char **dir_array, char **cmd, size_t i);
+char	*get_path_cmd_not_find_path(char **cmd, t_cmd_invoke *head, char **env);
+char	*get_path_main(t_cmd_invoke *node, char **env, t_cmd_invoke *head);
 
 // get_path_utils.c
 int		is_access(char *full_path);
