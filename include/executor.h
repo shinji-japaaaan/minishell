@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/02/20 21:30:01 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/21 00:25:00 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,17 @@
 // executor.c
 int				parent_process_wait(t_cmd_invoke *head);
 void			close_fd_in_child(t_cmd_invoke *node);
-void			cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
-					bool is_first, char **env);
 t_cmd_invoke	*cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first);
 int				cmd_execute_main(t_cmd_invoke *head, char **env,
 					int *last_status, t_History *history);
+void			process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env,
+					t_cmd_invoke *head);
+
+// executor_child.c
+void			cmd_execute_child1(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
+					bool is_first, char **env);
+void			cmd_execute_child2(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
+					int last_status, char **env);
 
 // executor_handle_fd.c
 void			handle_command_execution(t_cmd_invoke *temp_ptr, bool is_first);

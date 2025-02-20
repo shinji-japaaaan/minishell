@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:43 by karai             #+#    #+#             */
-/*   Updated: 2025/02/20 21:57:56 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/21 00:17:55 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 
 # include "parser.h"
 
-int		handle_internal_commands(t_cmd_invoke *parsed_list, char ***env);
+int		handle_internal_commands(t_cmd_invoke *parsed_list, char ***env,
+			int last_status);
 bool	is_internal_commands(char *command);
 
 int		change_directory(char *path, char **args, char ***env);
-void	exit_shell(char **args);
+void	exit_shell(char **args, int exit_code);
 bool	is_within_long(char *np);
 void	echo_command(char **args);
 int		print_working_directory(void);
@@ -27,7 +28,6 @@ void	print_environment(char **env);
 int		export_variable(char ***env, char *args);
 int		unset_variable(char ***env, char *args);
 void	execute_command(t_linked_list *parsed_list);
-int		handle_internal_commands(t_cmd_invoke *parsed_list, char ***env);
 bool	is_internal_commands(char *command);
 
 int		print_and_return(char **env);

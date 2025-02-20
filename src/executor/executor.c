@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 08:25:07 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 18:21:52 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/21 00:11:56 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,30 +55,6 @@ void	process_cmd_invoke(t_cmd_invoke *temp_ptr, char **env,
 	execve(path, temp_ptr->cmd_list, env);
 }
 
-void	cmd_execute_child(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
-		bool is_first, char **env)
-{
-	int	status;
-
-	handle_command_execution(temp_ptr, is_first);
-	handle_open_redirect(head, temp_ptr, env);
-	if (temp_ptr->cmd_list[0] == NULL)
-	{
-		free_all(&head);
-		free_env(env);
-		exit(0);
-	}
-	if (!is_internal_commands(temp_ptr->cmd_list[0]))
-		process_cmd_invoke(temp_ptr, env, head);
-	else
-	{
-		status = handle_internal_commands(temp_ptr, &env);
-		free_all(&head);
-		free_env(env);
-		exit(status);
-	}
-}
-
 t_cmd_invoke	*cmd_execute_parent(t_cmd_invoke *temp_ptr, bool *is_first)
 {
 	if (*is_first == false)
@@ -112,9 +88,8 @@ int	cmd_execute_main(t_cmd_invoke *head, char **env, int *last_status,
 		if (temp_ptr->pid == 0)
 		{
 			free_history(history);
-			heredoc_close_nu(head, temp_ptr);
-			set_sig_handler_child();
-			cmd_execute_child(head, temp_ptr, is_first, env);
+			cmd_execute_child1(head, temp_ptr, is_first, env);
+			cmd_execute_child2(head, temp_ptr, *last_status, env);
 		}
 		temp_ptr = cmd_execute_parent(temp_ptr, &is_first);
 	}

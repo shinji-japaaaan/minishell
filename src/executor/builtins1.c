@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/20 22:01:14 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/21 00:46:32 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,8 @@ bool	is_within_long(char *np)
 	return (true);
 }
 
-void	exit_shell(char **args)
+void	exit_shell(char **args, int exit_code)
 {
-	int	exit_code;
-
-	exit_code = 0;
 	if (args[1] && args[2])
 	{
 		put_str(STDERR_FILENO, "exit: too many arguments\n");

@@ -36,6 +36,7 @@ SRCS = src/main.c \
 	   src/executor/executor.c \
 	   src/executor/cmd_execute.c \
 	   src/executor/executor_utils.c \
+	   src/executor/executor_child.c\
 	   src/executor/get_path.c \
 	   src/executor/get_path_utils.c \
 	   src/executor/free1.c \

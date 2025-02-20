@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/20 21:08:27 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/21 00:37:17 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,20 @@ void	free_history(t_History *history)
 void	execute_shell_command(t_cmd_invoke *parsed_list, int *last_status,
 		char ***env, t_History *history)
 {
+	int	red_status;
+
 	if (is_internal_commands(parsed_list->next->cmd_list[0])
 		&& parsed_list->next->next == NULL)
 	{
 		heredoc_main(parsed_list, *env, last_status);
 		if (g_signal != SIGINT)
 		{
-			*last_status = open_redirect(parsed_list->next, true);
-			if (*last_status == 0)
-				*last_status = handle_internal_commands(parsed_list->next, env);
+			red_status = open_redirect(parsed_list->next, true);
+			if (red_status == 0)
+				*last_status = handle_internal_commands(parsed_list->next, env,
+						*last_status);
+			else
+				*last_status = red_status;
 			reset_redirect(parsed_list->next);
 			heredoc_close(parsed_list->next);
 		}
