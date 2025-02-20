@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/21 00:37:17 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/21 01:16:19 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,14 @@ void	handle_input(char *input, t_History *history, int *last_status,
 void	handle_user_input(char *input, t_History *history, int *last_status,
 		char ***env)
 {
-	if (*input == '\0')
+	if (g_signal == SIGINT)
+		*last_status = 130;
+	if (*input == '\0' || is_empty_line(input))
 	{
 		free(input);
 		return ;
 	}
-	if (g_signal == SIGINT)
-		*last_status = 130;
+	g_signal = 0;
 	handle_input(input, history, last_status, env);
 }
 
@@ -115,11 +116,6 @@ void	process_shell(char ***env)
 		input = readline("minishell> ");
 		if (!input)
 			break ;
-		if (is_empty_line(input))
-			continue ;
-		if (g_signal == SIGINT)
-			last_status = 130;
-		g_signal = 0;
 		handle_user_input(input, history, &last_status, env);
 	}
 	save_history_to_file(HISTORY_FILE, history);
