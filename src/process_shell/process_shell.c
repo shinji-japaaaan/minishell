@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 15:56:05 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/20 21:08:27 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ void	process_shell(char ***env)
 		input = readline("minishell> ");
 		if (!input)
 			break ;
+		if (is_empty_line(input))
+			continue ;
 		if (g_signal == SIGINT)
 			last_status = 130;
 		g_signal = 0;

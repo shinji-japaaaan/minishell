@@ -12,6 +12,7 @@ SRCS = src/main.c \
 	   src/process_shell/signal_exec.c \
 	   src/process_shell/signal_heredoc.c \
 	   src/process_shell/history.c \
+	   src/process_shell/process_shell_utils.c\
        src/parser/tokenize.c \
        src/parser/parser.c \
        src/parser/expansion.c \

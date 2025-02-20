@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:43 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 21:48:58 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/20 21:57:56 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ bool	is_internal_commands(char *command);
 
 int		change_directory(char *path, char **args, char ***env);
 void	exit_shell(char **args);
+bool	is_within_long(char *np);
 void	echo_command(char **args);
 int		print_working_directory(void);
 void	print_environment(char **env);

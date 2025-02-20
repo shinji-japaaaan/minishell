@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 21:47:40 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/20 22:01:14 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,35 @@ int	change_directory(char *path, char **args, char ***env)
 	return (0);
 }
 
+bool	is_within_long(char *np)
+{
+	long long	a;
+	int			pm;
+
+	a = 0;
+	pm = 1;
+	while (*np == '\f' || *np == '\n' || *np == '\r' || *np == '\t'
+		|| *np == '\v' || *np == ' ')
+		np += 1;
+	if (*np == '-')
+		pm = -1;
+	if (*np == '-' || *np == '+')
+		np += 1;
+	while (*np != '\0')
+	{
+		if (!(*np <= '9' && *np >= '0'))
+			return (false);
+		if (pm == 1 && (a > LLONG_MAX / 10 || ((LLONG_MAX - a * 10) < (*np
+						- '0'))))
+			return (false);
+		if (a != 0 && pm == -1 && ((a > -1 * (LLONG_MIN / 10)) || (-1
+					* (LLONG_MIN + a * 10)) < (*np - '0')))
+			return (false);
+		a = a * 10 + (*np++ - '0');
+	}
+	return (true);
+}
+
 void	exit_shell(char **args)
 {
 	int	exit_code;
@@ -47,7 +76,7 @@ void	exit_shell(char **args)
 	}
 	if (args[1])
 	{
-		if (!is_numeric(args[1]))
+		if (!is_numeric(args[1]) || !is_within_long(args[1]))
 		{
 			put_str(STDERR_FILENO, "exit: ");
 			put_str(STDERR_FILENO, args[1]);

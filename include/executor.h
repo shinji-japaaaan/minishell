@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:20:18 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 18:22:13 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/20 21:30:01 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ char			*get_path_cmd_part(char **dir_array, char **cmd, size_t i);
 char			*get_path_cmd_not_find_path(char **cmd, t_cmd_invoke *head,
 					char **env);
 char			*get_path_main(t_cmd_invoke *node, char **env,
+					t_cmd_invoke *head);
+void			is_directory(t_cmd_invoke *node, char **env,
 					t_cmd_invoke *head);
 
 // get_path_utils.c

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 21:09:45 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 15:50:11 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/20 21:40:28 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,26 +79,37 @@ char	*get_path_cmd_not_find_path(char **cmd, t_cmd_invoke *head, char **env)
 	return (NULL);
 }
 
+void	is_directory(t_cmd_invoke *node, char **env, t_cmd_invoke *head)
+{
+	struct stat	file_stat;
+
+	stat(node->cmd_list[0], &file_stat);
+	if (S_ISDIR(file_stat.st_mode))
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(node->cmd_list[0], 2);
+		ft_putendl_fd(" Is a directory", 2);
+		fext_incmdpath(NULL, head, env, NO_PERMISSION);
+	}
+}
+
 char	*get_path_main(t_cmd_invoke *node, char **env, t_cmd_invoke *head)
 {
-	char		*path_env;
-	struct stat	file_stat;
+	char	*path_env;
 
 	if (is_full_relative_path(node->cmd_list[0]) == false)
 	{
 		path_env = ft_getenv("PATH", env);
+		if (path_env == NULL)
+		{
+			is_directory(node, env, head);
+			return (get_path_cmd_not_find_path(node->cmd_list, head, env));
+		}
 		return (get_path_cmd(path_env, node->cmd_list, head, env));
 	}
 	else
 	{
-		stat(node->cmd_list[0], &file_stat);
-		if (S_ISDIR(file_stat.st_mode))
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(node->cmd_list[0], 2);
-			ft_putendl_fd(" Is a directory", 2);
-			fext_incmdpath(NULL, head, env, NO_PERMISSION);
-		}
+		is_directory(node, env, head);
 		return (get_path_cmd_not_find_path(node->cmd_list, head, env));
 	}
 }
