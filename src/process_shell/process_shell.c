@@ -3,35 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   process_shell.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/21 01:16:19 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/22 06:22:26 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 int		g_signal = 0;
-
-void	free_history(t_History *history)
-{
-	int	i;
-
-	if (!history)
-		return ;
-	if (history->entries)
-	{
-		i = 0;
-		while (i < history->count)
-		{
-			free(history->entries[i]);
-			i++;
-		}
-		free(history->entries);
-	}
-	free(history);
-}
 
 void	execute_shell_command(t_cmd_invoke *parsed_list, int *last_status,
 		char ***env, t_History *history)
@@ -100,14 +81,30 @@ void	handle_user_input(char *input, t_History *history, int *last_status,
 	handle_input(input, history, last_status, env);
 }
 
+char	*get_history_path(char **env)
+{
+	char	*home;
+	char	*history_path;
+
+	home = ft_getenv("HOME", env);
+	if (!home)
+		return (ft_strdup(".minishell_history"));
+	history_path = ft_strjoin(home, "/.minishell_history");
+	free(home);
+	return (history_path);
+}
+
 void	process_shell(char ***env)
 {
 	char		*input;
 	t_History	*history;
+	char		*history_path;
 	int			last_status;
 
 	history = init_history(MAX_HISTORY);
-	load_history_from_file(HISTORY_FILE, history);
+	history_path = get_history_path(*env);
+	if (history_path)
+		load_history_from_file(history_path, history);
 	last_status = 0;
 	while (1)
 	{
@@ -118,7 +115,12 @@ void	process_shell(char ***env)
 			break ;
 		handle_user_input(input, history, &last_status, env);
 	}
-	save_history_to_file(HISTORY_FILE, history);
+	if (history_path)
+		save_history_to_file(history_path, history);
+	free(history_path);
 	free_history(history);
 	rl_clear_history();
 }
+
+
+
