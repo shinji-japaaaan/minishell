@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:10:32 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/22 06:22:59 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/22 07:15:35 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_History
 	char	**entries;
 	int		count;
 	int		max_size;
+	char	*history_path;
 }			t_History;
 
 t_History	*init_history(int max_size);

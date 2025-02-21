@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_shell.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/22 06:22:26 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/22 07:23:15 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,12 @@ void	process_shell(char ***env)
 {
 	char		*input;
 	t_History	*history;
-	char		*history_path;
 	int			last_status;
 
 	history = init_history(MAX_HISTORY);
-	history_path = get_history_path(*env);
-	if (history_path)
-		load_history_from_file(history_path, history);
+	history->history_path = get_history_path(*env);
+	if (history->history_path)
+		load_history_from_file(history->history_path, history);
 	last_status = 0;
 	while (1)
 	{
@@ -115,12 +114,9 @@ void	process_shell(char ***env)
 			break ;
 		handle_user_input(input, history, &last_status, env);
 	}
-	if (history_path)
-		save_history_to_file(history_path, history);
-	free(history_path);
+	printf("%s\n", history->history_path);
+	if (history->history_path)
+		save_history_to_file(history->history_path, history);
 	free_history(history);
 	rl_clear_history();
 }
-
-
-
