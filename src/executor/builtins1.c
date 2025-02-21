@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/21 00:46:32 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/21 23:09:58 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,34 +83,6 @@ void	exit_shell(char **args, int exit_code)
 		exit_code = ft_atoi(args[1]);
 	}
 	exit(exit_code);
-}
-
-void	echo_command(char **args)
-{
-	int	no_newline;
-	int	i;
-
-	no_newline = 0;
-	i = 1;
-	if (!args || !args[0])
-		return ;
-	while (args[i] && ft_strncmp(args[i], "-n", 2) == 0
-		&& ft_strlen(args[i]) == 2)
-	{
-		no_newline = 1;
-		i++;
-	}
-	while (args[i])
-	{
-		printf("%s", args[i]);
-		if (args[i + 1])
-		{
-			printf(" ");
-		}
-		i++;
-	}
-	if (!no_newline)
-		printf("\n");
 }
 
 int	print_working_directory(void)
