@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_cd_utils1.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:59:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 10:14:11 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/23 14:09:49 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	add_new_env_var(char ***env, char *new_var, int i)
 	return (0);
 }
 
-int	update_old_pwd(char ***env, const char *old_pwd)
+int	update_old_pwd(char ***env, char *old_pwd)
 {
 	size_t	len;
 	char	*new_old_pwd;
@@ -62,10 +62,12 @@ int	update_old_pwd(char ***env, const char *old_pwd)
 	}
 	ft_strcpy(new_old_pwd, "OLDPWD=");
 	ft_strcat(new_old_pwd, old_pwd);
+	free(old_pwd);
 	while ((*env)[i] != NULL)
 	{
 		if (ft_strncmp((*env)[i], "OLDPWD=", 7) == 0)
 		{
+			free((*env)[i]);
 			(*env)[i] = new_old_pwd;
 			return (0);
 		}
@@ -83,6 +85,7 @@ int	update_or_add_env_var(char ***env, char *new_env_var)
 	{
 		if (ft_strncmp((*env)[i], "PWD=", 4) == 0)
 		{
+			free((*env)[i]);
 			(*env)[i] = new_env_var;
 			return (0);
 		}

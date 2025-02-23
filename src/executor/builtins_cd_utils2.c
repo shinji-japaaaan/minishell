@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_cd_utils2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:59:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/11 22:07:23 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/02/23 14:03:52 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,15 @@ int	print_error(const char *msg)
 char	*resolve_path(char *path, char ***env)
 {
 	if (!path || ft_strcmp(path, "~") == 0)
+	{
+		free(path);
 		return (ft_getenv("HOME", *env));
+	}
 	if (ft_strcmp(path, "$PWD") == 0)
+	{
+		free(path);
 		return (ft_getenv("PWD", *env));
+	}
 	return (path);
 }
 
