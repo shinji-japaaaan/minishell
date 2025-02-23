@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/23 14:31:28 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/23 16:50:43 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ void	execute_shell_command(t_cmd_invoke *parsed_list, int *last_status,
 		{
 			red_status = open_redirect(parsed_list->next, true);
 			if (red_status == 0)
-				*last_status = handle_internal_commands(parsed_list->next, env,
-						*last_status);
+			{
+				exit_parent(parsed_list, last_status, env, history);
+				*last_status = handle_internal_commands(parsed_list->next, env);
+			}
 			else
 				*last_status = red_status;
 			reset_redirect(parsed_list->next);
@@ -81,12 +83,13 @@ void	handle_user_input(char *input, t_History *history, int *last_status,
 	handle_input(input, history, last_status, env);
 }
 
-char	*get_history_path(char **env)
+char	*get_history_path(void)
 {
 	char	*home;
 	char	*history_path;
+	char	cwd[1024];
 
-	home = ft_getenv("HOME", env);
+	home = ft_strdup(getcwd(cwd, sizeof(cwd)));
 	if (!home)
 		return (ft_strdup(".minishell_history"));
 	history_path = ft_strjoin(home, "/.minishell_history");
@@ -101,7 +104,7 @@ void	process_shell(char ***env)
 	int			last_status;
 
 	history = init_history(MAX_HISTORY);
-	history->history_path = get_history_path(*env);
+	history->history_path = get_history_path();
 	if (history->history_path)
 		load_history_from_file(history->history_path, history);
 	last_status = 0;

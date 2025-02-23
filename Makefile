@@ -31,6 +31,7 @@ SRCS = src/main.c \
 	   src/executor/builtins1.c \
 	   src/executor/builtins2.c \
 	   src/executor/builtins3_echo.c\
+	   src/executor/builtins4_exit.c\
 	   src/executor/builtins_utils.c \
 	   src/executor/builtins_cd_utils1.c \
 	   src/executor/builtins_cd_utils2.c \

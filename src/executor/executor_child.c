@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_child.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 00:12:00 by karai             #+#    #+#             */
-/*   Updated: 2025/02/21 00:21:38 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/23 16:50:52 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	cmd_execute_child2(t_cmd_invoke *head, t_cmd_invoke *temp_ptr,
 		process_cmd_invoke(temp_ptr, env, head);
 	else
 	{
-		status = handle_internal_commands(temp_ptr, &env, last_status);
+		exit_child(head, temp_ptr, &env, last_status);
+		status = handle_internal_commands(temp_ptr, &env);
 		free_all(&head);
 		free_env(env);
 		exit(status);

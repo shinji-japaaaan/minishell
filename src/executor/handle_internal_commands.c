@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   handle_internal_commands.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 14:09:29 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/21 00:12:42 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/23 16:50:29 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	handle_internal_commands(t_cmd_invoke *parsed_list, char ***env,
-		int last_status)
+int	handle_internal_commands(t_cmd_invoke *parsed_list, char ***env)
 {
 	char	*cmd;
 	char	**args;
@@ -24,8 +23,6 @@ int	handle_internal_commands(t_cmd_invoke *parsed_list, char ***env,
 	result = 0;
 	if (ft_strcmp(cmd, "cd") == 0)
 		result = change_directory(args[1], args, env);
-	else if (ft_strcmp(cmd, "exit") == 0)
-		exit_shell(args, last_status);
 	else if (ft_strcmp(cmd, "echo") == 0)
 		echo_command(args);
 	else if (ft_strcmp(cmd, "pwd") == 0)

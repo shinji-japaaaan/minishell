@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 08:00:06 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/20 21:05:35 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/23 16:19:29 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,8 @@ void		sig_during_heredoc(int signum);
 void		execute_shell_command(t_cmd_invoke *parsed_list, int *last_status,
 				char ***env, t_History *history);
 bool		is_empty_line(char *input);
+
+// process_shell.c
+char		*get_history_path(void);
 
 #endif /* MINISHELL_H */

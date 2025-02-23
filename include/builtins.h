@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:43 by karai             #+#    #+#             */
-/*   Updated: 2025/02/21 23:09:53 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/23 16:53:22 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
+# include "history.h"
 # include "parser.h"
 
-int		handle_internal_commands(t_cmd_invoke *parsed_list, char ***env,
-			int last_status);
+int		handle_internal_commands(t_cmd_invoke *parsed_list, char ***env);
 bool	is_internal_commands(char *command);
 
 int		change_directory(char *path, char **args, char ***env);
@@ -46,5 +46,13 @@ int		update_pwd_env_var(char ***env, const char *new_pwd);
 char	*resolve_path(char *path, char ***env);
 int		print_error(const char *msg);
 char	*ft_strcat(char *dest, const char *src);
+
+// builtins4_exit.c
+void	exit_parent(t_cmd_invoke *parsed_list, int *last_status, char ***env,
+			t_History *history);
+void	exit_child(t_cmd_invoke *parsed_list, t_cmd_invoke *temp_ptr,
+			char ***env, int last_status);
+void	free_in_exitcmd(t_cmd_invoke *parsed_list, char ***env,
+			t_History *history, bool is_parent);
 
 #endif
