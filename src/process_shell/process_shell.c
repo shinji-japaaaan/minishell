@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_shell.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:10:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/22 07:23:15 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/23 14:31:28 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ void	handle_input(char *input, t_History *history, int *last_status,
 		*last_status = 2;
 		return (free(input));
 	}
+	free(input);
 	execute_shell_command(parsed_list, last_status, env, history);
 	free_all(&parsed_list);
-	free(input);
 }
 
 void	handle_user_input(char *input, t_History *history, int *last_status,
@@ -114,7 +114,6 @@ void	process_shell(char ***env)
 			break ;
 		handle_user_input(input, history, &last_status, env);
 	}
-	printf("%s\n", history->history_path);
 	if (history->history_path)
 		save_history_to_file(history->history_path, history);
 	free_history(history);
