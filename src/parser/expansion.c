@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:37:11 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 16:30:00 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/24 00:17:53 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,11 @@ char	*expand_env_variable(char *str, char *env_str, int last_status,
 	else
 		env_val = ft_getenv(env_str, env);
 	if (!env_val)
-		env_val = "";
+		env_val = ft_strdup("");
 	new_str = replace_env(str, env_str, env_val);
 	free(env_str);
 	free(str);
+	free(env_val);
 	return (new_str);
 }
 

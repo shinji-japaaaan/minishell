@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:43 by karai             #+#    #+#             */
-/*   Updated: 2025/02/23 16:53:22 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/24 00:13:45 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int		handle_invalid_identifier(char *arg);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		handle_existing_variable(char ***env, char *arg, int i);
 int		add_new_variable(char ***env, char *arg, int i);
-void	*ft_realloc(void *ptr, size_t size);
+void	*ft_realloc(void *ptr, size_t new_size, size_t old_size);
 int		is_numeric(char *str);
 void	put_str(int fd, char *str);
 void	free_env(char **env);

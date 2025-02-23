@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 13:22:15 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/24 00:17:48 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,21 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-void	*ft_realloc(void *ptr, size_t size)
+void	*ft_realloc(void *ptr, size_t new_size, size_t old_size)
 {
 	void	*new_ptr;
 
-	if (size == 0)
+	if (new_size == 0)
 	{
 		free(ptr);
 		return (NULL);
 	}
 	if (!ptr)
-		return (malloc(size));
-	new_ptr = malloc(size);
+		return (malloc(new_size));
+	new_ptr = malloc(new_size);
 	if (!new_ptr)
 		return (NULL);
-	ft_memcpy(new_ptr, ptr, size);
+	ft_memcpy(new_ptr, ptr, old_size);
 	free(ptr);
 	return (new_ptr);
 }

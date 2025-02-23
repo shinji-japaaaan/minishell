@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/23 14:19:30 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/24 00:38:27 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	change_directory(char *path, char **args, char ***env)
 		perror("cd failed");
 		return (1);
 	}
-	free(path);
+	if (args[1] == NULL || ft_strcmp(args[1], "~") == 0)
+		free(path);
 	current_dir = getcwd(NULL, 0);
 	if (!current_dir)
 		return (1);

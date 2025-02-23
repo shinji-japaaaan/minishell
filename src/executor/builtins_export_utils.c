@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 10:40:24 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/09 13:19:34 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/24 00:16:18 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int	add_new_variable(char ***env, char *arg, int i)
 {
 	char	**new_env;
 
-	new_env = ft_realloc(*env, sizeof(char *) * (i + 2));
+	new_env = ft_realloc(*env, sizeof(char *) * (i + 2), (i + 1)
+			* sizeof(char *));
 	if (!new_env)
 	{
 		perror("realloc failed");

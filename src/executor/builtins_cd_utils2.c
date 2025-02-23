@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_cd_utils2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:59:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/23 14:03:52 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/24 00:43:34 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,7 @@ char	*resolve_path(char *path, char ***env)
 {
 	if (!path || ft_strcmp(path, "~") == 0)
 	{
-		free(path);
 		return (ft_getenv("HOME", *env));
-	}
-	if (ft_strcmp(path, "$PWD") == 0)
-	{
-		free(path);
-		return (ft_getenv("PWD", *env));
 	}
 	return (path);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_cd_utils1.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
+/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:59:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/23 14:25:24 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/24 00:16:01 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	add_new_env_var(char ***env, char *new_var, int i)
 {
 	char	**new_environ;
 
-	new_environ = ft_realloc(*env, (i + 2) * sizeof(char *));
+	new_environ = ft_realloc(*env, (i + 2) * sizeof(char *), (i + 1)
+			* sizeof(char *));
 	if (!new_environ)
 	{
 		perror("realloc failed");
