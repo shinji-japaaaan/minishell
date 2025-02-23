@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:11:51 by karai             #+#    #+#             */
-/*   Updated: 2025/02/11 15:12:27 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/23 14:26:21 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int	handle_redirect(t_TokenType token_type, t_redirect *node, bool is_parent)
 {
 	int	status;
 
+	status = 0;
 	if (node->filename == NULL)
 	{
 		ft_putendl_fd("minishell: ambiguous redirect", 2);

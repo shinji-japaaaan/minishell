@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:59:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/02/23 14:09:49 by karai            ###   ########.fr       */
+/*   Updated: 2025/02/23 14:25:24 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	update_old_pwd(char ***env, char *old_pwd)
 
 	len = ft_strlen("OLDPWD=") + ft_strlen(old_pwd) + 1;
 	new_old_pwd = malloc(len);
-	i = 0;
+	i = -1;
 	if (!new_old_pwd)
 	{
 		perror("malloc failed");
@@ -63,7 +63,7 @@ int	update_old_pwd(char ***env, char *old_pwd)
 	ft_strcpy(new_old_pwd, "OLDPWD=");
 	ft_strcat(new_old_pwd, old_pwd);
 	free(old_pwd);
-	while ((*env)[i] != NULL)
+	while ((*env)[++i] != NULL)
 	{
 		if (ft_strncmp((*env)[i], "OLDPWD=", 7) == 0)
 		{
@@ -71,7 +71,6 @@ int	update_old_pwd(char ***env, char *old_pwd)
 			(*env)[i] = new_old_pwd;
 			return (0);
 		}
-		i++;
 	}
 	return (add_new_env_var(env, new_old_pwd, i));
 }
